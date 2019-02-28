@@ -1,0 +1,60 @@
+body {
+  background-color: grey;
+  padding: 40px;
+  #okno {
+    background-color: white;
+
+    #naglowek {
+      padding: 40px;
+      text-align: center;
+      border: 1px solid black;
+      background-color: rgb(180, 180, 180);
+    }
+
+    #belka {
+      background-color: rgb(150, 148, 148);
+      padding: 10px 0 10px 5px;
+      border: 1px solid black;
+    }
+
+    #menu_i_tresc {
+      display: flex;
+      align-items: stretch;
+      border: 1px solid black;
+
+      #menu {
+        display: flex;
+        flex-direction: column;
+        padding: 40px;
+        text-align: center;
+        border-left: 1px solid black;
+        border-right: 1px solid black;
+        background-color: rgb(170, 170, 170);
+
+        .el_menu {
+          background-color: rgb(233, 229, 229);
+          width: 150px;
+          border: 1px solid black;
+          padding: 5px;
+
+          &:hover {
+            background-color: white;
+          }
+
+        }
+      }
+
+      #tresc {
+        padding: 40px;
+        border-left: 1px solid black;
+        border-right: 1px solid black;
+      }
+    }
+    #stopka {
+      text-align: center;
+      background-color: rgb(150, 148, 148);
+      padding: 10px 0 10px 5px;
+      border: 1px solid black;
+    }
+  }
+}
