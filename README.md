@@ -1,3 +1,3 @@
 # Mikołaj Sojka
 
-tsw
+msojka@sigma.ug.edu.pl
