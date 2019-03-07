@@ -1,0 +1,62 @@
+body {
+  margin: 0;
+  background-color: lighten(grey, 20%);
+  #all {
+    display: flex;
+    height: 100vh;
+
+    #menu {
+      background-color: lighten(grey, 20%);
+      padding-top: 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      p {
+        width: 80px;
+        height: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: white;
+        border-radius: 10px 0 0 0;
+        justify-content: space-around;
+        align-self:center;
+        border: 2px solid rgb(103, 98, 98);
+      }
+    }
+
+    #main {
+      background-color: lighten(grey, 40%);
+      padding: 50px;
+    }
+  }
+
+  @media only screen and (min-width: 961px) {
+    #menu{
+      padding-right:40px;
+      padding-left:40px;
+    }
+
+  }
+
+  @media only screen and (max-width: 960px) {
+    #menu{
+      padding-right:0px;
+      padding-left:20px;
+    }
+
+  }
+
+  @media only screen and (max-width: 720px) {
+    #all {
+      flex-direction: column;
+
+      #menu {
+        align-self:center;
+        flex-direction: row;
+      }
+    }
+  }
+
+}
