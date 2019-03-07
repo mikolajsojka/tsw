@@ -1,0 +1,26 @@
+body {
+  @ligten: 10%;
+  margin: 0;
+  #outer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100vh;
+
+    .box {
+      background-color: lighten(grey, 0);
+      padding: 50px;
+      text-align: center;
+      color: white;
+      font-size: 35px;
+
+      &:nth-child(2) {
+        background-color: lighten(grey, 20%);
+      }
+
+      &:nth-child(3) {
+        background-color: lighten(grey, 40%);
+      }
+    }
+  }
+}
