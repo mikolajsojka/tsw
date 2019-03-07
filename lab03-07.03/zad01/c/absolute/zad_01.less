@@ -1,9 +1,8 @@
 body {
   @ligten: 10%;
-  margin: 0;
   #outer {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     height: 100vh;
 
@@ -14,11 +13,20 @@ body {
       color: white;
       font-size: 35px;
 
+      position: absolute;
+
+      &:nth-child(1) {
+        top:0;
+        left:0;
+      }
+
       &:nth-child(2) {
         background-color: lighten(grey, 20%);
       }
 
       &:nth-child(3) {
+        bottom:0;
+        right:0;
         background-color: lighten(grey, 40%);
       }
     }

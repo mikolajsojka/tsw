@@ -1,10 +1,12 @@
 body {
-  @ligten: 10%;
+  margin:0;
   #outer {
+    
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     height: 100vh;
+    width:100vw;
 
     .box {
       background-color: lighten(grey, 0);
@@ -13,11 +15,16 @@ body {
       color: white;
       font-size: 35px;
 
+      &:nth-child(1) {
+        align-self:flex-start
+      }
+
       &:nth-child(2) {
         background-color: lighten(grey, 20%);
       }
 
       &:nth-child(3) {
+        align-self:flex-end;
         background-color: lighten(grey, 40%);
       }
     }
