@@ -4,12 +4,13 @@
 let tekst = "Ala i As poszli w las";
 
 String.prototype.nbsp = function() {
-  return this.replace(" a ", " a&nbsp;")
-    .replace(" i ", " i&nbsp;")
-    .replace(" o ", " o&nbsp;")
-    .replace(" u", " u&nbsp;")
-    .replace(" w ", " w&nbsp;")
-    .replace(" z ", " z&nbsp;");
+
+  return this.replace(/[\ \n]a[\ \n]/g, " a&nbsp;")
+  .replace(/[\ \n]i[\ \n]/g, " i&nbsp;")
+  .replace(/[\ \n]o[\ \n]/g, " o&nbsp;")
+  .replace(/[\ \n]u[\ \n]/g, " u&nbsp;")
+  .replace(/[\ \n]w[\ \n]/g, " w&nbsp;")
+  .replace(/[\ \n]z[\ \n]/g, " z&nbsp;");
 };
 
 console.log(tekst.nbsp());
