@@ -7,18 +7,34 @@ const defFun = (fun, types) => {
   return fun;
 };
 
-const myfun = defFun((a, b) => a + b, ["number", "number"]);
+const myfun = defFun((a, b, c) => a + b + c, ["number", "number", "number"]);
 
-const appFun = (f, arg1, arg2) => {
-  if (typeof arg1 === f.typeConstr[0] && typeof arg2 === f.typeConstr[1]) {
-    return f(arg1, arg2);
+const appFun = function(f) {
+  let args = Array.from(arguments).slice(1);
+  let types = [];
+  let errors = "";
+
+  if (f.typeConstr) {
+    types = f.typeConstr;
   } else {
-    throw { typerr: "Błąd typów!!!" };
+    throw { typerr: "Funkcja nie posiada parametru typeConstr" };
+  }
+
+  args.forEach((element, index) => {
+    if (typeof element !== types[index]) {
+      errors += `Zły parametr w ${index} argumencie. \n`;
+    }
+  });
+
+  if (errors) {
+    throw { typerr: errors };
+  } else {
+    return f.apply(this, args);
   }
 };
 
 try {
-  console.log(appFun(myfun, 12, 16));
+  console.log(appFun(myfun, 10, 16, 3));
 } catch (e) {
   console.log(e.typerr);
 }
