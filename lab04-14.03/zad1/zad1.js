@@ -7,7 +7,7 @@ const defFun = (fun, types) => {
   return fun;
 };
 
-const myfun = defFun((a, b, c) => a + b + c, ["number", "number", "number"]);
+const myfun = defFun((a, b, c) => a + b + c, ["number", "number", "string"]);
 
 const appFun = function(f) {
   let args = Array.from(arguments).slice(1);
@@ -16,15 +16,15 @@ const appFun = function(f) {
 
   if (f.typeConstr) {
     types = f.typeConstr;
-  } else {
-    throw { typerr: "Funkcja nie posiada parametru typeConstr" };
-  }
 
-  args.forEach((element, index) => {
-    if (typeof element !== types[index]) {
-      errors += `Zły parametr w ${index} argumencie. \n`;
-    }
-  });
+    args.forEach((element, index) => {
+      if (typeof element !== types[index]) {
+        errors += `Zły parametr w ${index} argumencie. \n`;
+      }
+    });
+  } else {
+    errors += "Funkcja nie posiada parametru typeConstr \n";
+  }
 
   if (errors) {
     throw { typerr: errors };
