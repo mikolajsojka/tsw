@@ -12,7 +12,7 @@ let dane = {
   pesel: "97042176329"
 };
 
-String.prototype.podstaw = function({ first = "first", last = "last" }) {
+String.prototype.podstaw = function({ first = "{first}", last = "{last}" }) {
   return this.replace(/{first}/, first).replace(/{last}/, last);
 };
 
