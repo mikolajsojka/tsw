@@ -27,8 +27,12 @@ const ocena = kod => {
             delete ruch_copy[Rindex];
             visited.push(Kindex);
             result.white += 1;
-          }
+          } 
         });
+      });
+
+      ruch_copy = ruch_copy.filter(function (el) {
+        return el != undefined;
       });
 
       return `Czarne: ${result.black}, Białe: ${result.white}`;
@@ -38,8 +42,8 @@ const ocena = kod => {
   };
 };
 
-let kod = [7, 0, 0, 0];
-let ruch = [0, 7, 0, 0];
+let kod = [0, 0, 0, 3];
+let ruch = [0, 3, 0, 0];
 
 try {
   console.log(ocena(kod)(ruch));
