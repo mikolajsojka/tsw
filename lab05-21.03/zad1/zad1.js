@@ -27,11 +27,11 @@ const ocena = kod => {
             delete ruch_copy[Rindex];
             visited.push(Kindex);
             result.white += 1;
-          }
+          } 
         });
       });
 
-      ruch_copy = ruch_copy.filter(function(el) {
+      ruch_copy = ruch_copy.filter(function (el) {
         return el != undefined;
       });
 
