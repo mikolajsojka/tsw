@@ -11,12 +11,16 @@ const fun1 = asyncGenFun;
 const fun2 = asyncGenFun;
 
 const poKolei = (fun1, fun2, cb) => {
-  return fun1("wynik1", dane => {
-    console.log(`callback fun1: ${dane}`);
-    fun2(dane, dane => {
-      console.log(`callback fun2: ${dane}`);
-      cb(`cb(${dane})`);
-    });
+  return fun1("wynik1", dane1 => {
+    console.log(`fun1: ${dane1}`);
+    fun2(
+      "wynik2",
+      dane2 => {
+        console.log(`fun2: ${dane1}`);
+        cb(`cb(${dane2})`);
+      },
+      dane1
+    );
   });
 };
 
