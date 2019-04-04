@@ -71,12 +71,24 @@ app.post("/game/move", (req, res) => {
   let code = [1, 2, 1, 2, 1];
   let move = req.body.move;
 
+  let game = req.body.game;
+
   try {
     let result = ocena(code)(move);
-    res.send(result);
+    res.json({
+      game,
+      result
+    });
   } catch (e) {
     res.send(e.typerr);
   }
+});
+
+app.post("/game/status", (req, res) => {
+  let game = req.body.game;
+  let status = false;
+
+  res.json({ game, status });
 });
 
 app.listen(port, () => {
