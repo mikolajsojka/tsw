@@ -4,14 +4,14 @@
 const asyncGenFun = (txt, cb) => {
   setTimeout(() => {
     cb(`${txt}`);
-  }, Math.random() * 1000);
+  }, Math.random() * 5000);
 };
 
 const fun1 = asyncGenFun;
 const fun2 = asyncGenFun;
 
 const poKolei = (fun1, fun2, cb) => {
-  return fun1("wynik1", dane1 => {
+  fun1("wynik1", dane1 => {
     console.log(`fun1: ${dane1}`);
     fun2(
       "wynik2",
