@@ -1,7 +1,6 @@
-/* jshint strict: global, esversion: 6, devel: true */
-"use strict";
+/*jshint esversion: 6, browser: true */
 
-document.onreadystatechange = function() {
+document.addEventListener("DOMContentLoaded", () => {
   var sendRequest, handleResponse;
 
   sendRequest = () => {
@@ -9,17 +8,19 @@ document.onreadystatechange = function() {
     xhr.onload = () => {
       handleResponse(xhr);
     };
-    xhr.open("GET", "http://localhost:3000/", true);
-    xhr.send(null);
+    xhr.open("GET", "http://localhost:3000", true);
+
+    xhr.send();
   };
 
   handleResponse = xhr => {
     if (xhr.status === 200) {
       let xmlRes = xhr.responseXML;
-      console.log(xmlRes);
+      let test = xmlRes.getElementsByTagName('test')[0];
+      console.log(test.textContent);
     }
   };
 
-  let newGame = document.getElementById("new_but");
+  let newGame = document.getElementById("actual_games");
   newGame.addEventListener("click", sendRequest, false);
-};
+});
