@@ -3,6 +3,16 @@
 document.addEventListener("DOMContentLoaded", () => {
   var sendRequest, handleResponse;
 
+  let LocalGames = JSON.parse(window.localStorage.getItem("games"));
+  let yourGames = document.getElementById("yourGames");
+  let actual = "";
+
+  LocalGames.forEach(element => {
+    actual += `</br><div id=${element.id} class="actualGame">${element.id}</div></br>`;    
+  });
+
+  yourGames.innerHTML = actual;
+
   sendRequest = () => {
     //localStorage.clear();
 
@@ -39,6 +49,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  actualGamesClick = () => {
+    document.getElementById("new").style.display = "none";
+    document.getElementById("yourGames").style.display = "block";
+  };
+
   let newGame = document.getElementById("newGame");
   newGame.addEventListener("click", sendRequest, false);
+
+  let actualGames = document.getElementById("actualGames");
+  actualGames.addEventListener("click", actualGamesClick, false);
 });

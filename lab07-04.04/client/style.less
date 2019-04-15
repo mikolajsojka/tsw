@@ -7,13 +7,13 @@ body {
     justify-content: center;
     height: 100%;
 
-    #gameId{
-        display:none;
-        position:absolute;
-        top:5px;
-        left:5px;
-        font-size:10px;
-        color:grey;
+    #gameId {
+      display: none;
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      font-size: 10px;
+      color: grey;
     }
 
     #new {
@@ -25,6 +25,25 @@ body {
       border: 1px solid black;
       #newGame {
         margin: 10px;
+      }
+      #actualGames {
+        margin: 5px 10px 5px 10px;
+      }
+    }
+
+    #yourGames {
+      display: none;
+      height: 200px;
+      position: fixed;
+      overflow-y: scroll;
+      padding: 20px;
+      border:1px solid black;
+      cursor:pointer;
+
+      .actualGame {
+        border: 1px solid black;
+        border-radius:10px;
+        padding:10px;
       }
     }
   }
