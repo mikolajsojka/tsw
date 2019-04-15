@@ -57,7 +57,7 @@ app.get("/", (_req, res) => {
     "Access-Control-Allow-Origin": "*",
     "Content-Type": "text/xml",
     "Cache-control": "no-cache",
-    "Pragma": "no-cache"
+    Pragma: "no-cache"
   });
 
   res.write("<response><test>Serwer działa pomyślnie</test></response>");
@@ -65,6 +65,13 @@ app.get("/", (_req, res) => {
 });
 
 app.post("/game/new", (req, res) => {
+  res.writeHead(200, {
+    "Access-Control-Allow-Origin": "*",
+    "Content-Type": "text/xml",
+    "Cache-control": "no-cache",
+    Pragma: "no-cache"
+  });
+
   let newGameRes = {
     game: uuidv1(),
     size: req.body.size || 5,
@@ -72,7 +79,14 @@ app.post("/game/new", (req, res) => {
     steps: req.body.steps || "infinity"
   };
 
-  res.send(newGameRes);
+  //res.send(newGameRes);
+  res.write(`<response><newGame>
+    <id>${newGameRes.game}</id>
+    <size>${newGameRes.size}</size>
+    <colors>${newGameRes.colors}</colors>
+    <steps>${newGameRes.steps}</steps>
+    </newGame></response>`);
+  res.end();
 });
 
 app.post("/game/move", (req, res) => {
