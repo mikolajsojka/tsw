@@ -8,7 +8,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let actual = "";
 
   LocalGames.forEach(element => {
-    actual += `</br><div id=${element.id} class="actualGame">${element.id}</div></br>`;    
+    actual += `</br><div id=${element.id} class="actualGame">${
+      element.id
+    }</div></br>`;
   });
 
   yourGames.innerHTML = actual;
@@ -29,24 +31,36 @@ document.addEventListener("DOMContentLoaded", () => {
   handleResponse = xhr => {
     if (xhr.status === 200) {
       let xmlRes = xhr.responseXML;
-      let test = xmlRes.getElementsByTagName("id")[0].firstChild.nodeValue;
 
-      let element = {id:test};
+      let element = {
+        id: xmlRes.getElementsByTagName("id")[0].firstChild.nodeValue,
+        size: xmlRes.getElementsByTagName("size")[0].firstChild.nodeValue,
+        colors: xmlRes.getElementsByTagName("colors")[0].firstChild.nodeValue,
+        steps: xmlRes.getElementsByTagName("steps")[0].firstChild.nodeValue
+      };
+
       let elements = [element];
 
       let games = JSON.parse(window.localStorage.getItem("games"));
 
-      if(games){
-        games.push(element);
-        window.localStorage.setItem("games", JSON.stringify(games));
-      } else{
-        window.localStorage.setItem("games", JSON.stringify(elements));
-      }
-
-      document.getElementById("new").style.display = "none";
-      document.getElementById("gameId").style.display = "flex";
-      document.getElementById("gameId").innerHTML = test;
+      fillLocalStorageGames(elements, games, element);
     }
+  };
+
+  fillLocalStorageGames = (elements, games, element) => {
+    if (games) {
+      games.push(element);
+      window.localStorage.setItem("games", JSON.stringify(games));
+    } else {
+      window.localStorage.setItem("games", JSON.stringify(elements));
+    }
+
+    window.localStorage.setItem("currentGame", JSON.stringify(element));
+
+    document.getElementById("new").style.display = "none";
+
+    document.getElementById("gameId").style.display = "flex";
+    document.getElementById("gameId").innerHTML = element.id;
   };
 
   actualGamesClick = () => {
