@@ -90,19 +90,27 @@ app.post("/game/new", (req, res) => {
 });
 
 app.post("/game/move", (req, res) => {
-  let code = [1, 2, 1, 2, 1];
-  let move = req.body.move;
+  res.writeHead(200, {
+    "Access-Control-Allow-Origin": "*",
+    "Content-Type": "text/xml",
+    "Cache-control": "no-cache",
+    Pragma: "no-cache"
+  });
 
-  let game = req.body.game;
+  let code = req.body.code;
+  let move = req.body.move;
 
   try {
     let result = ocena(code)(move);
-    res.json({
-      game,
-      result
-    });
+
+    res.write(`<response><check>
+    <white>${result.white}</white>
+    <black>${result.black}</black>
+    </check></response>`);
+    res.end();
   } catch (e) {
-    res.send(e.typerr);
+    res.write(e.typerr);
+    res.end();
   }
 });
 

@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     xhr.open(method, `http://localhost:3000/${url}`, true);
 
     xhr.setRequestHeader("Content-Type", "application/json");
+    console.log(body);
     xhr.send(body);
   };
 
@@ -20,17 +21,40 @@ document.addEventListener("DOMContentLoaded", () => {
       if (url === "game/new") {
         handleNewGame(xhr);
       }
+
+      if (url === "game/move") {
+        handleNewMove(xhr);
+      }
     }
+  };
+
+  handleNewMove = xhr => {
+    let xmlRes = xhr.responseXML;
+
+    let white = xmlRes.getElementsByTagName("white")[0].firstChild.nodeValue;
+    let black = xmlRes.getElementsByTagName("black")[0].firstChild.nodeValue;
+
+    console.log(`${white} i ${black}`);
+
+    //tu skończone ...
   };
 
   handleNewGame = xhr => {
     let xmlRes = xhr.responseXML;
 
+    let size = xmlRes.getElementsByTagName("size")[0].firstChild.nodeValue;
+    let colors = xmlRes.getElementsByTagName("colors")[0].firstChild.nodeValue;
+    let code = Array.from(
+      { length: size },
+      () => Math.floor(Math.random() * (colors - 2)) + 1
+    );
+
     let element = {
       id: xmlRes.getElementsByTagName("id")[0].firstChild.nodeValue,
-      size: xmlRes.getElementsByTagName("size")[0].firstChild.nodeValue,
-      colors: xmlRes.getElementsByTagName("colors")[0].firstChild.nodeValue,
-      steps: xmlRes.getElementsByTagName("steps")[0].firstChild.nodeValue
+      size: size,
+      colors: colors,
+      steps: xmlRes.getElementsByTagName("steps")[0].firstChild.nodeValue,
+      code: code
     };
 
     let elements = [element];
@@ -51,6 +75,20 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("new").style.display = "none";
     document.getElementById("gameId").style.display = "flex";
     document.getElementById("gameId").innerHTML = element.id;
+
+    document.getElementById("currentGame").style.display = "flex";
+
+    let inputsSolve = document.getElementById("inputsSolve");
+
+    let inputs = "";
+    let i = 0;
+
+    element.code.forEach(element => {
+      inputs += `<input id="${i}"/></br>`;
+      i++;
+    });
+
+    inputsSolve.innerHTML = `${inputs}</br>`;
   };
 
   actualGamesClick = () => {
@@ -82,9 +120,26 @@ document.addEventListener("DOMContentLoaded", () => {
     sendRequest("game/new", "POST", body);
   };
 
+  checkSolutionClick = () => {
+    let currentGame = JSON.parse(window.localStorage.getItem("currentGame"));
+    let i = 0;
+    let move = [];
+
+    while(i<currentGame.size){
+      move.push(parseInt(document.getElementById(`${i}`).value));
+      i++;
+    }
+  
+    let body = JSON.stringify({ code: currentGame.code, move: move });
+    sendRequest("game/move", "POST", body);
+  };
+
   localStorageClick = () => {
     localStorage.clear();
   };
+
+  let checkSolution = document.getElementById("checkSolution");
+  checkSolution.addEventListener("click", checkSolutionClick, false);
 
   let newGame = document.getElementById("newGame");
   newGame.addEventListener("click", newGameClick, false);
