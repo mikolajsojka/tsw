@@ -1,5 +1,12 @@
 body {
   margin: 0;
+
+  #clearLocalStorage {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+  }
+
   #center {
     display: flex;
     align-items: center;
@@ -17,7 +24,7 @@ body {
     }
 
     #currentGame {
-      display:none;
+      display: none;
       border: 1px solid black;
     }
 
@@ -28,11 +35,11 @@ body {
       justify-content: center;
       flex-direction: column;
       border: 1px solid black;
-      border-radius:10px;
+      border-radius: 10px;
 
-      input{
-        border-radius:10px;
-        cursor:pointer;
+      input {
+        border-radius: 10px;
+        cursor: pointer;
       }
 
       #newGame {
@@ -49,13 +56,13 @@ body {
       position: fixed;
       overflow-y: scroll;
       padding: 20px;
-      border:1px solid black;
-      cursor:pointer;
+      border: 1px solid black;
+      cursor: pointer;
 
       .actualGame {
         border: 1px solid black;
-        border-radius:10px;
-        padding:10px;
+        border-radius: 10px;
+        padding: 10px;
       }
     }
   }
