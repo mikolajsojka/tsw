@@ -7,11 +7,13 @@ document.addEventListener("DOMContentLoaded", () => {
   let yourGames = document.getElementById("yourGames");
   let actual = "";
 
-  LocalGames.forEach(element => {
-    actual += `</br><div id=${element.id} class="actualGame">${
-      element.id
-    }</div></br>`;
-  });
+  if (LocalGames) {
+    LocalGames.forEach(element => {
+      actual += `</br><div id=${element.id} class="actualGame">${
+        element.id
+      }</div></br>`;
+    });
+  }
 
   yourGames.innerHTML = actual;
 
@@ -25,7 +27,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     xhr.open("POST", "http://localhost:3000/game/new", true);
 
-    xhr.send();
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send(JSON.stringify({ size: 12 }));
   };
 
   handleResponse = xhr => {
