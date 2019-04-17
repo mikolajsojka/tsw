@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   sendRequest = (url, method, body) => {
     var xhr = new XMLHttpRequest();
     xhr.onload = () => {
-      handleResponse(xhr);
+      handleResponse(xhr, url);
     };
 
     xhr.open(method, `http://localhost:3000/${url}`, true);
@@ -15,9 +15,11 @@ document.addEventListener("DOMContentLoaded", () => {
     xhr.send(body);
   };
 
-  handleResponse = xhr => {
+  handleResponse = (xhr, url) => {
     if (xhr.status === 200) {
-      handleNewGame(xhr);
+      if (url === "game/new") {
+        handleNewGame(xhr);
+      }
     }
   };
 
