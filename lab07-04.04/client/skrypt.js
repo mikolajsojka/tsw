@@ -73,7 +73,11 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   newGameClick = () => {
-    let body = JSON.stringify({ size: 12 });
+    let size = document.getElementById("inputSize").value;
+    let colors = document.getElementById("inputColors").value;
+    let steps = document.getElementById("inputSteps").value;
+
+    let body = JSON.stringify({ size: size, colors: colors, steps: steps });
 
     sendRequest("game/new", "POST", body);
   };
