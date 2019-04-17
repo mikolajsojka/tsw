@@ -37,6 +37,8 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log(`${white} i ${black}`);
 
     //tu skończone ...
+
+    //zamysł jest taki, żeby kolory wybierać na klicki i je zliczać, ilość kliknięć odpowiada liczbie -> Żeby nie zapomnieć 
   };
 
   handleNewGame = xhr => {
