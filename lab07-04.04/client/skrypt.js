@@ -41,6 +41,23 @@ document.addEventListener("DOMContentLoaded", () => {
     //zamysł jest taki, żeby kolory wybierać na klicki i je zliczać, ilość kliknięć odpowiada liczbie -> Żeby nie zapomnieć
   };
 
+  randomColor = () => {
+    var o = Math.round,
+      r = Math.random,
+      s = 255;
+    return (
+      "rgba(" +
+      o(r() * s) +
+      "," +
+      o(r() * s) +
+      "," +
+      o(r() * s) +
+      "," +
+      r().toFixed(1) +
+      ")"
+    );
+  };
+
   handleNewGame = xhr => {
     let xmlRes = xhr.responseXML;
 
@@ -51,12 +68,17 @@ document.addEventListener("DOMContentLoaded", () => {
       () => Math.floor(Math.random() * (colors - 2)) + 1
     );
 
+    let generatedColors = Array.from(
+      { length: colors },
+      () => randomColor()
+    );
     let element = {
       id: xmlRes.getElementsByTagName("id")[0].firstChild.nodeValue,
       size: size,
       colors: colors,
       steps: xmlRes.getElementsByTagName("steps")[0].firstChild.nodeValue,
-      code: code
+      code: code,
+      generatedColors:generatedColors
     };
 
     let elements = [element];
@@ -110,11 +132,11 @@ document.addEventListener("DOMContentLoaded", () => {
   inputColorsClick = element => {
     console.log(`Kliknięto kolor o id równym ${element.getAttribute("id")}`);
 
-    let clickInkrement = parseInt(element.getAttribute("value"))+1;
+    let clickInkrement = parseInt(element.getAttribute("value")) + 1;
 
     element.innerHTML = clickInkrement;
 
-    element.setAttribute('value', clickInkrement);
+    element.setAttribute("value", clickInkrement);
   };
 
   actualGamesClick = () => {
@@ -152,7 +174,9 @@ document.addEventListener("DOMContentLoaded", () => {
     let move = [];
 
     while (i < currentGame.size) {
-      move.push(parseInt(document.getElementById(`${i}`).getAttribute("value")));
+      move.push(
+        parseInt(document.getElementById(`${i}`).getAttribute("value"))
+      );
       i++;
     }
 
