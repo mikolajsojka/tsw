@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //tu skończone ...
 
-    //zamysł jest taki, żeby kolory wybierać na klicki i je zliczać, ilość kliknięć odpowiada liczbie -> Żeby nie zapomnieć 
+    //zamysł jest taki, żeby kolory wybierać na klicki i je zliczać, ilość kliknięć odpowiada liczbie -> Żeby nie zapomnieć
   };
 
   handleNewGame = xhr => {
@@ -80,17 +80,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("currentGame").style.display = "flex";
 
+    playGame(element);
+  };
+
+  playGame = element => {
     let inputsSolve = document.getElementById("inputsSolve");
 
     let inputs = "";
     let i = 0;
 
     element.code.forEach(element => {
-      inputs += `<input id="${i}"/></br>`;
+      inputs += `<div id="${i}" class="input" value="0" ></div>`;
       i++;
     });
 
-    inputsSolve.innerHTML = `${inputs}</br>`;
+    inputsSolve.innerHTML = `${inputs}`;
+
+    let input = document.getElementsByClassName("input");
+
+    Array.from(input).forEach(element => {
+      element.addEventListener(
+        "click",
+        inputColorsClick.bind(this, element),
+        false
+      );
+    });
+  };
+
+  inputColorsClick = element => {
+    console.log(`Kliknięto kolor o id równym ${element.getAttribute("id")}`);
+
+    let clickInkrement = parseInt(element.getAttribute("value"))+1;
+
+    element.innerHTML = clickInkrement;
+
+    element.setAttribute('value', clickInkrement);
   };
 
   actualGamesClick = () => {
@@ -100,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (LocalGames) {
       LocalGames.forEach(element => {
-        actual += `</br><div id=${element.id} class="actualGame">${
+        actual += `</br><div id=${element.id} class="actualGamesElement">${
           element.id
         }</div></br>`;
       });
@@ -127,11 +151,11 @@ document.addEventListener("DOMContentLoaded", () => {
     let i = 0;
     let move = [];
 
-    while(i<currentGame.size){
-      move.push(parseInt(document.getElementById(`${i}`).value));
+    while (i < currentGame.size) {
+      move.push(parseInt(document.getElementById(`${i}`).getAttribute("value")));
       i++;
     }
-  
+
     let body = JSON.stringify({ code: currentGame.code, move: move });
     sendRequest("game/move", "POST", body);
   };

@@ -27,9 +27,22 @@ body {
       display: none;
       border: 1px solid black;
       min-height: 100px;
+      min-width:500px;
 
       #inputsSolve {
         display: flex;
+        padding:10px;
+        background-color:yellow;
+        width:100%;
+        flex-direction:raw;
+
+        .input{
+          display:flex;
+          width:50px;
+          height:50px;
+          background-color:pink;
+          border:1px solid black;
+        }
       }
       
     }
@@ -65,7 +78,7 @@ body {
       border: 1px solid black;
       cursor: pointer;
 
-      .actualGame {
+      .actualGamesElement {
         border: 1px solid black;
         border-radius: 10px;
         padding: 10px;
