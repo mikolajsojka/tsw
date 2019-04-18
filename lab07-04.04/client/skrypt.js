@@ -46,7 +46,9 @@ document.addEventListener("DOMContentLoaded", () => {
     let r = Math.random;
     let s = 255;
 
-    let generatedColor = `rgba(${o(r() * s)},${o(r() * s)},${o(r() * s)},${r().toFixed(1)})`;
+    let generatedColor = `rgba(${o(r() * s)},${o(r() * s)},${o(
+      r() * s
+    )},${r().toFixed(1)})`;
 
     return generatedColor;
   };
@@ -56,9 +58,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let size = xmlRes.getElementsByTagName("size")[0].firstChild.nodeValue;
     let colors = xmlRes.getElementsByTagName("colors")[0].firstChild.nodeValue;
-    let code = Array.from(
-      { length: size },
-      () => Math.floor((Math.random() * colors) + 0)
+    let code = Array.from({ length: size }, () =>
+      Math.floor(Math.random() * colors + 0)
     );
 
     let generatedColors = Array.from({ length: colors }, () => randomColor());
@@ -86,13 +87,19 @@ document.addEventListener("DOMContentLoaded", () => {
       window.localStorage.setItem("games", JSON.stringify(elements));
     }
     window.localStorage.setItem("currentGame", JSON.stringify(element));
+
+    changeToGameInterface(element);
+
+    playGame(element);
+  };
+
+  changeToGameInterface = (element) => {
     document.getElementById("new").style.display = "none";
     document.getElementById("gameId").style.display = "flex";
+    document.getElementById("yourGames").style.display = "none";
     document.getElementById("gameId").innerHTML = element.id;
 
     document.getElementById("currentGame").style.display = "flex";
-
-    playGame(element);
   };
 
   playGame = element => {
@@ -102,8 +109,12 @@ document.addEventListener("DOMContentLoaded", () => {
     let inputs = "";
     let i = 0;
 
+    console.log(element.id);
+
     element.code.forEach(element => {
-      inputs += `<div id="${i}" class="input" value="0" style="background-color:${currentGame.generatedColors[0]}"></div>`;
+      inputs += `<div id="${i}" class="input" value="0" style="background-color:${
+        currentGame.generatedColors[0]
+      }"></div>`;
       i++;
     });
 
@@ -137,6 +148,34 @@ document.addEventListener("DOMContentLoaded", () => {
     element.setAttribute("value", clickInkrement);
   };
 
+  ongameClick = () => {
+    let elements = document.getElementsByClassName("actualGamesElement");
+
+    Array.from(elements).forEach(element => {
+      element.addEventListener(
+        "click",
+        onElementClick.bind(this, element),
+        false
+      );
+    });
+  };
+
+  onElementClick = elementDOM => {
+    let LocalGames = JSON.parse(window.localStorage.getItem("games"));
+
+    if (LocalGames) {
+      LocalGames.forEach(element => {
+        if (elementDOM.getAttribute("id") === element.id) {
+          window.localStorage.setItem("currentGame", JSON.stringify(element));
+          
+          playGame(element);
+          changeToGameInterface(element);
+        } 
+      });
+  
+    }
+  };
+
   actualGamesClick = () => {
     let LocalGames = JSON.parse(window.localStorage.getItem("games"));
     let yourGames = document.getElementById("yourGames");
@@ -144,16 +183,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (LocalGames) {
       LocalGames.forEach(element => {
-        actual += `</br><div id=${element.id} class="actualGamesElement">${
+        actual += `</br><div id="${element.id}" class="actualGamesElement">${
           element.id
         }</div></br>`;
       });
+      yourGames.innerHTML = actual;
+      document.getElementById("new").style.display = "none";
+      document.getElementById("yourGames").style.display = "block";
+      ongameClick();
+    } else {
+      alert("Brak gier");
     }
-
-    yourGames.innerHTML = actual;
-
-    document.getElementById("new").style.display = "none";
-    document.getElementById("yourGames").style.display = "block";
   };
 
   newGameClick = () => {
