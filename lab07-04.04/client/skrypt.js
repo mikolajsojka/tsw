@@ -24,6 +24,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (url === "game/move") {
         handleNewMove(xhr);
       }
+    } else {
+      alert("Coś poszło nie tak");
     }
   };
 
@@ -41,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let currentGame = JSON.parse(window.localStorage.getItem("currentGame"));
 
-    if(currentGame.size === black){
+    if (currentGame.size === black) {
       alert("Wygrałeś");
 
       //Obsługa game status żeby zakończyć grę w bazie
@@ -69,7 +71,9 @@ document.addEventListener("DOMContentLoaded", () => {
       Math.floor(Math.random() * colors + 0)
     );
 
-    let generatedColors = Array.from({ length: colors }, () => generateColors());
+    let generatedColors = Array.from({ length: colors }, () =>
+      generateColors()
+    );
     let element = {
       id: xmlRes.getElementsByTagName("id")[0].firstChild.nodeValue,
       size: size,
@@ -106,6 +110,14 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("yourGames").style.display = "none";
     document.getElementById("gameId").innerHTML = element.id;
     document.getElementById("currentGame").style.display = "flex";
+
+    let colors = "";
+
+    element.generatedColors.forEach(element => {
+      colors += `<div class="color" style="background-color:${element}"></div>`;
+    });
+
+    document.getElementById("colors").innerHTML = colors;
   };
 
   playGame = element => {
@@ -174,6 +186,8 @@ document.addEventListener("DOMContentLoaded", () => {
           changeToGameInterface(element);
         }
       });
+    } else {
+      alert("Brak gier");
     }
   };
 
