@@ -42,20 +42,13 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   randomColor = () => {
-    var o = Math.round,
-      r = Math.random,
-      s = 255;
-    return (
-      "rgba(" +
-      o(r() * s) +
-      "," +
-      o(r() * s) +
-      "," +
-      o(r() * s) +
-      "," +
-      r().toFixed(1) +
-      ")"
-    );
+    let o = Math.round;
+    let r = Math.random;
+    let s = 255;
+
+    let generatedColor = `rgba(${o(r() * s)},${o(r() * s)},${o(r() * s)},${r().toFixed(1)})`;
+
+    return generatedColor;
   };
 
   handleNewGame = xhr => {
@@ -65,20 +58,17 @@ document.addEventListener("DOMContentLoaded", () => {
     let colors = xmlRes.getElementsByTagName("colors")[0].firstChild.nodeValue;
     let code = Array.from(
       { length: size },
-      () => Math.floor(Math.random() * (colors - 2)) + 1
+      () => Math.floor((Math.random() * colors) + 0)
     );
 
-    let generatedColors = Array.from(
-      { length: colors },
-      () => randomColor()
-    );
+    let generatedColors = Array.from({ length: colors }, () => randomColor());
     let element = {
       id: xmlRes.getElementsByTagName("id")[0].firstChild.nodeValue,
       size: size,
       colors: colors,
       steps: xmlRes.getElementsByTagName("steps")[0].firstChild.nodeValue,
       code: code,
-      generatedColors:generatedColors
+      generatedColors: generatedColors
     };
 
     let elements = [element];
@@ -107,12 +97,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   playGame = element => {
     let inputsSolve = document.getElementById("inputsSolve");
+    let currentGame = JSON.parse(window.localStorage.getItem("currentGame"));
 
     let inputs = "";
     let i = 0;
 
     element.code.forEach(element => {
-      inputs += `<div id="${i}" class="input" value="0" ></div>`;
+      inputs += `<div id="${i}" class="input" value="0" style="background-color:${currentGame.generatedColors[0]}"></div>`;
       i++;
     });
 
@@ -133,8 +124,15 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log(`Kliknięto kolor o id równym ${element.getAttribute("id")}`);
 
     let clickInkrement = parseInt(element.getAttribute("value")) + 1;
+    let currentGame = JSON.parse(window.localStorage.getItem("currentGame"));
 
-    element.innerHTML = clickInkrement;
+    if (clickInkrement === parseInt(currentGame.colors)) {
+      clickInkrement = 0;
+    }
+
+    element.style.backgroundColor = `${
+      currentGame.generatedColors[clickInkrement]
+    }`;
 
     element.setAttribute("value", clickInkrement);
   };
