@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", () => {
     xhr.open(method, `http://localhost:3000/${url}`, true);
 
     xhr.setRequestHeader("Content-Type", "application/json");
-    console.log(body);
     xhr.send(body);
   };
 
@@ -41,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
     //zamysł jest taki, żeby kolory wybierać na klicki i je zliczać, ilość kliknięć odpowiada liczbie -> Żeby nie zapomnieć
   };
 
-  randomColor = () => {
+  generateColors = () => {
     let o = Math.round;
     let r = Math.random;
     let s = 255;
@@ -62,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
       Math.floor(Math.random() * colors + 0)
     );
 
-    let generatedColors = Array.from({ length: colors }, () => randomColor());
+    let generatedColors = Array.from({ length: colors }, () => generateColors());
     let element = {
       id: xmlRes.getElementsByTagName("id")[0].firstChild.nodeValue,
       size: size,
@@ -93,12 +92,11 @@ document.addEventListener("DOMContentLoaded", () => {
     playGame(element);
   };
 
-  changeToGameInterface = (element) => {
+  changeToGameInterface = element => {
     document.getElementById("new").style.display = "none";
     document.getElementById("gameId").style.display = "flex";
     document.getElementById("yourGames").style.display = "none";
     document.getElementById("gameId").innerHTML = element.id;
-
     document.getElementById("currentGame").style.display = "flex";
   };
 
@@ -109,10 +107,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let inputs = "";
     let i = 0;
 
-    console.log(element.id);
-
     element.code.forEach(element => {
-      inputs += `<div id="${i}" class="input" value="0" style="background-color:${
+      inputs += `<div id="${i}" class="input square" value="0" style="background-color:${
         currentGame.generatedColors[0]
       }"></div>`;
       i++;
@@ -132,8 +128,6 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   inputColorsClick = element => {
-    console.log(`Kliknięto kolor o id równym ${element.getAttribute("id")}`);
-
     let clickInkrement = parseInt(element.getAttribute("value")) + 1;
     let currentGame = JSON.parse(window.localStorage.getItem("currentGame"));
 
@@ -167,16 +161,15 @@ document.addEventListener("DOMContentLoaded", () => {
       LocalGames.forEach(element => {
         if (elementDOM.getAttribute("id") === element.id) {
           window.localStorage.setItem("currentGame", JSON.stringify(element));
-          
+
           playGame(element);
           changeToGameInterface(element);
-        } 
+        }
       });
-  
     }
   };
 
-  actualGamesClick = () => {
+  onActualGamesClick = () => {
     let LocalGames = JSON.parse(window.localStorage.getItem("games"));
     let yourGames = document.getElementById("yourGames");
     let actual = "";
@@ -196,7 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  newGameClick = () => {
+  onNewGameClick = () => {
     let size = document.getElementById("inputSize").value;
     let colors = document.getElementById("inputColors").value;
     let steps = document.getElementById("inputSteps").value;
@@ -206,7 +199,7 @@ document.addEventListener("DOMContentLoaded", () => {
     sendRequest("game/new", "POST", body);
   };
 
-  checkSolutionClick = () => {
+  onCheckSolutionClick = () => {
     let currentGame = JSON.parse(window.localStorage.getItem("currentGame"));
     let i = 0;
     let move = [];
@@ -222,19 +215,19 @@ document.addEventListener("DOMContentLoaded", () => {
     sendRequest("game/move", "POST", body);
   };
 
-  localStorageClick = () => {
+  onLocalStorageClick = () => {
     localStorage.clear();
   };
 
   let checkSolution = document.getElementById("checkSolution");
-  checkSolution.addEventListener("click", checkSolutionClick, false);
+  checkSolution.addEventListener("click", onCheckSolutionClick, false);
 
   let newGame = document.getElementById("newGame");
-  newGame.addEventListener("click", newGameClick, false);
+  newGame.addEventListener("click", onNewGameClick, false);
 
   let actualGames = document.getElementById("actualGames");
-  actualGames.addEventListener("click", actualGamesClick, false);
+  actualGames.addEventListener("click", onActualGamesClick, false);
 
   let clearLocalStorage = document.getElementById("clearLocalStorage");
-  clearLocalStorage.addEventListener("click", localStorageClick, false);
+  clearLocalStorage.addEventListener("click", onLocalStorageClick, false);
 });

@@ -25,27 +25,52 @@ body {
 
     #currentGame {
       display: none;
-      border: 1px solid black;
       min-height: 100px;
-      min-width:500px;
+      width: 70%;
+      flex-direction: column;
+      padding: 20px;
+      align-items:center;
+      justify-content: center;
 
       #inputsSolve {
         display: flex;
-        padding:10px;
-        align-items:center;
-        justify-content:center;
-        width:100%;
-        flex-direction:raw;
+        padding: 10px;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
 
-        .input{
-          display:flex;
-          width:50px;
-          height:50px;
-          background-color:pink;
-          border:1px solid black;
+        .square {
+          display: flex;
+          width: 50px;
+          height: 50px;
+          margin-left:5px;
+          margin-right:5px;
+          border: 1px solid black;
         }
       }
-      
+
+      #checkSolution {
+        width:100px;
+        margin-bottom:5px;
+      }
+
+      #score {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        #white {
+          background-color: white;
+          width: 50px;
+          height: 50px;
+          border: 3px solid black;
+        }
+        #black {
+          background-color: black;
+          width: 50px;
+          height: 50px;
+          border: 3px solid white;
+        }
+      }
     }
 
     #new {
@@ -85,5 +110,19 @@ body {
         padding: 10px;
       }
     }
+  }
+
+  @media (max-width: 600px) {
+
+      #center{
+        #currentGame{
+          #inputsSolve{
+            flex-direction: column;
+          }
+        }
+      }
+    
+
+
   }
 }
