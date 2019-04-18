@@ -33,11 +33,19 @@ document.addEventListener("DOMContentLoaded", () => {
     let white = xmlRes.getElementsByTagName("white")[0].firstChild.nodeValue;
     let black = xmlRes.getElementsByTagName("black")[0].firstChild.nodeValue;
 
-    console.log(`${white} i ${black}`);
+    let whiteScore = document.getElementById("white");
+    let blackScore = document.getElementById("black");
 
-    //tu skończone ...
+    whiteScore.innerHTML = white;
+    blackScore.innerHTML = black;
 
-    //zamysł jest taki, żeby kolory wybierać na klicki i je zliczać, ilość kliknięć odpowiada liczbie -> Żeby nie zapomnieć
+    let currentGame = JSON.parse(window.localStorage.getItem("currentGame"));
+
+    if(currentGame.size === black){
+      alert("Wygrałeś");
+
+      //Obsługa game status żeby zakończyć grę w bazie
+    }
   };
 
   generateColors = () => {

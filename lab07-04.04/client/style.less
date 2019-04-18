@@ -63,12 +63,22 @@ body {
           width: 50px;
           height: 50px;
           border: 3px solid black;
+          color:black;
+          text-align:center;
+          display:flex;
+          justify-content: center;
+          align-items: center;
         }
         #black {
           background-color: black;
           width: 50px;
           height: 50px;
           border: 3px solid white;
+          color:white;
+          text-align:center;
+          display:flex;
+          justify-content: center;
+          align-items: center;
         }
       }
     }
@@ -97,17 +107,20 @@ body {
 
     #yourGames {
       display: none;
-      height: 200px;
+      height: 50%;
       position: fixed;
       overflow-y: scroll;
       padding: 20px;
       border: 1px solid black;
       cursor: pointer;
+      width:70%;
 
       .actualGamesElement {
         border: 1px solid black;
         border-radius: 10px;
         padding: 10px;
+        height:auto;
+        text-align:center;
       }
     }
   }
