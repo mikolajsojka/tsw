@@ -109,6 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("gameId").style.display = "flex";
     document.getElementById("yourGames").style.display = "none";
     document.getElementById("gameId").innerHTML = element.id;
+    document.getElementById("gameId").setAttribute("value", element.steps);
     document.getElementById("currentGame").style.display = "flex";
 
     let colors = "";
@@ -135,6 +136,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     inputsSolve.innerHTML = `${inputs}`;
+
+    gameSteps(currentGame);
 
     let input = document.getElementsByClassName("input");
 
@@ -234,7 +237,37 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     let body = JSON.stringify({ code: currentGame.code, move: move });
-    sendRequest("game/move", "POST", body);
+
+    if (currentGame.steps === "infinity") {
+      gameSteps(currentGame);
+      sendRequest("game/move", "POST", body);
+    } else {
+      if (currentGame.steps <= 0) {
+        alert("Przekroczyłeś limit ruchów");
+      } else {
+        currentGame.steps = parseInt(currentGame.steps) - 1;
+        window.localStorage.setItem("currentGame", JSON.stringify(currentGame));
+        gameSteps(currentGame);
+        
+        let LocalGames = JSON.parse(window.localStorage.getItem("games"));
+
+        LocalGames.forEach(element => {
+          if (element.id === currentGame.id) {
+            element.steps = currentGame.steps;
+          }
+        });
+
+        window.localStorage.setItem("games", JSON.stringify(LocalGames));
+
+        sendRequest("game/move", "POST", body);
+      }
+    }
+  };
+
+  gameSteps = currentGame => {
+    document.getElementById("steps").innerHTML = `Zostało ruchów: ${
+      currentGame.steps
+    }`;
   };
 
   onLocalStorageClick = () => {
