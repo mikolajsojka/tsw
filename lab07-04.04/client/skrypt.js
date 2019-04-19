@@ -36,9 +36,20 @@ document.addEventListener("DOMContentLoaded", () => {
   handleNewStatus = xhr => {
     let xmlRes = xhr.responseXML;
 
-    let game = xmlRes.getElementsByTagName("game")[0].firstChild.nodeValue;
+    let gameId = xmlRes.getElementsByTagName("game")[0].firstChild.nodeValue;
+    let status = xmlRes.getElementsByTagName("status")[0].firstChild.nodeValue;
 
-    console.log(game);
+    let currentGame = JSON.parse(window.localStorage.getItem("currentGame"));
+    let LocalGames = JSON.parse(window.localStorage.getItem("games"));
+
+    LocalGames.forEach(element => {
+      if(element.id === gameId){
+        element.status = status;
+      }
+    });
+
+    window.localStorage.setItem("games", JSON.stringify(LocalGames));
+    currentGame.status = status;
   };
 
   handleNewMove = xhr => {
@@ -54,15 +65,11 @@ document.addEventListener("DOMContentLoaded", () => {
     blackScore.innerHTML = black;
 
     let currentGame = JSON.parse(window.localStorage.getItem("currentGame"));
-    let body = JSON.stringify({ game: currentGame });
-    
-    //rozkminić 
-    
+    let body = JSON.stringify({ game: currentGame.id });
+
     if (currentGame.size === black) {
       alert("Wygrałeś");
-      //sendRequest("game/status", "POST", body);
-
-      //Obsługa game status żeby zakończyć grę w bazie
+      sendRequest("game/status", "POST", body);
     }
   };
 
