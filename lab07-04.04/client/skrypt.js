@@ -178,9 +178,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }"></div>`;
       });
     }
-      
     
-
     return inputs;
   };
 
@@ -260,6 +258,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   onCheckSolutionClick = () => {
     let currentGame = JSON.parse(window.localStorage.getItem("currentGame"));
+    
     let i = 0;
     let move = [];
 
