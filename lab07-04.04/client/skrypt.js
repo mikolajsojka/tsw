@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let LocalGames = JSON.parse(window.localStorage.getItem("games"));
 
     LocalGames.forEach(element => {
-      if(element.id === gameId){
+      if (element.id === gameId) {
         element.status = status;
       }
     });
@@ -148,17 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let inputsSolve = document.getElementById("inputsSolve");
     let currentGame = JSON.parse(window.localStorage.getItem("currentGame"));
 
-    let inputs = "";
-    let i = 0;
-
-    element.code.forEach(element => {
-      inputs += `<div id="${i}" class="input square" value="0" style="background-color:${
-        currentGame.generatedColors[0]
-      }"></div>`;
-      i++;
-    });
-
-    inputsSolve.innerHTML = `${inputs}`;
+    inputsSolve.innerHTML = `${renderInputs(currentGame, element)}`;
 
     gameSteps(currentGame);
 
@@ -171,6 +161,27 @@ document.addEventListener("DOMContentLoaded", () => {
         false
       );
     });
+  };
+
+  renderInputs = (currentGame, element) => {
+    let inputs = "";
+    if(currentGame.lastMove === undefined){
+      element.code.forEach((_element, index) => {
+        inputs += `<div id="${index}" class="input square" value="0" style="background-color:${
+          currentGame.generatedColors[0]
+        }"></div>`;
+      });
+    } else {
+      element.code.forEach((_element, index) => {
+        inputs += `<div id="${index}" class="input square" value="${currentGame.lastMove[index]}" style="background-color:${
+          currentGame.generatedColors[currentGame.lastMove[index]]
+        }"></div>`;
+      });
+    }
+      
+    
+
+    return inputs;
   };
 
   inputColorsClick = element => {
@@ -259,6 +270,8 @@ document.addEventListener("DOMContentLoaded", () => {
       i++;
     }
 
+    currentGame.lastMove = move;
+
     let body = JSON.stringify({ code: currentGame.code, move: move });
 
     if (currentGame.steps === "infinity") {
@@ -277,6 +290,7 @@ document.addEventListener("DOMContentLoaded", () => {
         LocalGames.forEach(element => {
           if (element.id === currentGame.id) {
             element.steps = currentGame.steps;
+            element.lastMove = move;
           }
         });
 
