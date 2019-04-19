@@ -79,7 +79,6 @@ app.post("/game/new", (req, res) => {
     steps: req.body.steps || "infinity"
   };
 
-  //res.send(newGameRes);
   res.write(`<response><newGame>
     <id>${newGameRes.game}</id>
     <size>${newGameRes.size}</size>
@@ -118,7 +117,18 @@ app.post("/game/status", (req, res) => {
   let game = req.body.game;
   let status = false;
 
-  res.json({ game, status });
+  res.writeHead(200, {
+    "Access-Control-Allow-Origin": "*",
+    "Content-Type": "text/xml",
+    "Cache-control": "no-cache",
+    Pragma: "no-cache"
+  });
+
+  res.write(`<response><gameStatus>
+    <game>${game}</game>
+    <status>${status}</status>
+    </gameStatus></response>`);
+  res.end();
 });
 
 app.listen(port, () => {

@@ -24,9 +24,21 @@ document.addEventListener("DOMContentLoaded", () => {
       if (url === "game/move") {
         handleNewMove(xhr);
       }
+
+      if (url === "game/status") {
+        handleNewStatus(xhr);
+      }
     } else {
       alert("Coś poszło nie tak");
     }
+  };
+
+  handleNewStatus = xhr => {
+    let xmlRes = xhr.responseXML;
+
+    let game = xmlRes.getElementsByTagName("game")[0].firstChild.nodeValue;
+
+    console.log(game);
   };
 
   handleNewMove = xhr => {
@@ -42,9 +54,13 @@ document.addEventListener("DOMContentLoaded", () => {
     blackScore.innerHTML = black;
 
     let currentGame = JSON.parse(window.localStorage.getItem("currentGame"));
-
+    let body = JSON.stringify({ game: currentGame });
+    
+    //rozkminić 
+    
     if (currentGame.size === black) {
       alert("Wygrałeś");
+      //sendRequest("game/status", "POST", body);
 
       //Obsługa game status żeby zakończyć grę w bazie
     }
@@ -248,7 +264,7 @@ document.addEventListener("DOMContentLoaded", () => {
         currentGame.steps = parseInt(currentGame.steps) - 1;
         window.localStorage.setItem("currentGame", JSON.stringify(currentGame));
         gameSteps(currentGame);
-        
+
         let LocalGames = JSON.parse(window.localStorage.getItem("games"));
 
         LocalGames.forEach(element => {
