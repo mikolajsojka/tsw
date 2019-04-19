@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let LocalGames = JSON.parse(window.localStorage.getItem("games"));
 
     LocalGames.forEach(element => {
-      if (element.id === gameId) {
+      if(element.id === gameId){
         element.status = status;
       }
     });
@@ -148,9 +148,17 @@ document.addEventListener("DOMContentLoaded", () => {
     let inputsSolve = document.getElementById("inputsSolve");
     let currentGame = JSON.parse(window.localStorage.getItem("currentGame"));
 
-    console.log(currentGame);
-    
-    inputsSolve.innerHTML = fillColorsInput(element, "", currentGame);
+    let inputs = "";
+    let i = 0;
+
+    element.code.forEach(element => {
+      inputs += `<div id="${i}" class="input square" value="0" style="background-color:${
+        currentGame.generatedColors[0]
+      }"></div>`;
+      i++;
+    });
+
+    inputsSolve.innerHTML = `${inputs}`;
 
     gameSteps(currentGame);
 
@@ -163,25 +171,6 @@ document.addEventListener("DOMContentLoaded", () => {
         false
       );
     });
-  };
-
-  fillColorsInput = (element, inputs, currentGame) => {
-    if (currentGame.lastMove) {
-      element.code.forEach( (element,index) => {
-        console.log(currentGame.lastMove);
-        inputs += `<div id="${index}" class="input square" value="${currentGame.lastMove[index]}" style="background-color:${
-          currentGame.generatedColors[index]
-        }"></div>`;
-      });
-    } else {
-      element.code.forEach((element,index) => {
-        inputs += `<div id="${index}" class="input square" value="0" style="background-color:${
-          currentGame.generatedColors[0]
-        }"></div>`;
-      });
-    }
-
-    return `${inputs}`;
   };
 
   inputColorsClick = element => {
@@ -273,8 +262,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let body = JSON.stringify({ code: currentGame.code, move: move });
 
     if (currentGame.steps === "infinity") {
-      currentGame.lastMove = move;
-      window.localStorage.setItem("currentGame", JSON.stringify(currentGame));
       gameSteps(currentGame);
       sendRequest("game/move", "POST", body);
     } else {
@@ -282,7 +269,6 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("Przekroczyłeś limit ruchów");
       } else {
         currentGame.steps = parseInt(currentGame.steps) - 1;
-        currentGame.lastMove = move;
         window.localStorage.setItem("currentGame", JSON.stringify(currentGame));
         gameSteps(currentGame);
 
@@ -291,7 +277,6 @@ document.addEventListener("DOMContentLoaded", () => {
         LocalGames.forEach(element => {
           if (element.id === currentGame.id) {
             element.steps = currentGame.steps;
-            element.lastMove = move;
           }
         });
 
