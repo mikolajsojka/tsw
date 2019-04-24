@@ -70,6 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (currentGame.size === black) {
       alert("Wygrałeś");
+      document.getElementById("win").style.display = "flex";
       sendRequest("game/status", "POST", body);
     }
   };
@@ -143,7 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     if (element.status) {
-      document.getElementById("win").innerHTML = "Wygrałeś";
+      document.getElementById("win").style.display = "flex";
     }
 
     document.getElementById("colors").innerHTML = colors;
