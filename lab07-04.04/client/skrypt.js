@@ -235,7 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   onActualGamesClick = () => {
     let LocalGames = JSON.parse(window.localStorage.getItem("games"));
-    let yourGames = document.getElementById("yourGames");
+    let allGames = document.getElementById("allGames");
     let actual = "";
 
     if (LocalGames) {
@@ -244,9 +244,10 @@ document.addEventListener("DOMContentLoaded", () => {
           element.id
         }</div></br>`;
       });
-      yourGames.innerHTML = actual;
+    
+      allGames.innerHTML = actual;
       document.getElementById("new").style.display = "none";
-      document.getElementById("yourGames").style.display = "block";
+      document.getElementById("yourGames").style.display = "flex";
       ongameClick();
     } else {
       alert("Brak gier");

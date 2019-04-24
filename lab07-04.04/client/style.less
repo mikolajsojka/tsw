@@ -42,7 +42,17 @@ body {
       align-items: center;
       justify-content: center;
 
+      #win {
+        width: 100%;
+        cursor: pointer;
+        background-color: rgb(194, 194, 247);
+        color: white;
+        text-align: center;
+        padding: 10px;
+      }
+
       #steps {
+        margin-top: 5px;
         width: 100%;
         cursor: pointer;
         background-color: rgb(194, 194, 247);
@@ -146,7 +156,7 @@ body {
           display: flex;
           background-color: rgb(220, 220, 241);
           justify-content: center;
-          align-items:center;
+          align-items: center;
 
           #white {
             background-color: white;
@@ -239,29 +249,46 @@ body {
       border: 1px solid black;
       cursor: pointer;
       width: 70%;
+      background-color: rgb(194, 194, 247);
+      flex-direction: column;
+
+      span{
+        background-color: rgb(191, 145, 145);
+        width:auto;
+        padding:10px;
+        cursor:pointer;
+        color:white;
+        text-align:center;
+      }
 
       .actualGamesElement {
+        background-color: rgb(220, 220, 241);
         border: 1px solid black;
         border-radius: 10px;
         padding: 10px;
         height: auto;
         text-align: center;
         width: auto;
+
+        &:hover {
+          transition-duration: 2s;
+          background-color: rgb(235, 235, 194);
+        }
       }
     }
   }
 
   @media (max-width: 600px) {
     #center {
-      width:70%;
+      width: 70%;
       #currentGame {
         width: 70%;
-        #colors{
-          width:70%;
+        #colors {
+          width: 70%;
         }
 
-        #points{
-          width:70%;
+        #points {
+          width: 70%;
         }
       }
     }
