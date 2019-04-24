@@ -260,7 +260,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let body = JSON.stringify({ size: size, colors: colors, steps: steps });
 
-    sendRequest("game/new", "POST", body);
+    if (size < 0 || colors < 0 || steps < 0) {
+      alert("Złe wartości");
+    } else {
+      sendRequest("game/new", "POST", body);
+    }
   };
 
   onCheckSolutionClick = () => {

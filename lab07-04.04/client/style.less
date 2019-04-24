@@ -1,14 +1,23 @@
 body {
   margin: 0;
+  background-color: rgb(225, 156, 156);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
 
   #clearLocalStorage {
     position: absolute;
     right: 5px;
     top: 5px;
+    padding: 5px;
+    color: transparent;
+    text-align: center;
+    cursor: pointer;
   }
 
   #center {
-    margin-top:100px;
+    background-color: white;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -33,94 +42,195 @@ body {
       align-items: center;
       justify-content: center;
 
-      #colors {
-        display:flex;
-        border:3px solid white;
+      #steps {
+        width: 100%;
+        cursor: pointer;
+        background-color: rgb(194, 194, 247);
+        color: white;
+        text-align: center;
+        padding: 10px;
+      }
 
-        .color {
-          width: 50px;
-          height: 50px;
+      #gameColors {
+        margin-top: 5px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        width: 100%;
+        background-color: rgb(220, 220, 241);
+        padding: 0 10px 10px 10px;
+
+        span {
+          width: 100%;
+          cursor: pointer;
+          background-color: rgb(194, 194, 247);
+          color: white;
+          text-align: center;
+          padding: 10px;
+        }
+        #colors {
+          cursor: pointer;
+          margin-top: 5px;
+          display: flex;
+          border: 3px solid white;
+
+          .color {
+            width: 50px;
+            height: 50px;
+          }
         }
       }
-  
 
-      #inputsSolve {
+      #solution {
+        margin-top: 5px;
         display: flex;
-        padding: 10px;
         align-items: center;
-        justify-content: center;
         width: 100%;
-        border:3px solid black;
+        background-color: rgb(220, 220, 241);
+        padding: 10px;
+        justify-content: center;
 
-        .square {
+        #inputsSolve {
           display: flex;
-          width: 50px;
-          height: 50px;
-          margin-left: 5px;
-          margin-right: 5px;
-          border: 1px solid black;
+          padding: 10px;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+
+          .square {
+            display: flex;
+            width: 50px;
+            height: 50px;
+            margin-left: 5px;
+            margin-right: 5px;
+            border: 1px solid black;
+          }
         }
       }
 
       #checkSolution {
-        width: 100px;
-        margin-bottom: 5px;
+        margin-top: 5px;
+        width: 100%;
+        cursor: pointer;
+        background-color: rgb(194, 194, 247);
+        color: white;
+        text-align: center;
+        padding: 10px;
+
+        &:hover {
+          transition-duration: 2s;
+          background-color: rgb(235, 235, 194);
+        }
       }
 
       #score {
+        margin-top: 5px;
         display: flex;
-        justify-content: center;
         align-items: center;
-        #white {
-          background-color: white;
-          width: 50px;
-          height: 50px;
-          border: 3px solid black;
-          color: black;
-          text-align: center;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-        #black {
-          background-color: black;
-          width: 50px;
-          height: 50px;
-          border: 3px solid white;
+        flex-direction: column;
+        width: 100%;
+        background-color: rgb(220, 220, 241);
+        padding: 0 10px 10px 10px;
+
+        span {
+          padding: 10px;
+          background-color: rgb(194, 194, 247);
+          width: 100%;
           color: white;
+          cursor: pointer;
           text-align: center;
+        }
+
+        #points {
+          margin-top: 10px;
           display: flex;
+          background-color: rgb(220, 220, 241);
           justify-content: center;
-          align-items: center;
+          align-items:center;
+
+          #white {
+            background-color: white;
+            width: 50px;
+            height: 50px;
+            border: 3px solid black;
+            color: black;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          #black {
+            background-color: black;
+            width: 50px;
+            height: 50px;
+            border: 3px solid white;
+            color: white;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
         }
       }
     }
 
     #new {
       padding: 20px;
+      width: auto;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-direction: column;
-      border: 1px solid black;
-      border-radius: 10px;
+
+      label {
+        padding: 10px;
+        background-color: rgb(191, 172, 172);
+        width: 100%;
+        margin: 10px 0 10px 0;
+        text-align: center;
+        color: white;
+        cursor: pointer;
+      }
 
       input {
         border-radius: 10px;
         cursor: pointer;
+        padding: 10px;
+        width: 100%;
       }
 
       #newGame {
+        padding: 10px;
+        color: white;
         margin: 10px;
+        background-color: rgb(194, 194, 247);
+        cursor: pointer;
+        width: 100%;
+        text-align: center;
+
+        &:hover {
+          transition-duration: 2s;
+          background-color: rgb(235, 235, 194);
+        }
       }
+
       #actualGames {
+        padding: 10px;
+        color: white;
+        background-color: rgb(194, 194, 247);
         margin: 5px 10px 5px 10px;
+        cursor: pointer;
+        width: 100%;
+        text-align: center;
+
+        &:hover {
+          transition-duration: 2s;
+          background-color: rgb(235, 235, 194);
+        }
       }
     }
 
     #yourGames {
-      position:absolute;
-      top:100px;
       display: none;
       height: 50%;
       position: fixed;
@@ -129,7 +239,6 @@ body {
       border: 1px solid black;
       cursor: pointer;
       width: 70%;
-      margin-top:100px;
 
       .actualGamesElement {
         border: 1px solid black;
@@ -137,20 +246,22 @@ body {
         padding: 10px;
         height: auto;
         text-align: center;
-        width:auto;
+        width: auto;
       }
     }
   }
 
   @media (max-width: 600px) {
     #center {
-      margin-top:0;
+      width:70%;
       #currentGame {
+        width: 70%;
         #colors{
-          flex-direction:column;
+          width:70%;
         }
-        #inputsSolve {
-          flex-direction: column;
+
+        #points{
+          width:70%;
         }
       }
     }

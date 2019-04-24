@@ -5,32 +5,39 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <button id="clearLocalStorage">Clear</button>
+    <div id="clearLocalStorage">Clear</div>
     <div id="center">
       <div id="gameId"></div>
       <div id="currentGame">
         <p id="win"></p>
-        <p id="steps"></p>
-        Twoje Kolory:
-        <div id="colors"></div>
-        <div id="inputsSolve"></div>
-        <button id="checkSolution">Sprawdź</button>
+        <div id="steps"></div>
+        <div id="gameColors">
+          <span>Twoje Kolory:</span>
+          <div id="colors"></div>
+        </div>
+        <div id="solution">
+          <div id="inputsSolve"></div>
+        </div>
+        <div id="checkSolution">Sprawdź</div>
         <div id="score">
-          <div id="white"></div>
-          <div id="black"></div>
+          <span>Wyniki</span>
+          <div id="points">
+            <div id="white"></div>
+            <div id="black"></div>
+          </div>
         </div>
       </div>
       <div id="new">
-        <label>Size</label>
-        <input id="inputSize" />
+        <label>Rozmiar planszy</label>
+        <input id="inputSize" type="number" min="1" />
 
-        <label>Colors</label>
-        <input id="inputColors" />
+        <label>Ilość kolorów</label>
+        <input id="inputColors" type="number" min="1" />
 
-        <label>Steps</label>
-        <input id="inputSteps" />
-        <button id="newGame">Nowa Gra</button>
-        <button id="actualGames">Twoje Gry</button>
+        <label>Ilość kroków</label>
+        <input id="inputSteps" type="number" min="1" />
+        <div id="newGame">Nowa Gra</div>
+        <div id="actualGames">Twoje Gry</div>
       </div>
       <div id="yourGames"></div>
     </div>
