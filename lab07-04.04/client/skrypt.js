@@ -50,6 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     window.localStorage.setItem("games", JSON.stringify(LocalGames));
     currentGame.status = status;
+    window.localStorage.setItem("currentGame", JSON.stringify(currentGame));
   };
 
   handleNewMove = xhr => {
@@ -141,6 +142,10 @@ document.addEventListener("DOMContentLoaded", () => {
       colors += `<div class="color" style="background-color:${element}"></div>`;
     });
 
+    if (element.status) {
+      document.getElementById("win").innerHTML = "Wygrałeś";
+    }
+
     document.getElementById("colors").innerHTML = colors;
   };
 
@@ -165,7 +170,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   renderInputs = (currentGame, element) => {
     let inputs = "";
-    if(currentGame.lastMove === undefined){
+    if (currentGame.lastMove === undefined) {
       element.code.forEach((_element, index) => {
         inputs += `<div id="${index}" class="input square" value="0" style="background-color:${
           currentGame.generatedColors[0]
@@ -173,12 +178,14 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     } else {
       element.code.forEach((_element, index) => {
-        inputs += `<div id="${index}" class="input square" value="${currentGame.lastMove[index]}" style="background-color:${
+        inputs += `<div id="${index}" class="input square" value="${
+          currentGame.lastMove[index]
+        }" style="background-color:${
           currentGame.generatedColors[currentGame.lastMove[index]]
         }"></div>`;
       });
     }
-    
+
     return inputs;
   };
 
@@ -258,45 +265,52 @@ document.addEventListener("DOMContentLoaded", () => {
 
   onCheckSolutionClick = () => {
     let currentGame = JSON.parse(window.localStorage.getItem("currentGame"));
-    
-    let i = 0;
-    let move = [];
 
-    while (i < currentGame.size) {
-      move.push(
-        parseInt(document.getElementById(`${i}`).getAttribute("value"))
-      );
-      i++;
-    }
+    if (!currentGame.status) {
+      let i = 0;
+      let move = [];
 
-    currentGame.lastMove = move;
-
-    let body = JSON.stringify({ code: currentGame.code, move: move });
-
-    if (currentGame.steps === "infinity") {
-      gameSteps(currentGame);
-      sendRequest("game/move", "POST", body);
-    } else {
-      if (currentGame.steps <= 0) {
-        alert("Przekroczyłeś limit ruchów");
-      } else {
-        currentGame.steps = parseInt(currentGame.steps) - 1;
-        window.localStorage.setItem("currentGame", JSON.stringify(currentGame));
-        gameSteps(currentGame);
-
-        let LocalGames = JSON.parse(window.localStorage.getItem("games"));
-
-        LocalGames.forEach(element => {
-          if (element.id === currentGame.id) {
-            element.steps = currentGame.steps;
-            element.lastMove = move;
-          }
-        });
-
-        window.localStorage.setItem("games", JSON.stringify(LocalGames));
-
-        sendRequest("game/move", "POST", body);
+      while (i < currentGame.size) {
+        move.push(
+          parseInt(document.getElementById(`${i}`).getAttribute("value"))
+        );
+        i++;
       }
+
+      currentGame.lastMove = move;
+
+      let body = JSON.stringify({ code: currentGame.code, move: move });
+
+      if (currentGame.steps === "infinity") {
+        gameSteps(currentGame);
+        sendRequest("game/move", "POST", body);
+      } else {
+        if (currentGame.steps <= 0) {
+          alert("Przekroczyłeś limit ruchów");
+        } else {
+          currentGame.steps = parseInt(currentGame.steps) - 1;
+          window.localStorage.setItem(
+            "currentGame",
+            JSON.stringify(currentGame)
+          );
+          gameSteps(currentGame);
+
+          let LocalGames = JSON.parse(window.localStorage.getItem("games"));
+
+          LocalGames.forEach(element => {
+            if (element.id === currentGame.id) {
+              element.steps = currentGame.steps;
+              element.lastMove = move;
+            }
+          });
+
+          window.localStorage.setItem("games", JSON.stringify(LocalGames));
+
+          sendRequest("game/move", "POST", body);
+        }
+      }
+    } else {
+      alert("Wygrałeś już");
     }
   };
 
