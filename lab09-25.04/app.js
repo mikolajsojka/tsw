@@ -20,6 +20,12 @@ db.once("open", function() {
 const userSchema = mongoose.Schema({ username: String, status: String });
 let User = mongoose.model("User", userSchema);
 
+const chatAllSchema = mongoose.Schema({
+  text: String,
+  username: String
+});
+let chatAll = mongoose.model("chatAll", chatAllSchema);
+
 const httpServer = require("http").createServer(app);
 
 const socketio = require("socket.io");
@@ -28,6 +34,18 @@ const io = socketio.listen(httpServer);
 app.use(serveStatic("public"));
 
 io.sockets.on("connect", socket => {
+  chatAll.find({}, function(err, messages) {
+    messages.forEach(element => {
+      let data = {
+        username: element.username,
+        message: element.text
+      };
+      console.log(element);
+      socket.emit("write", data);
+      socket.broadcast.emit("write", data);
+    });
+  });
+
   socket.on("authentication", data => {
     let newUser = new User({
       username: data,
@@ -41,9 +59,18 @@ io.sockets.on("connect", socket => {
     socket.emit("login", JSON.stringify(newUser));
   });
 
-  socket.on("message", (data) => {
-    socket.broadcast.emit("write",data);
-    socket.emit("write",data);
+  socket.on("message", data => {
+    let newChat = new chatAll({
+      text: data.message,
+      username: data.username
+    });
+
+    newChat.save(function(err, _newChat) {
+      if (err) return console.error(err);
+    });
+
+    socket.broadcast.emit("write", data);
+    socket.emit("write", data);
   });
 });
 
