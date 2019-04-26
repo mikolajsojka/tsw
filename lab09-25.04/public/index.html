@@ -9,10 +9,19 @@
   </head>
 
   <body>
-    <div id="logPanel">
-      <input id="login" type="text" required />
-      <div id="logIn">Zaloguj</div>
-      <div id="logOut">Wyloguj</div>
+    <div id="logged"></div>
+
+    <div id="center">
+      <div id="logPanel">
+        <input id="username" type="text" required />
+        <div id="logIn" class="auth">Zaloguj</div>
+        <div id="logOut" class="auth">Wyloguj</div>
+      </div>
+
+      <div id="chatroom">
+        <div id="messages"></div>
+        <input id="send"/>
+      </div>
     </div>
   </body>
 </html>
