@@ -59,14 +59,29 @@ document.addEventListener("DOMContentLoaded", () => {
     let white = xmlRes.getElementsByTagName("white")[0].firstChild.nodeValue;
     let black = xmlRes.getElementsByTagName("black")[0].firstChild.nodeValue;
 
+    let currentGame = JSON.parse(window.localStorage.getItem("currentGame"));
+    let body = JSON.stringify({ game: currentGame.id });
+
     let whiteScore = document.getElementById("white");
     let blackScore = document.getElementById("black");
 
     whiteScore.innerHTML = white;
     blackScore.innerHTML = black;
 
-    let currentGame = JSON.parse(window.localStorage.getItem("currentGame"));
-    let body = JSON.stringify({ game: currentGame.id });
+    let LocalGames = JSON.parse(window.localStorage.getItem("games"));
+
+    LocalGames.forEach(element => {
+      if (element.id === currentGame.id) {
+        element.white = white;
+        element.black = black;
+      }
+    });
+
+    currentGame.white = white;
+    currentGame.black = black;
+
+    window.localStorage.setItem("currentGame", JSON.stringify(currentGame));
+    window.localStorage.setItem("games", JSON.stringify(LocalGames));
 
     if (currentGame.size === black) {
       alert("Wygrałeś");
@@ -136,6 +151,19 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("gameId").innerHTML = element.id;
     document.getElementById("gameId").setAttribute("value", element.steps);
     document.getElementById("currentGame").style.display = "flex";
+
+    let whiteScore = document.getElementById("white");
+    let blackScore = document.getElementById("black");
+
+    let currentGame = JSON.parse(window.localStorage.getItem("currentGame"));
+
+    if (currentGame.white) {
+      whiteScore.innerHTML = currentGame.white;
+      blackScore.innerHTML = currentGame.black;
+    } else {
+      whiteScore.innerHTML = "";
+      blackScore.innerHTML = "";
+    }
 
     let colors = "";
 
@@ -269,6 +297,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  fillMove = (currentGame, move) => {
+    let LocalGames = JSON.parse(window.localStorage.getItem("games"));
+
+    LocalGames.forEach(element => {
+      if (element.id === currentGame.id) {
+        element.steps = currentGame.steps;
+        element.lastMove = move;
+      }
+    });
+
+    window.localStorage.setItem("games", JSON.stringify(LocalGames));
+  };
+
   onCheckSolutionClick = () => {
     let currentGame = JSON.parse(window.localStorage.getItem("currentGame"));
 
@@ -291,16 +332,7 @@ document.addEventListener("DOMContentLoaded", () => {
         window.localStorage.setItem("currentGame", JSON.stringify(currentGame));
         gameSteps(currentGame);
 
-        let LocalGames = JSON.parse(window.localStorage.getItem("games"));
-
-        LocalGames.forEach(element => {
-          if (element.id === currentGame.id) {
-            element.steps = currentGame.steps;
-            element.lastMove = move;
-          }
-        });
-
-        window.localStorage.setItem("games", JSON.stringify(LocalGames));
+        fillMove(currentGame, move);
 
         sendRequest("game/move", "POST", body);
       } else {
@@ -314,16 +346,7 @@ document.addEventListener("DOMContentLoaded", () => {
           );
           gameSteps(currentGame);
 
-          let LocalGames = JSON.parse(window.localStorage.getItem("games"));
-
-          LocalGames.forEach(element => {
-            if (element.id === currentGame.id) {
-              element.steps = currentGame.steps;
-              element.lastMove = move;
-            }
-          });
-
-          window.localStorage.setItem("games", JSON.stringify(LocalGames));
+          fillMove(currentGame, move);
 
           sendRequest("game/move", "POST", body);
         }
