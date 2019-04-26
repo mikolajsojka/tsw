@@ -55,18 +55,6 @@ const ocena = kod => {
   };
 };
 
-app.get("/", (_req, res) => {
-  res.writeHead(200, {
-    "Access-Control-Allow-Origin": "*",
-    "Content-Type": "text/xml",
-    "Cache-control": "no-cache",
-    Pragma: "no-cache"
-  });
-
-  res.write("<response><test>Serwer działa pomyślnie</test></response>");
-  res.end();
-});
-
 app.post("/game/new", (req, res) => {
   res.writeHead(200, {
     "Access-Control-Allow-Origin": "*",

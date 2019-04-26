@@ -245,7 +245,7 @@ document.addEventListener("DOMContentLoaded", () => {
           element.id
         }</div></br>`;
       });
-    
+
       allGames.innerHTML = actual;
       document.getElementById("new").style.display = "none";
       document.getElementById("yourGames").style.display = "flex";
@@ -288,7 +288,20 @@ document.addEventListener("DOMContentLoaded", () => {
       let body = JSON.stringify({ code: currentGame.code, move: move });
 
       if (currentGame.steps === "infinity") {
+        window.localStorage.setItem("currentGame", JSON.stringify(currentGame));
         gameSteps(currentGame);
+
+        let LocalGames = JSON.parse(window.localStorage.getItem("games"));
+
+        LocalGames.forEach(element => {
+          if (element.id === currentGame.id) {
+            element.steps = currentGame.steps;
+            element.lastMove = move;
+          }
+        });
+
+        window.localStorage.setItem("games", JSON.stringify(LocalGames));
+
         sendRequest("game/move", "POST", body);
       } else {
         if (currentGame.steps <= 0) {
