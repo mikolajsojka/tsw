@@ -4,6 +4,9 @@
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 3000;
+const serveStatic = require("serve-static");
+
+app.use(serveStatic("public"));
 
 const bodyParser = require("body-parser");
 const uuidv1 = require("uuid/v1");
