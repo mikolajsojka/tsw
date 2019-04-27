@@ -5,6 +5,7 @@ body {
   align-items: center;
   justify-content: center;
   height: 100vh;
+  width: 100vw;
 
   #logged {
     position: absolute;
@@ -57,30 +58,50 @@ body {
     }
 
     #chatroom {
-      display:none;
-      align-items:center;
+      position: absolute;
+      display: none;
+      align-items: center;
       justify-content: center;
       flex-direction: column;
-      height:auto;
+      height: auto;
       background-color: white;
+      width: auto;
+      bottom:10%;
+      height:auto;
+      top:10%;
+      right:10%;
+      left:10%;
 
-      #messages {
-        display: flex;
-        height: 50%;
-        position: fixed;
-        overflow-y: scroll;
-        padding: 20px;
-        border: 1px solid black;
-        cursor: pointer;
-        width: 70%;
-        background-color: rgb(194, 194, 247);
-        flex-direction: column;
+      #window{
+        display:flex;
+
+        #actual-chats{
+          background-color:blue;
+          top:10%;
+          bottom:10%;
+          height:auto;
+          left:10%;
+          right:60%;
+          position: fixed;
+          overflow-y: scroll;
+        }
+
+        #messages{
+          top:10%;
+          right:10%;
+          bottom:10%;
+          left:40%;
+          position: fixed;
+          overflow-y: scroll;
+          padding:20px;
+        }
+
       }
 
-      input{
-        position:absolute;
-        right:5px;
-        bottom:5px;
+      #send {
+        position: fixed;
+        bottom:1%;
+
       }
     }
   }
