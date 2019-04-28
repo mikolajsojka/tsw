@@ -20,12 +20,6 @@ db.once("open", function() {
 const userSchema = mongoose.Schema({ username: String, status: String });
 let User = mongoose.model("User", userSchema);
 
-const chatAllSchema = mongoose.Schema({
-  text: String,
-  username: String
-});
-let chatAll = mongoose.model("chatAll", chatAllSchema);
-
 const httpServer = require("http").createServer(app);
 
 const socketio = require("socket.io");
@@ -34,44 +28,48 @@ const io = socketio.listen(httpServer);
 app.use(serveStatic("public"));
 
 io.sockets.on("connect", socket => {
-  
-  chatAll.find({}, function(err, messages) {
-    messages.forEach(element => {
-      let data = {
-        username: element.username,
-        message: element.text
-      };
-      console.log(element);
-      socket.emit("write", data);
-      socket.broadcast.emit("write", data);
-    });
-  });
-
   socket.on("authentication", data => {
     let newUser = new User({
       username: data,
       status: "online"
     });
 
-    newUser.save(function(err, _newUser) {
-      if (err) return console.error(err);
+    User.findOne({ username: newUser.username }, (err, user) => {
+      if (user) {
+        if (user.status === "online") {
+          socket.emit("authentication-failed");
+        } else {
+          socket.emit("authentication-passed", JSON.stringify(user));
+        }
+      } else {
+        newUser.save(function(err, _newUser) {
+          if (err) return console.error(err);
+        });
+        socket.emit("authentication-passed", JSON.stringify(newUser));
+      }
+      if (err) {
+        console.log("Nie tak");
+      }
     });
 
-    socket.emit("login", JSON.stringify(newUser));
+    //najpierw sprawdź czy online
+
+    //jak jest wolny nickname, ale w bazie to tylko go zaloguj
+
+    //jak nie ma to dodaj do bazy
   });
 
-  socket.on("message", data => {
-    let newChat = new chatAll({
-      text: data.message,
-      username: data.username
+  socket.on("search-user", data => {
+    User.findOne({ username: data }, (err, user) => {
+      if (user) {
+        socket.emit("search-user-passed");
+      } else {
+        socket.emit("search-user-failed");
+      }
+      if (err) {
+        console.log("Nie tak");
+      }
     });
-
-    newChat.save(function(err, _newChat) {
-      if (err) return console.error(err);
-    });
-
-    socket.broadcast.emit("write", data);
-    socket.emit("write", data);
   });
 });
 

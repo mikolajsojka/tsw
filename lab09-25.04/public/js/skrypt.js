@@ -4,56 +4,80 @@
 
 document.onreadystatechange = () => {
   if (document.readyState === "interactive") {
-    let logInButton = document.getElementById("logIn");
-    let logOutButton = document.getElementById("logOut");
-    let logged = document.getElementById("logged");
-    let logPanel = document.getElementById("logPanel");
-    let chatroom = document.getElementById("chatroom");
-    let messages = document.getElementById("messages");
-    let username = document.getElementById("username");
-    let send = document.getElementById("send");
+    let logIn = document.getElementById("log-in");
+    let searchUser = document.getElementById("search-user");
+    let logOut = document.getElementById("log-out");
+    let usernameInput = document.getElementById("username-input");
     let socket;
 
     socket = io.connect(`http://${location.host}`);
 
     socket.on("connect", () => {
-      let user = JSON.parse(window.localStorage.getItem("user"));
+      logIn.addEventListener(
+        "click",
+        () => {
+          if (usernameInput.value) {
+            socket.emit("authentication", usernameInput.value);
+          } else {
+            alert("Musisz podać swój nick");
+          }
+        },
+        false
+      );
 
-      if (user) {
-        logged.innerHTML = `Zalogowany jako: ${user.username}`;
-        logPanel.style.display = "none";
-        chatroom.style.display = "flex";
-      } else {
-        logged.innerHTML = `Niezalogowany`;
-      }
+      logOut.addEventListener(
+        "click",
+        () => {
+          let user = JSON.parse(window.localStorage.getItem("user"));
 
-      logInButton.addEventListener("click", () => {
-        logInButton.style.display = "none";
-        logOutButton.style.display = "flex";
-        socket.emit("authentication", username.value);
+          if (user) {
+            window.localStorage.clear();
+            logIn.style.display = "flex";
+            logOut.style.display = "none";
+            usernameInput.style.display = "flex";
+            logOut.innerHTML = "";
 
-        socket.on("login", data => {
-          window.localStorage.setItem("user", data);
-          location.reload();
-        });
-      });
+            //odesłanie do serwera żeby zmieniło status na offline
+          } else {
+            alert("Nie wiem jak, ale próbowałeś mnie oszukać");
+          }
+        },
+        false
+      );
 
-      send.addEventListener("keypress", function(e) {
-        var key = e.which || e.keyCode;
-        if (key === 13) {
-          let data = { username: user.username, message: send.value };
+      socket.on("authentication-passed", data => {
+        window.localStorage.setItem("user", data);
 
-          send.value = "";
+        let user = JSON.parse(window.localStorage.getItem("user"));
 
-          socket.emit("message", data);
+        if (user) {
+          logIn.style.display = "none";
+          logOut.style.display = "flex";
+          usernameInput.style.display = "none";
+          logOut.innerHTML = `Wyloguj(${user.username})`;
+
+          //prymitywnie bardzo
         }
       });
 
-      socket.on("write", data => {
-        let message = `</br><div class="text">${data.username}: ${
-          data.message
-        }</div>`;
-        messages.innerHTML += message;
+      searchUser.addEventListener("keypress", function(e) {
+        var key = e.which || e.keyCode;
+        if (key === 13) {
+          socket.emit("search-user", searchUser.value);
+          searchUser.value = "";
+        }
+      });
+
+      socket.on("search-user-passed", () => {
+        console.log("Znaleziono takiego użytkownika");
+      });
+
+      socket.on("search-user-failed", () => {
+        console.log("Nie znaleziono takiego użytkownika");
+      });
+
+      socket.on("authentication-failed", () => {
+        alert("Login jest obecnie zajęty");
       });
     });
   }
