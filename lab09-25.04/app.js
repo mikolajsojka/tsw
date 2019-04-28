@@ -12,6 +12,7 @@ mongoose.connect("mongodb://localhost:27017/chat-socket-io", {
 });
 
 let db = mongoose.connection;
+let ObjectId = require("mongodb").ObjectID;
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", function() {
   // we're connected!
@@ -20,14 +21,53 @@ db.once("open", function() {
 const userSchema = mongoose.Schema({ username: String, status: String });
 let User = mongoose.model("User", userSchema);
 
+const chatSchema = mongoose.Schema({
+  user_1: String,
+  user_2: String,
+  messages: [
+    {
+      message: String,
+      author: String
+    }
+  ]
+});
+let Chat = mongoose.model("Chat", chatSchema);
+
+const chatAllSchema = mongoose.Schema({
+  messages: [
+    {
+      message: String,
+      author: String
+    }
+  ]
+});
+let chatAll = mongoose.model("chatAll", chatAllSchema);
+
 const httpServer = require("http").createServer(app);
 
 const socketio = require("socket.io");
 const io = socketio.listen(httpServer);
+const bodyParser = require("body-parser");
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(serveStatic("public"));
 
 io.sockets.on("connect", socket => {
+  socket.on("chat-all", () => {
+    chatAll.findOne({}, function(err, messages) {
+      if (messages) {
+        socket.emit("chat-all-fill-passed", JSON.stringify(messages.messages));
+      } else {
+        socket.emit("chat-all-fill-failed");
+      }
+      if (err) {
+        console.log("Nie tak");
+      }
+    });
+  });
+
   socket.on("authentication", data => {
     let newUser = new User({
       username: data,
@@ -57,6 +97,38 @@ io.sockets.on("connect", socket => {
     //jak jest wolny nickname, ale w bazie to tylko go zaloguj
 
     //jak nie ma to dodaj do bazy
+  });
+
+  socket.on("send-message", data => {
+    chatAll.findOne({}, function(err, messages) {
+      let new_message = messages.messages;
+
+      new_message.push({ message: data.message, author: data.author });
+      console.log(new_message);
+      if (messages) {
+        chatAll.updateOne(
+          { _id: ObjectId(messages._id) },
+          {
+            $set: {
+              messages: new_message
+            }
+          },
+          function(err) {
+            if (err) {
+              console.log("Coś nie tak poszło przy dodawaniu wiadomości");
+            } else {
+              console.log("niby dodane");
+
+              socket.broadcast.emit("write-message", data);
+              socket.emit("write-message", data);
+            }
+          }
+        );
+      }
+      if (err) {
+        console.log("Nie znaleziono w bazie");
+      }
+    });
   });
 
   socket.on("search-user", data => {
