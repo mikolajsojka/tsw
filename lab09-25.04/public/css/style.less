@@ -1,107 +1,56 @@
 body {
+  background-color: pink;
   margin: 0;
-  background-color: rgb(225, 156, 156);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  width: 100vw;
 
-  #logged {
+  #authorization {
     position: absolute;
     top: 5px;
-    left: 5px;
+    right: 5px;
+    display: flex;
+    justify-content: flex-end;
   }
 
-  #center {
-    background-color: white;
+  #chat-ui {
+    position: absolute;
+    top: 30px;
     display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
+    background-color: white;
+    left: 0;
+    right: 0;
+    width: auto;
     height: auto;
+    bottom: 0;
+    padding: 20px;
 
-    #logPanel {
-      background-color: white;
-      padding: 40px;
-      width: auto;
+    #all-chats {
+      background-color: yellow;
       display: flex;
-      align-items: center;
-      justify-content: center;
       flex-direction: column;
 
-      input {
-        padding: 10px;
-      }
-
-      .auth {
+      #your-chats{
         display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 10px;
-        color: white;
-        margin: 10px;
-        background-color: rgb(194, 194, 247);
-        cursor: pointer;
-        width: 100%;
-        text-align: center;
-
-        &:hover {
-          transition-duration: 2s;
-          background-color: rgb(235, 235, 194);
-        }
-      }
-
-      #logOut {
-        display: none;
+        flex-direction: column;
+        flex: 1;
+        overflow: auto;
       }
     }
 
-    #chatroom {
-      position: absolute;
-      display: none;
-      align-items: center;
-      justify-content: center;
+    #actual-chat {
+      background-color: green;
+      width: 100%;
+      display: flex;
       flex-direction: column;
-      height: auto;
-      background-color: white;
-      width: auto;
-      bottom:10%;
-      height:auto;
-      top:10%;
-      right:10%;
-      left:10%;
 
-      #window{
-        display:flex;
-
-        #actual-chats{
-          background-color:blue;
-          top:10%;
-          bottom:10%;
-          height:auto;
-          left:10%;
-          right:60%;
-          position: fixed;
-          overflow-y: scroll;
-        }
-
-        #messages{
-          top:10%;
-          right:10%;
-          bottom:10%;
-          left:40%;
-          position: fixed;
-          overflow-y: scroll;
-          padding:20px;
-        }
-
+      #actual-chat-messages {
+        height: 80%;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        overflow: auto;
       }
 
       #send {
-        position: fixed;
-        bottom:1%;
-
+        height: 10%;
       }
     }
   }

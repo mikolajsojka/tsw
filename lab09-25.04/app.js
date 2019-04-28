@@ -34,6 +34,7 @@ const io = socketio.listen(httpServer);
 app.use(serveStatic("public"));
 
 io.sockets.on("connect", socket => {
+  
   chatAll.find({}, function(err, messages) {
     messages.forEach(element => {
       let data = {

@@ -41,17 +41,20 @@ document.onreadystatechange = () => {
       send.addEventListener("keypress", function(e) {
         var key = e.which || e.keyCode;
         if (key === 13) {
-          let data = {username:user.username,message:send.value};
+          let data = { username: user.username, message: send.value };
 
-          socket.emit("message", (data));
-        }        
+          send.value = "";
+
+          socket.emit("message", data);
+        }
       });
 
-      socket.on("write",data => {
-        let message = `</br><div class="text">${data.username}: ${data.message}</div>`;
+      socket.on("write", data => {
+        let message = `</br><div class="text">${data.username}: ${
+          data.message
+        }</div>`;
         messages.innerHTML += message;
       });
-      
     });
   }
 };
