@@ -49,6 +49,12 @@ document.onreadystatechange = () => {
           };
           socket.emit("send-message", data);
           sendMessage.value = "";
+
+          document.getElementById(
+            "actual-chat-messages"
+          ).scrollTop = document.getElementById(
+            "actual-chat-messages"
+          ).scrollHeight;
         }
       });
 
@@ -131,6 +137,12 @@ document.onreadystatechange = () => {
         });
 
         messages.innerHTML = fill;
+
+        document.getElementById(
+          "actual-chat-messages"
+        ).scrollTop = document.getElementById(
+          "actual-chat-messages"
+        ).scrollHeight;
       });
 
       socket.on("write-message", data => {
@@ -140,8 +152,8 @@ document.onreadystatechange = () => {
         messages.innerHTML += message;
       });
 
-      socket.on("empty-chat-all", (currentChat) => {
-        socket.emit("chat-all",currentChat);
+      socket.on("empty-chat-all", currentChat => {
+        socket.emit("chat-all", currentChat);
       });
 
       socket.on("chat-all-fill-failed", () => {
