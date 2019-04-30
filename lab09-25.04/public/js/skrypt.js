@@ -13,27 +13,32 @@ document.onreadystatechange = () => {
     let chatUi = document.getElementById("chat-ui");
     let chats = document.getElementById("chats");
 
-    let socket;
+    let socket, user, currentChat;
 
     socket = io.connect(`http://${location.host}`);
 
     socket.on("connect", () => {
-      let user = JSON.parse(window.localStorage.getItem("user"));
-      let currentChat = window.localStorage.getItem("current-chat");
+      //socket emit to i tamto
+      socket.emit("on-connect", () => {});
 
-      if (user) {
-        logIn.style.display = "none";
-        logOut.style.display = "flex";
-        usernameInput.style.display = "none";
-        logOut.innerHTML = `Wyloguj(${user.username})`;
-        chatUi.style.display = "flex";
-      } else {
-        chatUi.style.display = "none";
-      }
+      socket.on("after-connect", (data) => {
+        user = data.user;
+        currentChat = data.currentChat;
 
-      if (currentChat) {
-        socket.emit("chat-all", currentChat);
-      }
+        if (user) {
+          logIn.style.display = "none";
+          logOut.style.display = "flex";
+          usernameInput.style.display = "none";
+          logOut.innerHTML = `Wyloguj(${user.username})`;
+          chatUi.style.display = "flex";
+        } else {
+          chatUi.style.display = "none";
+        }
+
+        if (currentChat) {
+          socket.emit("chat-all", currentChat);
+        }
+      });
 
       sendMessage.addEventListener("keypress", function(e) {
         let key = e.which || e.keyCode;

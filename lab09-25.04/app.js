@@ -94,6 +94,13 @@ io.sockets.on("connect", socket => {
     }
   });
 
+  socket.on("on-connect", () => {
+    socket.emit("after-connect", {
+      user: socket.handshake.session.userdata,
+      currentChat: socket.handshake.session.currentChat
+    });
+  });
+
   socket.on("authentication", data => {
     if (data) {
       let newUser = new User({
@@ -155,7 +162,7 @@ io.sockets.on("connect", socket => {
     let data = socket.handshake.session.userdata;
 
     User.updateOne(
-      { _id: ObjectId(data._id) },
+      { username: data.username },
       {
         $set: {
           status: "offline"
