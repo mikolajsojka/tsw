@@ -31,7 +31,7 @@ document.onreadystatechange = () => {
           usernameInput.style.display = "none";
           logOut.innerHTML = `Wyloguj(${user.username})`;
           chatUi.style.display = "flex";
-          chats.innerHTML = `<div id="general-chat" class="active-chats">Wszyscy</div>`;
+          chats.innerHTML = `<div id="general-chat" class="active-chats" style="background-color:rgb(95, 90, 90)">Wszyscy</div>`;
         } else {
           chatUi.style.display = "none";
         }
@@ -87,7 +87,6 @@ document.onreadystatechange = () => {
         messages.innerHTML = "";
         chats.innerHTML = "";
 
-        //Coś wykminić żeby alert się pokazał po ukryciu
         alert("Wylogowano");
 
         chatUi.style.display = "none";
@@ -110,11 +109,9 @@ document.onreadystatechange = () => {
           generalChat.addEventListener("click", () => {
             let currentChat = "general-chat";
 
-            console.log(currentChat);
             if (currentChat) {
               socket.emit("chat-all", currentChat);
             }
-            //on failed
           });
         }
       });
@@ -143,6 +140,9 @@ document.onreadystatechange = () => {
         ).scrollTop = document.getElementById(
           "actual-chat-messages"
         ).scrollHeight;
+
+        document.getElementById("general-chat").style.backgroundColor =
+          "rgb(95, 90, 90)";
       });
 
       socket.on("write-message", data => {
