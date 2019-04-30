@@ -55,17 +55,24 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(serveStatic("public"));
 
 io.sockets.on("connect", socket => {
-  socket.on("chat-all", () => {
-    chatAll.findOne({}, function(err, messages) {
-      if (messages) {
-        socket.emit("chat-all-fill-passed", JSON.stringify(messages.messages));
-      } else {
-        socket.emit("chat-all-fill-failed");
-      }
-      if (err) {
-        console.log("Nie tak");
-      }
-    });
+  socket.on("chat-all", currentChat => {
+    if (currentChat === "general-chat") {
+      chatAll.findOne({}, function(err, messages) {
+        if (messages) {
+          socket.emit(
+            "chat-all-fill-passed",
+            JSON.stringify(messages.messages)
+          );
+        } else {
+          socket.emit("chat-all-fill-failed");
+        }
+        if (err) {
+          console.log("Nie tak");
+        }
+      });
+    } else {
+      console.log("Coś majstrowałeś..");
+    }
   });
 
   socket.on("authentication", data => {
@@ -132,35 +139,39 @@ io.sockets.on("connect", socket => {
   });
 
   socket.on("send-message", data => {
-    chatAll.findOne({}, function(err, messages) {
-      let new_message = messages.messages;
+    if (data.currentChat === "general-chat") {
+      chatAll.findOne({}, function(err, messages) {
+        let new_message = messages.messages;
 
-      new_message.push({ message: data.message, author: data.author });
-      console.log(new_message);
-      if (messages) {
-        chatAll.updateOne(
-          { _id: ObjectId(messages._id) },
-          {
-            $set: {
-              messages: new_message
-            }
-          },
-          function(err) {
-            if (err) {
-              console.log("Coś nie tak poszło przy dodawaniu wiadomości");
-            } else {
-              console.log("niby dodane");
+        new_message.push({ message: data.message, author: data.author });
+        console.log(new_message);
+        if (messages) {
+          chatAll.updateOne(
+            { _id: ObjectId(messages._id) },
+            {
+              $set: {
+                messages: new_message
+              }
+            },
+            function(err) {
+              if (err) {
+                console.log("Coś nie tak poszło przy dodawaniu wiadomości");
+              } else {
+                console.log("niby dodane");
 
-              socket.broadcast.emit("write-message", data);
-              socket.emit("write-message", data);
+                socket.broadcast.emit("write-message", data);
+                socket.emit("write-message", data);
+              }
             }
-          }
-        );
-      }
-      if (err) {
-        console.log("Nie znaleziono w bazie");
-      }
-    });
+          );
+        }
+        if (err) {
+          console.log("Nie znaleziono w bazie");
+        }
+      });
+    } else {
+      console.log("Coś nie tak z wyborem czatu");
+    }
   });
 
   socket.on("search-user", data => {

@@ -9,15 +9,25 @@ body {
     display: flex;
     justify-content: flex-end;
 
-    #log-out{
-      display:none;
+    #log-out {
+      display: none;
+      color: white;
+      padding: 5px;
+      cursor: pointer;
+      background-color: rgb(194, 194, 247);
+      text-align: center;
+
+      &:hover {
+        transition-duration: 2s;
+        background-color: rgb(235, 235, 194);
+      }
     }
   }
 
   #chat-ui {
     position: absolute;
-    top: 30px;
-    display: flex;
+    top: 40px;
+    display: none;
     background-color: white;
     left: 0;
     right: 0;
@@ -31,11 +41,33 @@ body {
       display: flex;
       flex-direction: column;
 
-      #your-chats{
+      input {
+        border-style:none;
+        background-color:rgb(213, 204, 204);
+      }
+
+      #your-chats {
         display: flex;
         flex-direction: column;
         flex: 1;
         overflow: auto;
+
+        #chats {
+          display: flex;
+          flex-direction: column;
+          .active-chats {
+            background-color: rgb(247, 217, 162);
+            color: white;
+            text-align: center;
+            padding: 5px;
+            cursor: pointer;
+
+              &:hover {
+                transition-duration: 2s;
+                background-color: rgb(231, 231, 195);
+              }
+          }
+        }
       }
     }
 
@@ -51,10 +83,25 @@ body {
         flex-direction: column;
         flex: 1;
         overflow: auto;
+
+        #messages {
+          padding: 10px;
+          .message {
+            display: flex;
+            background-color: rgb(216, 212, 212);
+            color: white;
+            height: 50px;
+            margin-bottom: 5px;
+            align-items: center;
+            padding: 5px;
+          }
+        }
       }
 
       #send-message {
         height: 10%;
+        border-style:none;
+        background-color:rgb(213, 204, 204);
       }
     }
   }

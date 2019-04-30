@@ -8,9 +8,10 @@ document.onreadystatechange = () => {
     let searchUser = document.getElementById("search-user");
     let logOut = document.getElementById("log-out");
     let usernameInput = document.getElementById("username-input");
-    let generalChat = document.getElementById("general-chat");
     let messages = document.getElementById("messages");
     let sendMessage = document.getElementById("send-message");
+    let chatUi = document.getElementById("chat-ui");
+    let chats = document.getElementById("chats");
 
     let socket;
 
@@ -18,31 +19,41 @@ document.onreadystatechange = () => {
 
     socket.on("connect", () => {
       let user = JSON.parse(window.localStorage.getItem("user"));
+      let currentChat = window.localStorage.getItem("current-chat");
 
       if (user) {
         logIn.style.display = "none";
         logOut.style.display = "flex";
         usernameInput.style.display = "none";
         logOut.innerHTML = `Wyloguj(${user.username})`;
+        chatUi.style.display = "flex";
+      } else {
+        chatUi.style.display = "none";
       }
 
-      generalChat.addEventListener("click", () => {
-        let user = JSON.parse(window.localStorage.getItem("user"));
+      if (currentChat) {
+        socket.emit("chat-all", currentChat);
+      }
 
-        console.log(user);
-        if (user) {
-          socket.emit("chat-all");
-        }
-      });
+      
 
       sendMessage.addEventListener("keypress", function(e) {
         let user = JSON.parse(window.localStorage.getItem("user"));
+        let currentChat = window.localStorage.getItem("current-chat");
         if (user) {
-          let key = e.which || e.keyCode;
-          if (key === 13) {
-            let data = { message: sendMessage.value, author: user.username };
-            socket.emit("send-message", data);
-            sendMessage.value = "";
+          if (currentChat) {
+            let key = e.which || e.keyCode;
+            if (key === 13) {
+              let data = {
+                message: sendMessage.value,
+                author: user.username,
+                currentChat: currentChat
+              };
+              socket.emit("send-message", data);
+              sendMessage.value = "";
+            }
+          } else {
+            alert("Musisz wybrać czat");
           }
         } else {
           alert("Musisz się zalogować");
@@ -68,13 +79,6 @@ document.onreadystatechange = () => {
 
           if (user) {
             socket.emit("logout", user);
-            logIn.style.display = "flex";
-            logOut.style.display = "none";
-            usernameInput.style.display = "flex";
-            logOut.innerHTML = "";
-            messages.innerHTML = "";
-
-            //odesłanie do serwera żeby zmieniło status na offline
           } else {
             alert("Nie wiem jak, ale próbowałeś mnie oszukać");
           }
@@ -82,9 +86,20 @@ document.onreadystatechange = () => {
         false
       );
 
-      socket.on("logout-passed",()=>{
+      socket.on("logout-passed", () => {
         window.localStorage.clear();
+
+        logIn.style.display = "flex";
+        logOut.style.display = "none";
+        usernameInput.style.display = "flex";
+        logOut.innerHTML = "";
+        messages.innerHTML = "";
+        chats.innerHTML = "";
+
+        //Coś wykminić żeby alert się pokazał po ukryciu
         alert("Wylogowano");
+
+        chatUi.style.display = "none";
       });
 
       socket.on("authentication-passed", data => {
@@ -97,8 +112,23 @@ document.onreadystatechange = () => {
           logOut.style.display = "flex";
           usernameInput.style.display = "none";
           logOut.innerHTML = `Wyloguj(${user.username})`;
-
+          chatUi.style.display = "flex";
+          chats.innerHTML = `<div id="general-chat" class="active-chats">Wszyscy</div>`;
           //prymitywnie bardzo
+
+          let generalChat = document.getElementById("general-chat");
+
+          generalChat.addEventListener("click", () => {
+            let user = JSON.parse(window.localStorage.getItem("user"));
+            window.localStorage.setItem("current-chat", "general-chat");
+            let currentChat = window.localStorage.getItem("current-chat");
+    
+            if (user && currentChat === "general-chat") {
+              socket.emit("chat-all", currentChat);
+            } else {
+              alert("Nie wybrano czatu");
+            }
+          });
         }
       });
 
@@ -114,14 +144,18 @@ document.onreadystatechange = () => {
         let fill = "";
 
         JSON.parse(data).forEach(element => {
-          fill += `<div>${element.author}: ${element.message}</div>`;
+          fill += `<div class="message">${element.author}: ${
+            element.message
+          }</div>`;
         });
 
         messages.innerHTML = fill;
       });
 
       socket.on("write-message", data => {
-        let message = `<div>${data.author}: ${data.message}</div>`;
+        let message = `<div class="message">${data.author}: ${
+          data.message
+        }</div>`;
         messages.innerHTML += message;
       });
 
