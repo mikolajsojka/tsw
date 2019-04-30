@@ -35,28 +35,14 @@ document.onreadystatechange = () => {
         socket.emit("chat-all", currentChat);
       }
 
-      
-
       sendMessage.addEventListener("keypress", function(e) {
-        let user = JSON.parse(window.localStorage.getItem("user"));
-        let currentChat = window.localStorage.getItem("current-chat");
-        if (user) {
-          if (currentChat) {
-            let key = e.which || e.keyCode;
-            if (key === 13) {
-              let data = {
-                message: sendMessage.value,
-                author: user.username,
-                currentChat: currentChat
-              };
-              socket.emit("send-message", data);
-              sendMessage.value = "";
-            }
-          } else {
-            alert("Musisz wybrać czat");
-          }
-        } else {
-          alert("Musisz się zalogować");
+        let key = e.which || e.keyCode;
+        if (key === 13) {
+          let data = {
+            message: sendMessage.value
+          };
+          socket.emit("send-message", data);
+          sendMessage.value = "";
         }
       });
 
@@ -65,6 +51,7 @@ document.onreadystatechange = () => {
         () => {
           if (usernameInput.value) {
             socket.emit("authentication", usernameInput.value);
+            usernameInput.value = "";
           } else {
             alert("Musisz podać swój nick");
           }
@@ -75,13 +62,7 @@ document.onreadystatechange = () => {
       logOut.addEventListener(
         "click",
         () => {
-          let user = JSON.parse(window.localStorage.getItem("user"));
-
-          if (user) {
-            socket.emit("logout", user);
-          } else {
-            alert("Nie wiem jak, ale próbowałeś mnie oszukać");
-          }
+          socket.emit("logout");
         },
         false
       );
@@ -103,9 +84,7 @@ document.onreadystatechange = () => {
       });
 
       socket.on("authentication-passed", data => {
-        window.localStorage.setItem("user", data);
-
-        let user = JSON.parse(window.localStorage.getItem("user"));
+        let user = JSON.parse(data);
 
         if (user) {
           logIn.style.display = "none";
@@ -119,15 +98,14 @@ document.onreadystatechange = () => {
           let generalChat = document.getElementById("general-chat");
 
           generalChat.addEventListener("click", () => {
-            let user = JSON.parse(window.localStorage.getItem("user"));
             window.localStorage.setItem("current-chat", "general-chat");
             let currentChat = window.localStorage.getItem("current-chat");
-    
-            if (user && currentChat === "general-chat") {
+
+            console.log(currentChat);
+            if (currentChat) {
               socket.emit("chat-all", currentChat);
-            } else {
-              alert("Nie wybrano czatu");
             }
+            //on failed
           });
         }
       });

@@ -6,6 +6,18 @@ const app = express();
 const port = process.env.PORT || 3000;
 const serveStatic = require("serve-static");
 
+let cookieParser = require("cookie-parser");
+let session = require("express-session")({
+    secret: "my-secret",
+    resave: true,
+    saveUninitialized: true
+  }),
+  sharedsession = require("express-socket.io-session");
+
+app.use(cookieParser());
+
+app.use(session);
+
 const mongoose = require("mongoose");
 mongoose.connect("mongodb://localhost:27017/chat-socket-io", {
   useNewUrlParser: true
@@ -54,9 +66,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(serveStatic("public"));
 
+io.use(sharedsession(session));
+
 io.sockets.on("connect", socket => {
   socket.on("chat-all", currentChat => {
-    if (currentChat === "general-chat") {
+    socket.handshake.session.currentChat = currentChat;
+    socket.handshake.session.save();
+
+    let chatName = socket.handshake.session.currentChat;
+
+    if (chatName === "general-chat") {
       chatAll.findOne({}, function(err, messages) {
         if (messages) {
           socket.emit(
@@ -76,48 +95,64 @@ io.sockets.on("connect", socket => {
   });
 
   socket.on("authentication", data => {
-    let newUser = new User({
-      username: data,
-      status: "online"
-    });
+    if (data) {
+      let newUser = new User({
+        username: data,
+        status: "online"
+      });
 
-    User.findOne({ username: newUser.username }, (err, user) => {
-      if (user) {
-        if (user.status === "online") {
-          socket.emit("authentication-failed");
+      User.findOne({ username: newUser.username }, (err, user) => {
+        if (user) {
+          if (user.status === "online") {
+            socket.emit("authentication-failed");
+          } else {
+            User.updateOne(
+              { username: newUser.username },
+              {
+                $set: {
+                  status: "online"
+                }
+              },
+              function(err) {
+                if (err) {
+                  console.log("Coś nie tak poszło przy logowaniu");
+                } else {
+                  console.log("niby zalogowano");
+
+                  socket.handshake.session.userdata = newUser;
+                  socket.handshake.session.save();
+
+                  socket.emit(
+                    "authentication-passed",
+                    JSON.stringify(socket.handshake.session.userdata)
+                  );
+                }
+              }
+            );
+          }
         } else {
-          User.updateOne(
-            { username: newUser.username },
-            {
-              $set: {
-                status: "online"
-              }
-            },
-            function(err) {
-              if (err) {
-                console.log("Coś nie tak poszło przy logowaniu");
-              } else {
-                console.log("niby zalogowano");
+          newUser.save(function(err, _newUser) {
+            if (err) return console.error(err);
+          });
 
-                socket.emit("authentication-passed", JSON.stringify(user));
-              }
-            }
+          socket.handshake.session.userdata = newUser;
+          socket.handshake.session.save();
+          socket.emit(
+            "authentication-passed",
+            JSON.stringify(socket.handshake.session.userdata)
           );
         }
-      } else {
-        newUser.save(function(err, _newUser) {
-          if (err) return console.error(err);
-        });
-        socket.emit("authentication-passed", JSON.stringify(newUser));
-      }
-      if (err) {
-        console.log("Nie tak");
-      }
-    });
+        if (err) {
+          console.log("Nie tak");
+        }
+      });
+    } else {
+      console.log("data jest puste");
+    }
   });
 
-  socket.on("logout", data => {
-    console.log(data);
+  socket.on("logout", () => {
+    let data = socket.handshake.session.userdata;
 
     User.updateOne(
       { _id: ObjectId(data._id) },
@@ -132,14 +167,21 @@ io.sockets.on("connect", socket => {
         } else {
           console.log("niby wylogowano");
 
+          delete socket.handshake.session.userdata;
+          socket.handshake.session.save();
+
           socket.emit("logout-passed");
         }
       }
     );
   });
 
-  socket.on("send-message", data => {
-    if (data.currentChat === "general-chat") {
+  socket.on("send-message", chatName => {
+    let data = chatName;
+    data.currentChat = socket.handshake.session.currentChat;
+    data.author = socket.handshake.session.userdata.username;
+
+    if (data.currentChat === "general-chat" && data.author) {
       chatAll.findOne({}, function(err, messages) {
         let new_message = messages.messages;
 
