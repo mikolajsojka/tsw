@@ -85,13 +85,7 @@ io.sockets.on("connect", socket => {
           );
         } else {
           let newChatAll = new chatAll({
-            messages: [
-              {
-                message:
-                  "Witam na serwerze Socket IO, proszę o zachowanie kultury.",
-                author: "Admin"
-              }
-            ]
+            messages: []
           });
 
           newChatAll.save(function(err, _newChatAll) {
