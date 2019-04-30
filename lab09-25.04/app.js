@@ -204,7 +204,7 @@ io.sockets.on("connect", socket => {
     data.author = socket.handshake.session.userdata.username;
     let user = socket.handshake.session.userdata;
 
-    if (data.currentChat === "general-chat" && data.author && user) {
+    if (data.currentChat === "general-chat" && data.author && user && data.message) {
       chatAll.findOne({}, function(err, messages) {
         let new_message = messages.messages;
 

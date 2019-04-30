@@ -173,7 +173,7 @@ document.onreadystatechange = () => {
       });
 
       socket.on("send-message-failed", () => {
-        alert("Nie wybrałeś żadnego czatu");
+        alert("Coś poszło nie tak");
       });
     });
   }
