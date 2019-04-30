@@ -18,10 +18,10 @@ document.onreadystatechange = () => {
     socket = io.connect(`http://${location.host}`);
 
     socket.on("connect", () => {
-      //socket emit to i tamto
-      socket.emit("on-connect", () => {});
+      socket.emit("on-connect");
+      socket.emit("chat-all");
 
-      socket.on("after-connect", (data) => {
+      socket.on("after-connect", data => {
         user = data.user;
         currentChat = data.currentChat;
 
@@ -31,6 +31,7 @@ document.onreadystatechange = () => {
           usernameInput.style.display = "none";
           logOut.innerHTML = `Wyloguj(${user.username})`;
           chatUi.style.display = "flex";
+          chats.innerHTML = `<div id="general-chat" class="active-chats">Wszyscy</div>`;
         } else {
           chatUi.style.display = "none";
         }
@@ -73,7 +74,6 @@ document.onreadystatechange = () => {
       );
 
       socket.on("logout-passed", () => {
-        window.localStorage.clear();
 
         logIn.style.display = "flex";
         logOut.style.display = "none";
@@ -103,8 +103,7 @@ document.onreadystatechange = () => {
           let generalChat = document.getElementById("general-chat");
 
           generalChat.addEventListener("click", () => {
-            window.localStorage.setItem("current-chat", "general-chat");
-            let currentChat = window.localStorage.getItem("current-chat");
+            let currentChat = "general-chat";
 
             console.log(currentChat);
             if (currentChat) {
@@ -156,6 +155,10 @@ document.onreadystatechange = () => {
 
       socket.on("authentication-failed", () => {
         alert("Login jest obecnie zajęty");
+      });
+
+      socket.on("send-message-failed", () => {
+        alert("Nie wybrałeś żadnego czatu");
       });
     });
   }

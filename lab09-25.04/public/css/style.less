@@ -9,8 +9,7 @@ body {
     display: flex;
     justify-content: flex-end;
 
-    #log-out {
-      display: none;
+    .log-button {
       color: white;
       padding: 5px;
       cursor: pointer;
@@ -21,6 +20,9 @@ body {
         transition-duration: 2s;
         background-color: rgb(235, 235, 194);
       }
+    }
+    #log-out {
+      display: none;
     }
   }
 
@@ -42,8 +44,8 @@ body {
       flex-direction: column;
 
       input {
-        border-style:none;
-        background-color:rgb(213, 204, 204);
+        border-style: none;
+        background-color: rgb(213, 204, 204);
       }
 
       #your-chats {
@@ -62,10 +64,10 @@ body {
             padding: 5px;
             cursor: pointer;
 
-              &:hover {
-                transition-duration: 2s;
-                background-color: rgb(231, 231, 195);
-              }
+            &:hover {
+              transition-duration: 2s;
+              background-color: rgb(231, 231, 195);
+            }
           }
         }
       }
@@ -100,8 +102,8 @@ body {
 
       #send-message {
         height: 10%;
-        border-style:none;
-        background-color:rgb(213, 204, 204);
+        border-style: none;
+        background-color: rgb(213, 204, 204);
       }
     }
   }

@@ -74,8 +74,9 @@ io.sockets.on("connect", socket => {
     socket.handshake.session.save();
 
     let chatName = socket.handshake.session.currentChat;
+    let user = socket.handshake.session.userdata;
 
-    if (chatName === "general-chat") {
+    if (user && chatName === "general-chat") {
       chatAll.findOne({}, function(err, messages) {
         if (messages) {
           socket.emit(
@@ -159,36 +160,42 @@ io.sockets.on("connect", socket => {
   });
 
   socket.on("logout", () => {
-    let data = socket.handshake.session.userdata;
+    let user = socket.handshake.session.userdata;
 
-    User.updateOne(
-      { username: data.username },
-      {
-        $set: {
-          status: "offline"
+    if (user) {
+      User.updateOne(
+        { username: user.username },
+        {
+          $set: {
+            status: "offline"
+          }
+        },
+        function(err) {
+          if (err) {
+            console.log("Coś nie tak poszło przy wylogowaniu");
+          } else {
+            console.log("niby wylogowano");
+
+            delete socket.handshake.session.userdata;
+            delete socket.handshake.session.currentChat;
+            socket.handshake.session.save();
+
+            socket.emit("logout-passed");
+          }
         }
-      },
-      function(err) {
-        if (err) {
-          console.log("Coś nie tak poszło przy wylogowaniu");
-        } else {
-          console.log("niby wylogowano");
-
-          delete socket.handshake.session.userdata;
-          socket.handshake.session.save();
-
-          socket.emit("logout-passed");
-        }
-      }
-    );
+      );
+    } else {
+      console.log("Nie byłeś zalogowany !!!!");
+    }
   });
 
   socket.on("send-message", chatName => {
     let data = chatName;
     data.currentChat = socket.handshake.session.currentChat;
     data.author = socket.handshake.session.userdata.username;
+    let user = socket.handshake.session.userdata;
 
-    if (data.currentChat === "general-chat" && data.author) {
+    if (data.currentChat === "general-chat" && data.author && user) {
       chatAll.findOne({}, function(err, messages) {
         let new_message = messages.messages;
 
@@ -219,21 +226,26 @@ io.sockets.on("connect", socket => {
         }
       });
     } else {
-      console.log("Coś nie tak z wyborem czatu");
+      socket.emit("send-message-failed");
     }
   });
 
   socket.on("search-user", data => {
-    User.findOne({ username: data }, (err, user) => {
-      if (user) {
-        socket.emit("search-user-passed");
-      } else {
-        socket.emit("search-user-failed");
-      }
-      if (err) {
-        console.log("Nie tak");
-      }
-    });
+    let user = socket.handshake.session.userdata;
+    if (socket.handshake.session.userdata.username !== data && user) {
+      User.findOne({ username: data }, (err, user) => {
+        if (user) {
+          socket.emit("search-user-passed");
+        } else {
+          socket.emit("search-user-failed");
+        }
+        if (err) {
+          console.log("Nie tak");
+        }
+      });
+    } else {
+      console.log("Szukany użytkownik to Ty");
+    }
   });
 });
 
