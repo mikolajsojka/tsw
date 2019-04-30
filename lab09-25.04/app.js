@@ -79,7 +79,23 @@ io.sockets.on("connect", socket => {
         if (user.status === "online") {
           socket.emit("authentication-failed");
         } else {
-          socket.emit("authentication-passed", JSON.stringify(user));
+          User.updateOne(
+            { username: newUser.username },
+            {
+              $set: {
+                status: "online"
+              }
+            },
+            function(err) {
+              if (err) {
+                console.log("Coś nie tak poszło przy logowaniu");
+              } else {
+                console.log("niby zalogowano");
+
+                socket.emit("authentication-passed", JSON.stringify(user));
+              }
+            }
+          );
         }
       } else {
         newUser.save(function(err, _newUser) {
@@ -91,12 +107,28 @@ io.sockets.on("connect", socket => {
         console.log("Nie tak");
       }
     });
+  });
 
-    //najpierw sprawdź czy online
+  socket.on("logout", data => {
+    console.log(data);
 
-    //jak jest wolny nickname, ale w bazie to tylko go zaloguj
+    User.updateOne(
+      { _id: ObjectId(data._id) },
+      {
+        $set: {
+          status: "offline"
+        }
+      },
+      function(err) {
+        if (err) {
+          console.log("Coś nie tak poszło przy wylogowaniu");
+        } else {
+          console.log("niby wylogowano");
 
-    //jak nie ma to dodaj do bazy
+          socket.emit("logout-passed");
+        }
+      }
+    );
   });
 
   socket.on("send-message", data => {

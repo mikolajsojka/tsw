@@ -67,7 +67,7 @@ document.onreadystatechange = () => {
           let user = JSON.parse(window.localStorage.getItem("user"));
 
           if (user) {
-            window.localStorage.clear();
+            socket.emit("logout", user);
             logIn.style.display = "flex";
             logOut.style.display = "none";
             usernameInput.style.display = "flex";
@@ -81,6 +81,11 @@ document.onreadystatechange = () => {
         },
         false
       );
+
+      socket.on("logout-passed",()=>{
+        window.localStorage.clear();
+        alert("Wylogowano");
+      });
 
       socket.on("authentication-passed", data => {
         window.localStorage.setItem("user", data);
