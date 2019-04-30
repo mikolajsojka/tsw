@@ -84,8 +84,23 @@ io.sockets.on("connect", socket => {
             JSON.stringify(messages.messages)
           );
         } else {
-          socket.emit("chat-all-fill-failed");
+          let newChatAll = new chatAll({
+            messages: [
+              {
+                message:
+                  "Witam na serwerze Socket IO, proszę o zachowanie kultury.",
+                author: "Admin"
+              }
+            ]
+          });
+
+          newChatAll.save(function(err, _newChatAll) {
+            if (err) return console.error(err);
+          });
+
+          socket.emit("empty-chat-all", currentChat);
         }
+
         if (err) {
           console.log("Nie tak");
         }

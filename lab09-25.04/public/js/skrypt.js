@@ -74,7 +74,6 @@ document.onreadystatechange = () => {
       );
 
       socket.on("logout-passed", () => {
-
         logIn.style.display = "flex";
         logOut.style.display = "none";
         usernameInput.style.display = "flex";
@@ -139,6 +138,10 @@ document.onreadystatechange = () => {
           data.message
         }</div>`;
         messages.innerHTML += message;
+      });
+
+      socket.on("empty-chat-all", (currentChat) => {
+        socket.emit("chat-all",currentChat);
       });
 
       socket.on("chat-all-fill-failed", () => {
