@@ -115,7 +115,6 @@ document.onreadystatechange = () => {
         if (key === 13) {
           socket.emit("search-user", searchUser.value);
           searchUser.value = "";
-
         }
       });
 
@@ -147,8 +146,16 @@ document.onreadystatechange = () => {
         messages.innerHTML += message;
       });
 
-      socket.on("new-chat",data =>{
-        //chats.innerHTML += `<div id="${data.chatId}" class="active-chats">${data.user}</div>`;
+      socket.on("new-chat", data => {
+        chats.innerHTML += `<div id="${data.chatId}" class="active-chats">${
+          data.user
+        }</div>`;
+
+        let newChat = document.getElementById(data.chatId);
+
+        newChat.addEventListener("click",()=>{
+          console.log(`Wybrano czat z użytkownikiem: ${data.user}`);
+        },false);
       });
 
       socket.on("empty-chat-all", currentChat => {
