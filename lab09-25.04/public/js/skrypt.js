@@ -155,6 +155,9 @@ document.onreadystatechange = () => {
 
         let newChats = document.getElementsByClassName("users-chats");
 
+        //emit
+        socket.emit("set-current-chat",data.chatId);
+
         Array.from(newChats).forEach(element =>{
           element.addEventListener(
             "click",
@@ -193,7 +196,7 @@ document.onreadystatechange = () => {
       });
 
       socket.on("search-user-passed", () => {
-        console.log("Znaleziono takiego użytkownika");
+        console.log("Znaleziono takiego użytkownika: ");
       });
 
       socket.on("search-user-failed", () => {

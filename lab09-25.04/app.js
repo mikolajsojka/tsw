@@ -302,8 +302,14 @@ io.sockets.on("connect", socket => {
     }
   });
 
+  socket.on("set-current-chat", data => {
+    socket.handshake.session.currentChat = data;
+    socket.handshake.session.save();
+  });
+
   socket.on("search-user", data => {
     let user = socket.handshake.session.userdata;
+
     if (socket.handshake.session.userdata.username !== data && user) {
       User.findOne({ username: data }, (err, user) => {
         if (user) {
@@ -330,6 +336,7 @@ io.sockets.on("connect", socket => {
                   chatId: chat._id,
                   user: user.username
                 });
+
                 socket.emit("render-chat-window", chat);
               } else {
                 let newChat = new Chat({
@@ -341,11 +348,11 @@ io.sockets.on("connect", socket => {
                 newChat.save(function(err, _newChat) {
                   if (err) return console.error(err);
                 });
+
                 socket.emit("new-chat", {
                   chatId: newChat._id,
                   user: user.username
                 });
-                console.log(newChat);
 
                 socket.emit("render-chat-window", newChat);
               }
