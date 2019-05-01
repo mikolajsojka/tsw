@@ -69,6 +69,7 @@ app.use(serveStatic("public"));
 io.use(sharedsession(session));
 
 io.sockets.on("connect", socket => {
+
   socket.on("chat-all", currentChat => {
     socket.handshake.session.currentChat = currentChat;
     socket.handshake.session.save();
@@ -204,7 +205,12 @@ io.sockets.on("connect", socket => {
     data.author = socket.handshake.session.userdata.username;
     let user = socket.handshake.session.userdata;
 
-    if (data.currentChat === "general-chat" && data.author && user && data.message) {
+    if (
+      data.currentChat === "general-chat" &&
+      data.author &&
+      user &&
+      data.message
+    ) {
       chatAll.findOne({}, function(err, messages) {
         let new_message = messages.messages;
 

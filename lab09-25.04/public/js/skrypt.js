@@ -31,9 +31,7 @@ document.onreadystatechange = () => {
           usernameInput.style.display = "none";
           logOut.innerHTML = `Wyloguj(${user.username})`;
           chatUi.style.display = "flex";
-          chats.innerHTML = `<div id="general-chat" class="active-chats" style="background-color:rgb(95, 90, 90)">Wszyscy</div>`;
-        } else {
-          chatUi.style.display = "none";
+          chats.innerHTML = `<div id="general-chat" class="active-chats">Wszyscy</div>`;
         }
 
         if (currentChat) {
@@ -107,11 +105,7 @@ document.onreadystatechange = () => {
           let generalChat = document.getElementById("general-chat");
 
           generalChat.addEventListener("click", () => {
-            let currentChat = "general-chat";
-
-            if (currentChat) {
-              socket.emit("chat-all", currentChat);
-            }
+            socket.emit("chat-all", "general-chat");
           });
         }
       });
