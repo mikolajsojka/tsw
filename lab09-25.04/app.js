@@ -115,7 +115,6 @@ io.sockets.on("connect", socket => {
   socket.on("render-chat", data => {
     Chat.findOne({ _id: ObjectId(data.chatId) }, (err, chat) => {
       if (chat) {
-        
         socket.emit("render-chat-window", chat);
         socket.handshake.session.currentChat = chat._id;
         socket.handshake.session.save();
@@ -212,18 +211,14 @@ io.sockets.on("connect", socket => {
     }
   });
 
-  socket.on("send-message", chatName => {
+  socket.on("send-message-all", chatName => {
     let data = chatName;
     data.currentChat = socket.handshake.session.currentChat;
     data.author = socket.handshake.session.userdata.username;
     let user = socket.handshake.session.userdata;
 
-    if (
-      data.currentChat === "general-chat" &&
-      data.author &&
-      user &&
-      data.message
-    ) {
+    if(data.currentChat === "general-chat" ){
+    if (data.author && user && data.message) {
       chatAll.findOne({}, function(err, messages) {
         let new_message = messages.messages;
 
@@ -256,7 +251,43 @@ io.sockets.on("connect", socket => {
     } else {
       socket.emit("send-message-failed");
     }
+  } else {
+    socket.emit("send-message-user",data);
+  }
+
   });
+
+  socket.on("send-message-user",(data)=>{
+    Chat.findOne({}, function(err, messages) {
+      let new_message = messages.messages;
+
+      new_message.push({ message: data.message, author: data.author });
+      console.log(new_message);
+      if (messages) {
+        Chat.updateOne(
+          { _id: ObjectId(messages._id) },
+          {
+            $set: {
+              messages: new_message
+            }
+          },
+          function(err) {
+            if (err) {
+              console.log("Coś nie tak poszło przy dodawaniu wiadomości");
+            } else {
+              console.log("niby dodane");
+
+              socket.broadcast.emit("write-message", data);
+              socket.emit("write-message", data);
+            }
+          }
+        );
+      }
+      if (err) {
+        console.log("Nie znaleziono w bazie");
+      }
+    });
+  })
 
   socket.on("search-user", data => {
     let user = socket.handshake.session.userdata;

@@ -12,6 +12,7 @@ document.onreadystatechange = () => {
     let sendMessage = document.getElementById("send-message");
     let chatUi = document.getElementById("chat-ui");
     let chats = document.getElementById("chats-all");
+    let chatsElse = document.getElementById("chats-else");
 
     let socket, user, currentChat;
 
@@ -45,7 +46,7 @@ document.onreadystatechange = () => {
           let data = {
             message: sendMessage.value
           };
-          socket.emit("send-message", data);
+          socket.emit("send-message-all", data);
           sendMessage.value = "";
 
           document.getElementById(
@@ -84,6 +85,7 @@ document.onreadystatechange = () => {
         logOut.innerHTML = "";
         messages.innerHTML = "";
         chats.innerHTML = "";
+        chatsElse.innerHTML = "";
 
         alert("Wylogowano");
 
@@ -174,6 +176,10 @@ document.onreadystatechange = () => {
         });
 
         messages.innerHTML = fill;
+      });
+
+      socket.on("send-message-user", data => {
+        socket.emit("send-message-user", data);
       });
 
       socket.on("empty-chat-all", currentChat => {
