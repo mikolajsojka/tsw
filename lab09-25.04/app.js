@@ -101,7 +101,7 @@ io.sockets.on("connect", socket => {
         }
       });
     } else {
-      console.log("Coś majstrowałeś..");
+      console.log("Nie ten czat");
     }
   });
 
@@ -250,6 +250,9 @@ io.sockets.on("connect", socket => {
     if (socket.handshake.session.userdata.username !== data && user) {
       User.findOne({ username: data }, (err, user) => {
         if (user) {
+          //odesłać do gniazdka, które stworzy lub wczyta dany chat
+          //narazie prosta opcja po wyszukaniu wyświetla 
+          
           socket.emit("search-user-passed");
         } else {
           socket.emit("search-user-failed");

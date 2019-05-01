@@ -115,6 +115,7 @@ document.onreadystatechange = () => {
         if (key === 13) {
           socket.emit("search-user", searchUser.value);
           searchUser.value = "";
+
         }
       });
 
