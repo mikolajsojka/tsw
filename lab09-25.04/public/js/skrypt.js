@@ -147,6 +147,10 @@ document.onreadystatechange = () => {
         messages.innerHTML += message;
       });
 
+      socket.on("new-chat",data =>{
+        //chats.innerHTML += `<div id="${data.chatId}" class="active-chats">${data.user}</div>`;
+      });
+
       socket.on("empty-chat-all", currentChat => {
         socket.emit("chat-all", currentChat);
       });

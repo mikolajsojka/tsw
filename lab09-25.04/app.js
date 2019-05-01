@@ -271,21 +271,27 @@ io.sockets.on("connect", socket => {
             },
             (err, chat) => {
               if (chat) {
-                console.log(chat);
+                socket.emit("new-chat", {
+                  chatId: chat._id,
+                  user: user.username
+                });
               } else {
                 let newChat = new Chat({
-                  user_1:socket.handshake.session.userdata.username,
-                  user_2:user.username,
+                  user_1: socket.handshake.session.userdata.username,
+                  user_2: user.username,
                   messages: []
                 });
-      
+
                 newChat.save(function(err, _newChat) {
                   if (err) return console.error(err);
                 });
-                //odwołać się do tego gniazdka żeby wczytało 
+                socket.emit("new-chat", {
+                  chatId: newChat._id,
+                  user: user.username
+                });
               }
 
-              if(err){
+              if (err) {
                 console.log("UPSSSSS");
               }
             }
