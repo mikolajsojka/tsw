@@ -69,7 +69,6 @@ app.use(serveStatic("public"));
 io.use(sharedsession(session));
 
 io.sockets.on("connect", socket => {
-
   socket.on("chat-all", currentChat => {
     socket.handshake.session.currentChat = currentChat;
     socket.handshake.session.save();
@@ -251,8 +250,47 @@ io.sockets.on("connect", socket => {
       User.findOne({ username: data }, (err, user) => {
         if (user) {
           //odesłać do gniazdka, które stworzy lub wczyta dany chat
-          //narazie prosta opcja po wyszukaniu wyświetla 
-          
+          //narazie prosta opcja po wyszukaniu wyświetla
+
+          Chat.findOne(
+            {
+              $or: [
+                {
+                  $and: [
+                    { user_1: user.username },
+                    { user_2: socket.handshake.session.userdata.username }
+                  ]
+                },
+                {
+                  $and: [
+                    { user_2: user.username },
+                    { user_1: socket.handshake.session.userdata.username }
+                  ]
+                }
+              ]
+            },
+            (err, chat) => {
+              if (chat) {
+                console.log(chat);
+              } else {
+                let newChat = new Chat({
+                  user_1:socket.handshake.session.userdata.username,
+                  user_2:user.username,
+                  messages: []
+                });
+      
+                newChat.save(function(err, _newChat) {
+                  if (err) return console.error(err);
+                });
+                //odwołać się do tego gniazdka żeby wczytało 
+              }
+
+              if(err){
+                console.log("UPSSSSS");
+              }
+            }
+          );
+
           socket.emit("search-user-passed");
         } else {
           socket.emit("search-user-failed");
