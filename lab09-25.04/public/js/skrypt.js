@@ -11,7 +11,7 @@ document.onreadystatechange = () => {
     let messages = document.getElementById("messages");
     let sendMessage = document.getElementById("send-message");
     let chatUi = document.getElementById("chat-ui");
-    let chats = document.getElementById("chats");
+    let chats = document.getElementById("chats-all");
 
     let socket, user, currentChat;
 
@@ -99,7 +99,7 @@ document.onreadystatechange = () => {
           usernameInput.style.display = "none";
           logOut.innerHTML = `Wyloguj(${user.username})`;
           chatUi.style.display = "flex";
-          chats.innerHTML = `<div id="general-chat" class="active-chats">Wszyscy</div>`;
+          chats.innerHTML += `<div id="general-chat" class="active-chats">Wszyscy</div>`;
           //prymitywnie bardzo
 
           let generalChat = document.getElementById("general-chat");
@@ -147,7 +147,8 @@ document.onreadystatechange = () => {
       });
 
       socket.on("new-chat", data => {
-        chats.innerHTML += `<div id="${data.chatId}" class="active-chats">${
+        let chatElse = document.getElementById("chats-else");
+        chatElse.innerHTML += `<div id="${data.chatId}" class="active-chats">${
           data.user
         }</div>`;
 
