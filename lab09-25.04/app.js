@@ -119,7 +119,7 @@ io.sockets.on("connect", socket => {
         socket.handshake.session.currentChat = chat._id;
         socket.handshake.session.save();
 
-        console.log(socket.handshake.session.currentChat);
+        
       }
     });
   });
@@ -217,77 +217,84 @@ io.sockets.on("connect", socket => {
     data.author = socket.handshake.session.userdata.username;
     let user = socket.handshake.session.userdata;
 
-    if(data.currentChat === "general-chat" ){
-    if (data.author && user && data.message) {
-      chatAll.findOne({}, function(err, messages) {
-        let new_message = messages.messages;
+    if (data.currentChat === "general-chat") {
+      if (data.author && user && data.message) {
+        chatAll.findOne({}, function(err, messages) {
+          let new_message = messages.messages;
 
-        new_message.push({ message: data.message, author: data.author });
-        console.log(new_message);
-        if (messages) {
-          chatAll.updateOne(
-            { _id: ObjectId(messages._id) },
-            {
-              $set: {
-                messages: new_message
-              }
-            },
-            function(err) {
-              if (err) {
-                console.log("Coś nie tak poszło przy dodawaniu wiadomości");
-              } else {
-                console.log("niby dodane");
+          new_message.push({ message: data.message, author: data.author });
+          console.log(new_message);
+          if (messages) {
+            chatAll.updateOne(
+              { _id: ObjectId(messages._id) },
+              {
+                $set: {
+                  messages: new_message
+                }
+              },
+              function(err) {
+                if (err) {
+                  console.log("Coś nie tak poszło przy dodawaniu wiadomości");
+                } else {
+                  console.log("niby dodane");
 
-                socket.broadcast.emit("write-message", data);
-                socket.emit("write-message", data);
+                  socket.broadcast.emit("write-message", data);
+                  socket.emit("write-message", data);
+                }
               }
-            }
-          );
-        }
-        if (err) {
-          console.log("Nie znaleziono w bazie");
-        }
-      });
+            );
+          }
+          if (err) {
+            console.log("Nie znaleziono w bazie");
+          }
+        });
+      } else {
+        socket.emit("send-message-failed");
+      }
     } else {
-      socket.emit("send-message-failed");
+      socket.emit("send-message-user", data);
     }
-  } else {
-    socket.emit("send-message-user",data);
-  }
-
   });
 
-  socket.on("send-message-user",(data)=>{
-    Chat.findOne({}, function(err, messages) {
-      let new_message = messages.messages;
+  socket.on("send-message-user", data => {
+    if (socket.handshake.session.currentChat === data._id) {
+      if (socket.handshake.session.userdata.username === data.author) {
+        Chat.findOne({}, function(err, messages) {
+          let new_message = messages.messages;
 
-      new_message.push({ message: data.message, author: data.author });
-      console.log(new_message);
-      if (messages) {
-        Chat.updateOne(
-          { _id: ObjectId(messages._id) },
-          {
-            $set: {
-              messages: new_message
-            }
-          },
-          function(err) {
-            if (err) {
-              console.log("Coś nie tak poszło przy dodawaniu wiadomości");
-            } else {
-              console.log("niby dodane");
+          new_message.push({ message: data.message, author: data.author });
+          console.log(new_message);
+          if (messages) {
+            Chat.updateOne(
+              { _id: ObjectId(messages._id) },
+              {
+                $set: {
+                  messages: new_message
+                }
+              },
+              function(err) {
+                if (err) {
+                  console.log("Coś nie tak poszło przy dodawaniu wiadomości");
+                } else {
+                  console.log("niby dodane");
 
-              socket.broadcast.emit("write-message", data);
-              socket.emit("write-message", data);
-            }
+                  socket.broadcast.emit("write-message", data);
+                  socket.emit("write-message", data);
+                }
+              }
+            );
           }
-        );
+          if (err) {
+            console.log("Nie znaleziono w bazie");
+          }
+        });
+      } else {
+        console.log("Ty to nie Ty");
       }
-      if (err) {
-        console.log("Nie znaleziono w bazie");
-      }
-    });
-  })
+    } else {
+      console.log("Nie ten Czat");
+    }
+  });
 
   socket.on("search-user", data => {
     let user = socket.handshake.session.userdata;
@@ -317,6 +324,7 @@ io.sockets.on("connect", socket => {
                   chatId: chat._id,
                   user: user.username
                 });
+                socket.emit("render-chat-window", chat);
               } else {
                 let newChat = new Chat({
                   user_1: socket.handshake.session.userdata.username,
@@ -331,6 +339,8 @@ io.sockets.on("connect", socket => {
                   chatId: newChat._id,
                   user: user.username
                 });
+
+                socket.emit("render-chat-window", newChat);
               }
 
               if (err) {
