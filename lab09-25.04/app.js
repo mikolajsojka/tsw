@@ -83,6 +83,7 @@ io.sockets.on("connect", socket => {
             "chat-all-fill-passed",
             JSON.stringify(messages.messages)
           );
+          console.log(socket.handshake.session.currentChat);
         } else {
           let newChatAll = new chatAll({
             messages: []
@@ -108,6 +109,19 @@ io.sockets.on("connect", socket => {
     socket.emit("after-connect", {
       user: socket.handshake.session.userdata,
       currentChat: socket.handshake.session.currentChat
+    });
+  });
+
+  socket.on("render-chat", data => {
+    Chat.findOne({ _id: ObjectId(data.chatId) }, (err, chat) => {
+      if (chat) {
+        
+        socket.emit("render-chat-window", chat);
+        socket.handshake.session.currentChat = chat._id;
+        socket.handshake.session.save();
+
+        console.log(socket.handshake.session.currentChat);
+      }
     });
   });
 
@@ -249,9 +263,6 @@ io.sockets.on("connect", socket => {
     if (socket.handshake.session.userdata.username !== data && user) {
       User.findOne({ username: data }, (err, user) => {
         if (user) {
-          //odesłać do gniazdka, które stworzy lub wczyta dany chat
-          //narazie prosta opcja po wyszukaniu wyświetla
-
           Chat.findOne(
             {
               $or: [

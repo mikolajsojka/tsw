@@ -135,8 +135,7 @@ document.onreadystatechange = () => {
           "actual-chat-messages"
         ).scrollHeight;
 
-        document.getElementById("general-chat").style.backgroundColor =
-          "rgb(95, 90, 90)";
+        //document.getElementById("general-chat").style.backgroundColor = "rgb(95, 90, 90)";
       });
 
       socket.on("write-message", data => {
@@ -154,9 +153,27 @@ document.onreadystatechange = () => {
 
         let newChat = document.getElementById(data.chatId);
 
-        newChat.addEventListener("click",()=>{
-          console.log(`Wybrano czat z użytkownikiem: ${data.user}`);
-        },false);
+        newChat.addEventListener(
+          "click",
+          () => {
+            console.log(`Wybrano czat z użytkownikiem: ${data.user}`);
+
+            socket.emit("render-chat", data);
+          },
+          false
+        );
+      });
+
+      socket.on("render-chat-window", chat => {
+        let fill = "";
+
+        chat.messages.forEach(element => {
+          fill += `<div class="message">${element.author}: ${
+            element.message
+          }</div>`;
+        });
+
+        messages.innerHTML = fill;
       });
 
       socket.on("empty-chat-all", currentChat => {
