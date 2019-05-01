@@ -113,13 +113,14 @@ io.sockets.on("connect", socket => {
   });
 
   socket.on("render-chat", data => {
+    console.log(data.chatId);
     Chat.findOne({ _id: ObjectId(data.chatId) }, (err, chat) => {
       if (chat) {
-        socket.emit("render-chat-window", chat);
-        socket.handshake.session.currentChat = chat._id;
+        socket.handshake.session.currentChat = data.chatId;
         socket.handshake.session.save();
-
-        
+        socket.emit("render-chat-window", chat);
+      } else {
+        console.log("nie znalazlem");
       }
     });
   });
@@ -212,7 +213,7 @@ io.sockets.on("connect", socket => {
   });
 
   socket.on("send-message-all", chatName => {
-    let data = chatName;
+    let data = JSON.parse(chatName);
     data.currentChat = socket.handshake.session.currentChat;
     data.author = socket.handshake.session.userdata.username;
     let user = socket.handshake.session.userdata;
@@ -257,37 +258,49 @@ io.sockets.on("connect", socket => {
   });
 
   socket.on("send-message-user", data => {
-    if (socket.handshake.session.currentChat === data._id) {
+    if (socket.handshake.session.currentChat === data.currentChat) {
       if (socket.handshake.session.userdata.username === data.author) {
-        Chat.findOne({}, function(err, messages) {
-          let new_message = messages.messages;
-
-          new_message.push({ message: data.message, author: data.author });
-          console.log(new_message);
-          if (messages) {
-            Chat.updateOne(
-              { _id: ObjectId(messages._id) },
+        Chat.findOne(
+          {
+            $or: [
               {
-                $set: {
-                  messages: new_message
-                }
+                user_2: socket.handshake.session.userdata.username
               },
-              function(err) {
-                if (err) {
-                  console.log("Coś nie tak poszło przy dodawaniu wiadomości");
-                } else {
-                  console.log("niby dodane");
-
-                  socket.broadcast.emit("write-message", data);
-                  socket.emit("write-message", data);
-                }
+              {
+                user_1: socket.handshake.session.userdata.username
               }
-            );
+            ]
+          },
+          function(err, messages) {
+            let new_message = messages.messages;
+
+            new_message.push({ message: data.message, author: data.author });
+            console.log(new_message);
+            if (messages) {
+              Chat.updateOne(
+                { _id: ObjectId(messages._id) },
+                {
+                  $set: {
+                    messages: new_message
+                  }
+                },
+                function(err) {
+                  if (err) {
+                    console.log("Coś nie tak poszło przy dodawaniu wiadomości");
+                  } else {
+                    console.log("niby dodane");
+
+                    socket.broadcast.emit("write-message", data);
+                    socket.emit("write-message", data);
+                  }
+                }
+              );
+            }
+            if (err) {
+              console.log("Nie znaleziono w bazie");
+            }
           }
-          if (err) {
-            console.log("Nie znaleziono w bazie");
-          }
-        });
+        );
       } else {
         console.log("Ty to nie Ty");
       }
@@ -324,6 +337,8 @@ io.sockets.on("connect", socket => {
                   chatId: chat._id,
                   user: user.username
                 });
+                socket.handshake.session.currentChat = chat._id;
+                socket.handshake.session.save();
                 socket.emit("render-chat-window", chat);
               } else {
                 let newChat = new Chat({
@@ -339,6 +354,9 @@ io.sockets.on("connect", socket => {
                   chatId: newChat._id,
                   user: user.username
                 });
+                console.log(newChat);
+                socket.handshake.session.currentChat = newChat.chatId;
+                socket.handshake.session.save();
 
                 socket.emit("render-chat-window", newChat);
               }

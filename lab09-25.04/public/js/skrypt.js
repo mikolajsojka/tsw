@@ -46,7 +46,7 @@ document.onreadystatechange = () => {
           let data = {
             message: sendMessage.value
           };
-          socket.emit("send-message-all", data);
+          socket.emit("send-message-all", JSON.stringify(data));
           sendMessage.value = "";
 
           document.getElementById(
