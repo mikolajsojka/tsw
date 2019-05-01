@@ -151,6 +151,8 @@ io.sockets.on("connect", socket => {
                   socket.handshake.session.userdata = newUser;
                   socket.handshake.session.save();
 
+                  socket.emit("empty-chat-all", "general-chat");
+
                   socket.emit(
                     "authentication-passed",
                     JSON.stringify(socket.handshake.session.userdata)
@@ -166,6 +168,8 @@ io.sockets.on("connect", socket => {
 
           socket.handshake.session.userdata = newUser;
           socket.handshake.session.save();
+          socket.emit("empty-chat-all", "general-chat");
+
           socket.emit(
             "authentication-passed",
             JSON.stringify(socket.handshake.session.userdata)
