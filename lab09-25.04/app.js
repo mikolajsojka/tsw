@@ -83,7 +83,6 @@ io.sockets.on("connect", socket => {
             "chat-all-fill-passed",
             JSON.stringify(messages.messages)
           );
-          console.log(socket.handshake.session.currentChat);
         } else {
           let newChatAll = new chatAll({
             messages: []
@@ -212,7 +211,6 @@ io.sockets.on("connect", socket => {
   });
 
   socket.on("send-message-all", chatName => {
-    console.log(socket.handshake.session.currentChat);
     let data = JSON.parse(chatName);
     data.currentChat = socket.handshake.session.currentChat;
     data.author = socket.handshake.session.userdata.username;
@@ -224,7 +222,6 @@ io.sockets.on("connect", socket => {
           let new_message = messages.messages;
 
           new_message.push({ message: data.message, author: data.author });
-          console.log(new_message);
           if (messages) {
             chatAll.updateOne(
               { _id: ObjectId(messages._id) },
@@ -268,7 +265,7 @@ io.sockets.on("connect", socket => {
             let new_message = messages.messages;
 
             new_message.push({ message: data.message, author: data.author });
-            console.log(new_message);
+            
             if (messages) {
               Chat.updateOne(
                 { _id: ObjectId(messages._id) },

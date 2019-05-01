@@ -149,21 +149,19 @@ document.onreadystatechange = () => {
 
       socket.on("new-chat", data => {
         let chatElse = document.getElementById("chats-else");
-        chatElse.innerHTML += `<div id="${data.chatId}" class="active-chats users-chats">${
-          data.user
-        }</div>`;
+        chatElse.innerHTML += `<div id="${
+          data.chatId
+        }" class="active-chats users-chats">${data.user}</div>`;
 
         let newChats = document.getElementsByClassName("users-chats");
 
         //emit
-        socket.emit("set-current-chat",data.chatId);
+        socket.emit("set-current-chat", data.chatId);
 
-        Array.from(newChats).forEach(element =>{
+        Array.from(newChats).forEach(element => {
           element.addEventListener(
             "click",
             () => {
-              console.log(`Wybrano czat z użytkownikiem: ${element.textContent}`);
-  
               socket.emit("render-chat", element.getAttribute("id"));
             },
             false
@@ -192,15 +190,13 @@ document.onreadystatechange = () => {
       });
 
       socket.on("chat-all-fill-failed", () => {
-        console.log("Brak wiadomości");
+        alert("Brak wiadomości");
       });
 
-      socket.on("search-user-passed", () => {
-        console.log("Znaleziono takiego użytkownika: ");
-      });
+      socket.on("search-user-passed", () => {});
 
       socket.on("search-user-failed", () => {
-        console.log("Nie znaleziono takiego użytkownika");
+        alert("Nie znaleziono takiego użytkownika");
       });
 
       socket.on("authentication-failed", () => {
