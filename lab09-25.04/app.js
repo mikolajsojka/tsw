@@ -113,10 +113,9 @@ io.sockets.on("connect", socket => {
   });
 
   socket.on("render-chat", data => {
-    console.log(data.chatId);
-    Chat.findOne({ _id: ObjectId(data.chatId) }, (err, chat) => {
+    Chat.findOne({ _id: ObjectId(data) }, (err, chat) => {
       if (chat) {
-        socket.handshake.session.currentChat = data.chatId;
+        socket.handshake.session.currentChat = data;
         socket.handshake.session.save();
         socket.emit("render-chat-window", chat);
       } else {
@@ -213,6 +212,7 @@ io.sockets.on("connect", socket => {
   });
 
   socket.on("send-message-all", chatName => {
+    console.log(socket.handshake.session.currentChat);
     let data = JSON.parse(chatName);
     data.currentChat = socket.handshake.session.currentChat;
     data.author = socket.handshake.session.userdata.username;
@@ -262,14 +262,7 @@ io.sockets.on("connect", socket => {
       if (socket.handshake.session.userdata.username === data.author) {
         Chat.findOne(
           {
-            $or: [
-              {
-                user_2: socket.handshake.session.userdata.username
-              },
-              {
-                user_1: socket.handshake.session.userdata.username
-              }
-            ]
+            _id: ObjectId(socket.handshake.session.currentChat)
           },
           function(err, messages) {
             let new_message = messages.messages;
@@ -337,8 +330,6 @@ io.sockets.on("connect", socket => {
                   chatId: chat._id,
                   user: user.username
                 });
-                socket.handshake.session.currentChat = chat._id;
-                socket.handshake.session.save();
                 socket.emit("render-chat-window", chat);
               } else {
                 let newChat = new Chat({
@@ -355,8 +346,6 @@ io.sockets.on("connect", socket => {
                   user: user.username
                 });
                 console.log(newChat);
-                socket.handshake.session.currentChat = newChat.chatId;
-                socket.handshake.session.save();
 
                 socket.emit("render-chat-window", newChat);
               }

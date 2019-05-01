@@ -149,21 +149,23 @@ document.onreadystatechange = () => {
 
       socket.on("new-chat", data => {
         let chatElse = document.getElementById("chats-else");
-        chatElse.innerHTML += `<div id="${data.chatId}" class="active-chats">${
+        chatElse.innerHTML += `<div id="${data.chatId}" class="active-chats users-chats">${
           data.user
         }</div>`;
 
-        let newChat = document.getElementById(data.chatId);
+        let newChats = document.getElementsByClassName("users-chats");
 
-        newChat.addEventListener(
-          "click",
-          () => {
-            console.log(`Wybrano czat z użytkownikiem: ${data.user}`);
-
-            socket.emit("render-chat", data);
-          },
-          false
-        );
+        Array.from(newChats).forEach(element =>{
+          element.addEventListener(
+            "click",
+            () => {
+              console.log(`Wybrano czat z użytkownikiem: ${element.textContent}`);
+  
+              socket.emit("render-chat", element.getAttribute("id"));
+            },
+            false
+          );
+        });
       });
 
       socket.on("render-chat-window", chat => {
