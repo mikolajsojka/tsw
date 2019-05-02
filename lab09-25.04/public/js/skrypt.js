@@ -33,6 +33,7 @@ document.onreadystatechange = () => {
           logOut.innerHTML = `Wyloguj(${user.username})`;
           chatUi.style.display = "flex";
           chats.innerHTML = `<div id="general-chat" class="active-chats">Wszyscy</div>`;
+          socket.emit("user-chats");
         }
 
         if (currentChat) {
@@ -40,7 +41,7 @@ document.onreadystatechange = () => {
         }
       });
 
-      sendMessage.addEventListener("keypress", function(e) {
+      sendMessage.addEventListener("keypress", e => {
         let key = e.which || e.keyCode;
         if (key === 13) {
           let data = {
@@ -102,17 +103,18 @@ document.onreadystatechange = () => {
           logOut.innerHTML = `Wyloguj(${user.username})`;
           chatUi.style.display = "flex";
           chats.innerHTML += `<div id="general-chat" class="active-chats">Wszyscy</div>`;
-          //prymitywnie bardzo
+          socket.emit("user-chats");
 
           let generalChat = document.getElementById("general-chat");
 
           generalChat.addEventListener("click", () => {
+            socket.emit("set-current-chat", "general-chat");
             socket.emit("chat-all", "general-chat");
           });
         }
       });
 
-      searchUser.addEventListener("keypress", function(e) {
+      searchUser.addEventListener("keypress", e => {
         let key = e.which || e.keyCode;
         if (key === 13) {
           socket.emit("search-user", searchUser.value);
@@ -136,8 +138,6 @@ document.onreadystatechange = () => {
         ).scrollTop = document.getElementById(
           "actual-chat-messages"
         ).scrollHeight;
-
-        //document.getElementById("general-chat").style.backgroundColor = "rgb(95, 90, 90)";
       });
 
       socket.on("write-message", data => {
@@ -155,18 +155,42 @@ document.onreadystatechange = () => {
 
         let newChats = document.getElementsByClassName("users-chats");
 
-        //emit
-        socket.emit("set-current-chat", data.chatId);
+        if (data.status) {
+          socket.emit("set-current-chat", "general-chat");
+        } else {
+          socket.emit("set-current-chat", data.chatId);
+        }
 
         Array.from(newChats).forEach(element => {
           element.addEventListener(
             "click",
             () => {
+              socket.emit("set-current-chat", element.getAttribute("id"));
               socket.emit("render-chat", element.getAttribute("id"));
             },
             false
           );
         });
+      });
+
+      socket.on("add-class-active", data => {
+        let elseChats = document.getElementsByClassName("users-chats");
+
+        Array.from(elseChats).forEach(element => {
+          element.style.backgroundColor = " rgb(247, 217, 162)";
+        });
+
+        document.getElementById("general-chat").style.backgroundColor =
+          " rgb(247, 217, 162)";
+
+        console.log(data);
+        if (data === "general-chat") {
+          document.getElementById("general-chat").style.backgroundColor =
+            "rgb(95, 90, 90)";
+        } else {
+          document.getElementById(`${data}`).style.backgroundColor =
+            "rgb(95, 90, 90)";
+        }
       });
 
       socket.on("render-chat-window", chat => {

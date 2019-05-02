@@ -26,7 +26,7 @@ mongoose.connect("mongodb://localhost:27017/chat-socket-io", {
 let db = mongoose.connection;
 let ObjectId = require("mongodb").ObjectID;
 db.on("error", console.error.bind(console, "connection error:"));
-db.once("open", function() {
+db.once("open", () => {
   // we're connected!
 });
 
@@ -77,7 +77,7 @@ io.sockets.on("connect", socket => {
     let user = socket.handshake.session.userdata;
 
     if (user && chatName === "general-chat") {
-      chatAll.findOne({}, function(err, messages) {
+      chatAll.findOne({}, (err, messages) => {
         if (messages) {
           socket.emit(
             "chat-all-fill-passed",
@@ -88,7 +88,7 @@ io.sockets.on("connect", socket => {
             messages: []
           });
 
-          newChatAll.save(function(err, _newChatAll) {
+          newChatAll.save((err, _newChatAll) => {
             if (err) return console.error(err);
           });
 
@@ -142,7 +142,7 @@ io.sockets.on("connect", socket => {
                   status: "online"
                 }
               },
-              function(err) {
+              err => {
                 if (err) {
                   console.log("Coś nie tak poszło przy logowaniu");
                 } else {
@@ -162,7 +162,7 @@ io.sockets.on("connect", socket => {
             );
           }
         } else {
-          newUser.save(function(err, _newUser) {
+          newUser.save((err, _newUser) => {
             if (err) return console.error(err);
           });
 
@@ -195,7 +195,7 @@ io.sockets.on("connect", socket => {
             status: "offline"
           }
         },
-        function(err) {
+        err => {
           if (err) {
             console.log("Coś nie tak poszło przy wylogowaniu");
           } else {
@@ -222,7 +222,7 @@ io.sockets.on("connect", socket => {
 
     if (data.currentChat === "general-chat") {
       if (data.author && user && data.message) {
-        chatAll.findOne({}, function(err, messages) {
+        chatAll.findOne({}, (err, messages) => {
           let new_message = messages.messages;
 
           new_message.push({ message: data.message, author: data.author });
@@ -234,7 +234,7 @@ io.sockets.on("connect", socket => {
                   messages: new_message
                 }
               },
-              function(err) {
+              err => {
                 if (err) {
                   console.log("Coś nie tak poszło przy dodawaniu wiadomości");
                 } else {
@@ -258,6 +258,34 @@ io.sockets.on("connect", socket => {
     }
   });
 
+  socket.on("user-chats", () => {
+    Chat.find(
+      {
+        $or: [
+          { user_1: socket.handshake.session.userdata.username },
+          { user_2: socket.handshake.session.userdata.username }
+        ]
+      },
+      (err, chats) => {
+        chats.forEach(element => {
+          if (element.user_1 === socket.handshake.session.userdata.username) {
+            socket.emit("new-chat", {
+              chatId: element._id,
+              user: element.user_2,
+              status: "on-connect"
+            });
+          } else {
+            socket.emit("new-chat", {
+              chatId: element._id,
+              user: element.user_1,
+              status: "on-connect"
+            });
+          }
+        });
+      }
+    );
+  });
+
   socket.on("send-message-user", data => {
     if (socket.handshake.session.currentChat === data.currentChat) {
       if (socket.handshake.session.userdata.username === data.author) {
@@ -265,11 +293,11 @@ io.sockets.on("connect", socket => {
           {
             _id: ObjectId(socket.handshake.session.currentChat)
           },
-          function(err, messages) {
+          (err, messages) => {
             let new_message = messages.messages;
 
             new_message.push({ message: data.message, author: data.author });
-            
+
             if (messages) {
               Chat.updateOne(
                 { _id: ObjectId(messages._id) },
@@ -278,7 +306,7 @@ io.sockets.on("connect", socket => {
                     messages: new_message
                   }
                 },
-                function(err) {
+                err => {
                   if (err) {
                     console.log("Coś nie tak poszło przy dodawaniu wiadomości");
                   } else {
@@ -306,6 +334,8 @@ io.sockets.on("connect", socket => {
   socket.on("set-current-chat", data => {
     socket.handshake.session.currentChat = data;
     socket.handshake.session.save();
+
+    socket.emit("add-class-active", socket.handshake.session.currentChat);
   });
 
   socket.on("search-user", data => {
@@ -346,7 +376,7 @@ io.sockets.on("connect", socket => {
                   messages: []
                 });
 
-                newChat.save(function(err, _newChat) {
+                newChat.save((err, _newChat) => {
                   if (err) return console.error(err);
                 });
 
