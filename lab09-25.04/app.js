@@ -96,11 +96,9 @@ io.sockets.on("connect", socket => {
         }
 
         if (err) {
-          console.log("Nie tak");
+          socket.emit("on-err", err);
         }
       });
-    } else {
-      console.log("Nie ten czat");
     }
   });
 
@@ -112,15 +110,21 @@ io.sockets.on("connect", socket => {
   });
 
   socket.on("render-chat", data => {
+    if(socket.handshake.session.userdata){
     Chat.findOne({ _id: ObjectId(data) }, (err, chat) => {
       if (chat) {
         socket.handshake.session.currentChat = data;
         socket.handshake.session.save();
         socket.emit("render-chat-window", chat);
+      } else if (err) {
+        socket.emit("on-err", err);
       } else {
-        console.log("nie znalazlem");
+        socket.emit("not-found");
       }
     });
+  } else {
+    socket.emit("auth-error");
+  }
   });
 
   socket.on("authentication", data => {
@@ -144,10 +148,8 @@ io.sockets.on("connect", socket => {
               },
               err => {
                 if (err) {
-                  console.log("Coś nie tak poszło przy logowaniu");
+                  socket.emit("on-err", err);
                 } else {
-                  console.log("niby zalogowano");
-
                   socket.handshake.session.userdata = newUser;
                   socket.handshake.session.save();
 
@@ -176,11 +178,11 @@ io.sockets.on("connect", socket => {
           );
         }
         if (err) {
-          console.log("Nie tak");
+          socket.emit("on-err", err);
         }
       });
     } else {
-      console.log("data jest puste");
+      socket.emit("empty-data");
     }
   });
 
@@ -197,10 +199,8 @@ io.sockets.on("connect", socket => {
         },
         err => {
           if (err) {
-            console.log("Coś nie tak poszło przy wylogowaniu");
+            socket.emit("on-err", err);
           } else {
-            console.log("niby wylogowano");
-
             delete socket.handshake.session.userdata;
             delete socket.handshake.session.currentChat;
             socket.handshake.session.save();
@@ -210,7 +210,7 @@ io.sockets.on("connect", socket => {
         }
       );
     } else {
-      console.log("Nie byłeś zalogowany !!!!");
+      socket.emit("auth-error");
     }
   });
 
@@ -221,85 +221,14 @@ io.sockets.on("connect", socket => {
     let user = socket.handshake.session.userdata;
 
     if (data.currentChat === "general-chat") {
-      if (data.author && user && data.message) {
-        chatAll.findOne({}, (err, messages) => {
-          let new_message = messages.messages;
-
-          new_message.push({ message: data.message, author: data.author });
-          if (messages) {
-            chatAll.updateOne(
-              { _id: ObjectId(messages._id) },
-              {
-                $set: {
-                  messages: new_message
-                }
-              },
-              err => {
-                if (err) {
-                  console.log("Coś nie tak poszło przy dodawaniu wiadomości");
-                } else {
-                  console.log("niby dodane");
-
-                  socket.broadcast.emit("write-message", data);
-                  socket.emit("write-message", data);
-                }
-              }
-            );
-          }
-          if (err) {
-            console.log("Nie znaleziono w bazie");
-          }
-        });
-      } else {
-        socket.emit("send-message-failed");
-      }
-    } else {
-      socket.emit("send-message-user", data);
-    }
-  });
-
-  socket.on("user-chats", () => {
-    Chat.find(
-      {
-        $or: [
-          { user_1: socket.handshake.session.userdata.username },
-          { user_2: socket.handshake.session.userdata.username }
-        ]
-      },
-      (err, chats) => {
-        chats.forEach(element => {
-          if (element.user_1 === socket.handshake.session.userdata.username) {
-            socket.emit("new-chat", {
-              chatId: element._id,
-              user: element.user_2,
-              status: "on-connect"
-            });
-          } else {
-            socket.emit("new-chat", {
-              chatId: element._id,
-              user: element.user_1,
-              status: "on-connect"
-            });
-          }
-        });
-      }
-    );
-  });
-
-  socket.on("send-message-user", data => {
-    if (socket.handshake.session.currentChat === data.currentChat) {
-      if (socket.handshake.session.userdata.username === data.author) {
-        Chat.findOne(
-          {
-            _id: ObjectId(socket.handshake.session.currentChat)
-          },
-          (err, messages) => {
+      if (data.message) {
+        if (data.author && user) {
+          chatAll.findOne({}, (err, messages) => {
             let new_message = messages.messages;
 
             new_message.push({ message: data.message, author: data.author });
-
             if (messages) {
-              Chat.updateOne(
+              chatAll.updateOne(
                 { _id: ObjectId(messages._id) },
                 {
                   $set: {
@@ -308,10 +237,8 @@ io.sockets.on("connect", socket => {
                 },
                 err => {
                   if (err) {
-                    console.log("Coś nie tak poszło przy dodawaniu wiadomości");
+                    socket.emit("on-err", err);
                   } else {
-                    console.log("niby dodane");
-
                     socket.broadcast.emit("write-message", data);
                     socket.emit("write-message", data);
                   }
@@ -319,15 +246,96 @@ io.sockets.on("connect", socket => {
               );
             }
             if (err) {
-              console.log("Nie znaleziono w bazie");
+              socket.emit("on-err", err);
             }
-          }
-        );
+          });
+        } else {
+          socket.emit("send-message-failed");
+        }
       } else {
-        console.log("Ty to nie Ty");
+        socket.emit("empty-message");
       }
     } else {
-      console.log("Nie ten Czat");
+      socket.emit("send-message-user", data);
+    }
+  });
+
+  socket.on("user-chats", () => {
+    if (socket.handshake.session.userdata) {
+      Chat.find(
+        {
+          $or: [
+            { user_1: socket.handshake.session.userdata.username },
+            { user_2: socket.handshake.session.userdata.username }
+          ]
+        },
+        (err, chats) => {
+          chats.forEach(element => {
+            if (element.user_1 === socket.handshake.session.userdata.username) {
+              socket.emit("new-chat", {
+                chatId: element._id,
+                user: element.user_2,
+                status: "on-connect"
+              });
+            } else if (err) {
+              socket.emit("on-err", err);
+            } else {
+              socket.emit("new-chat", {
+                chatId: element._id,
+                user: element.user_1,
+                status: "on-connect"
+              });
+            }
+          });
+        }
+      );
+    } else {
+      socket.emit("auth-error");
+    }
+  });
+
+  socket.on("send-message-user", data => {
+    if (data.message) {
+      if (socket.handshake.session.currentChat === data.currentChat) {
+        if (socket.handshake.session.userdata.username === data.author) {
+          Chat.findOne(
+            {
+              _id: ObjectId(socket.handshake.session.currentChat)
+            },
+            (err, messages) => {
+              let new_message = messages.messages;
+
+              new_message.push({ message: data.message, author: data.author });
+
+              if (messages) {
+                Chat.updateOne(
+                  { _id: ObjectId(messages._id) },
+                  {
+                    $set: {
+                      messages: new_message
+                    }
+                  },
+                  err => {
+                    if (err) {
+                      socket.emit("on-err", err);
+                    } else {
+                      socket.broadcast.emit("write-message", data);
+                      socket.emit("write-message", data);
+                    }
+                  }
+                );
+              }
+              if (err) {
+                socket.emit("on-err", err);
+              }
+            }
+          );
+        } else {
+          socket.emit("auth-err");
+        }
+      }
+    } else {
+      socket.emit("empty-message");
     }
   });
 
@@ -389,7 +397,7 @@ io.sockets.on("connect", socket => {
               }
 
               if (err) {
-                console.log("UPSSSSS");
+                socket.emit("on-err", err);
               }
             }
           );
@@ -399,11 +407,11 @@ io.sockets.on("connect", socket => {
           socket.emit("search-user-failed");
         }
         if (err) {
-          console.log("Nie tak");
+          socket.emit("on-err", err);
         }
       });
     } else {
-      console.log("Szukany użytkownik to Ty");
+      socket.emit("auth-err-you");
     }
   });
 });

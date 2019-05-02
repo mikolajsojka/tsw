@@ -183,7 +183,6 @@ document.onreadystatechange = () => {
         document.getElementById("general-chat").style.backgroundColor =
           " rgb(247, 217, 162)";
 
-        console.log(data);
         if (data === "general-chat") {
           document.getElementById("general-chat").style.backgroundColor =
             "rgb(95, 90, 90)";
@@ -210,25 +209,54 @@ document.onreadystatechange = () => {
       });
 
       socket.on("empty-chat-all", currentChat => {
+        socket.emit("set-current-chat", "general-chat");
         socket.emit("chat-all", currentChat);
       });
 
       socket.on("chat-all-fill-failed", () => {
-        alert("Brak wiadomości");
+        alert("Brak wiadomości.");
       });
 
       socket.on("search-user-passed", () => {});
+
+      socket.on("auth-err",()=>{
+        alert("Ty to nie Ty.");
+      });
+
+      socket.on("not-found",()=>{
+        alert("Nie znaleziono.");
+      });
+
+      socket.on("empty-data",()=>{
+        alert("Data jest puste.");
+      });
+
+      socket.on("auth-error",()=>{
+        alert("Nie byłeś zalogowany.");
+      });
+
+      socket.on("auth-err-you",()=>{
+        alert("Nie możesz tworzyć czatów sam ze sobą.");
+      });
 
       socket.on("search-user-failed", () => {
         alert("Nie znaleziono takiego użytkownika");
       });
 
       socket.on("authentication-failed", () => {
-        alert("Login jest obecnie zajęty");
+        alert("Login jest obecnie zajęty.");
+      });
+
+      socket.on("empty-message", () => {
+        alert("Pusta wiadomość.");
       });
 
       socket.on("send-message-failed", () => {
-        alert("Coś poszło nie tak");
+        alert("Coś poszło nie tak.");
+      });
+
+      socket.on("err", ()=>{
+        alert(err);
       });
     });
   }
