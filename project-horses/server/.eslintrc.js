@@ -22,5 +22,9 @@ module.exports = {
     indent: ["error", 4],
     semi: ["error", "always"],
     quotes: ["error", "double"]
-  }
+  },
+  parserOptions: {
+    parser: "babel-eslint"
+  },
+  plugins: ["html"]
 };
