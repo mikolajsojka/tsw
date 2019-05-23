@@ -7,6 +7,26 @@ const serveStatic = require("serve-static");
 
 const indexRouter = require("./routes/index");
 
+const cors = require("cors");
+const bodyParser = require("body-parser");
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+const mongoose = require("mongoose");
+
+mongoose.connect("mongodb://localhost:27017/project-horses", {
+    useNewUrlParser: true
+});
+
+const db = mongoose.connection;
+
+db.on("error", console.error.bind(console, "connection error:"));
+db.once("open", () => {
+    console.log("connected with mongo");
+});
+
+app.use(cors());
 app.use("/", indexRouter);
 app.use(serveStatic("public"));
 

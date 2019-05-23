@@ -1,7 +1,6 @@
 <template>
-    <div class="hello">
+    <div class="authorization">
         <Login/>
-        {{msg}}
     </div>
 </template>
 

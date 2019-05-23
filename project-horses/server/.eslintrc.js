@@ -22,7 +22,9 @@ module.exports = {
     indent: ["error", 4],
     semi: ["error", "always"],
     quotes: ["error", "double"],
-    "import/order": "off"
+    "import/order": "off",
+    "no-multi-assign": "off",
+    "no-param-reassign": "off"
   },
   parserOptions: {
     parser: "babel-eslint"

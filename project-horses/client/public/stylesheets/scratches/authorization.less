@@ -1,0 +1,40 @@
+.authorization {
+  display: flex;
+  width: 100vw;
+  align-items: center;
+  justify-content: center;
+
+  .login {
+    padding: 50px;
+
+    form {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      input {
+        margin-top: 5px;
+        height: 40px;
+        width: 150px;
+      }
+
+      .submit {
+        margin-top: 5px;
+        height: 40px;
+        width: 150px;
+        background-color: rgb(34, 34, 34);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        &:hover {
+          background-color: rgb(161, 158, 158);
+          transition-duration: 2s;
+        }
+      }
+    }
+  }
+}
