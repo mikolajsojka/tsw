@@ -1,5 +1,6 @@
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
+const User = require("../models/User");
 
 const users = [
     {
@@ -15,6 +16,30 @@ const users = [
         password: "password2"
     }
 ];
+exports.create_admin = (_req, res) => {
+    User.findOne(
+        {
+            username: "admin"
+        },
+        (err, user) => {
+            if (user) {
+                res.status(200).send("OK");
+            }
+            else {
+                const newUser = new User({
+                    username: "admin",
+                    password:
+            "$2y$12$GnXV53KsMDhE7QMF1jL1.uHp7eo7EUjB5AYIgtAa4ZXWKwSX9aPua"
+                });
+                User.createUser(newUser, (err, user) => {
+                    if (err) throw err;
+                    console.log(user);
+                });
+                res.status(200).send("OK");
+            }
+        }
+    );
+};
 
 exports.login = (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
@@ -51,11 +76,9 @@ const authMiddleware = (req, res, next) => {
 
 exports.user = (authMiddleware,
 (req, res) => {
-    const user = users.find(user => user.id === req.session.passport.user);
+    console.log(req.session.passport);
 
-    console.log([user, req.session]);
-
-    res.send({ user });
+    res.status(200).send();
 });
 
 passport.serializeUser((user, done) => {
