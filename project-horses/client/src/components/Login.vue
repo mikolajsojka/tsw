@@ -1,41 +1,42 @@
 <template>
     <div class="login">
-        <form v-on:submit="login">
-            <input type="text" name="login">
+        <form>
+            <input v-model="user.username" type="text">
 
-            <input type="password" name="password">
+            <input v-model="user.password" type="password">
 
-            <input class="submit" type="submit" value="Zaloguj">
+            <button @click="login">Zaloguj</button>
         </form>
     </div>
 </template>
 
 <script>
-    import router from "../router";
     import axios from "axios";
 
     export default {
         name: "Login",
+        data () {
+            return {
+                user: {
+                    username: "",
+                    password: ""
+                }
+            };
+        },
         methods: {
-            login: e => {
-                e.preventDefault();
-                let username = document.querySelector("input[name=login]").value;
-                let password = document.querySelector("input[name=password]").value;
+            login () {
                 let login = () => {
-                    let data = {
-                        username: username,
-                        password: password
-                    };
                     axios
-                        .post("http://localhost:3000/login", data)
+                        .post("http://localhost:3000/login", this.user)
                         .then(response => {
-                            console.log("Logged in");
+                            console.log("Zalogowano");
                             // router.push("/");
                         })
                         .catch(errors => {
-                            console.log("Cannot log in");
+                            console.log("Wystąpił problem z zalogowaniem");
                         });
                 };
+
                 login();
             }
         }

@@ -24,7 +24,9 @@ module.exports = {
     quotes: ["error", "double"],
     "import/order": "off",
     "no-multi-assign": "off",
-    "no-param-reassign": "off"
+    "no-param-reassign": "off",
+    "consistent-return": "off",
+    "no-shadow": "off"
   },
   parserOptions: {
     parser: "babel-eslint"
