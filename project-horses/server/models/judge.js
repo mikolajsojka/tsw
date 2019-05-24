@@ -5,6 +5,9 @@ const JudgeSchema = mongoose.Schema({
         type: String,
         index: true
     },
+    id: {
+        type: Number
+    },
     country: {
         type: String
     }

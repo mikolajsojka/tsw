@@ -16,7 +16,18 @@
                 let classes = () => {
                     axios
                         .get("http://localhost:3000/klasy")
-                        .then(response => {})
+                        .then(response => {
+                            axios
+                                .post("http://localhost:3001/data/randomclasses", {
+                                    classes: response.data
+                                })
+                                .then(response => {
+                                    console.log(response.data);
+                                })
+                                .catch(errors => {
+                                    console.log("Wystąpił problem z losowaniem");
+                                });
+                        })
                         .catch(errors => {
                             console.log("Wystąpił problem z losowaniem");
                         });

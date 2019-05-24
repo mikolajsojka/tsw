@@ -6,12 +6,14 @@ exports.random_judges = (req, res) => {
     judges.forEach((element) => {
         Judge.findOne(
             {
+                id: element.id,
                 judge: element.sedzia,
                 country: element.kraj
             },
             (_err, judge) => {
                 if (!judge) {
                     let newJudge = new Judge({
+                        id: element.id,
                         judge: element.sedzia,
                         country: element.kraj
                     });
