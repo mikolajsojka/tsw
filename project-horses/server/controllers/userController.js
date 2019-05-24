@@ -2,7 +2,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const User = require("../models/User");
 
-const users = [
+let users = [
     {
         id: 1,
         name: "Jude",
@@ -21,12 +21,12 @@ exports.create_admin = (_req, res) => {
         {
             username: "admin"
         },
-        (err, user) => {
+        (_err, user) => {
             if (user) {
                 res.status(200).send("OK");
             }
             else {
-                const newUser = new User({
+                let newUser = new User({
                     username: "admin",
                     password:
             "$2y$12$GnXV53KsMDhE7QMF1jL1.uHp7eo7EUjB5AYIgtAa4ZXWKwSX9aPua"
@@ -65,7 +65,7 @@ exports.logout = (req, res) => {
     return res.send();
 };
 
-const authMiddleware = (req, res, next) => {
+let authMiddleware = (req, res, next) => {
     if (!req.isAuthenticated()) {
         res.status(401).send("You are not authenticated");
     }
@@ -86,7 +86,7 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((id, done) => {
-    const user = users.find(user => user.id === id);
+    let user = users.find(user => user.id === id);
 
     done(null, user);
 });
@@ -99,7 +99,7 @@ passport.use(
         },
 
         (username, password, done) => {
-            const user = users.find(
+            let user = users.find(
                 user => user.name === username && user.password === password
             );
 

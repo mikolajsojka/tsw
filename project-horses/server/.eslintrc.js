@@ -27,7 +27,10 @@ module.exports = {
     "no-param-reassign": "off",
     "consistent-return": "off",
     "no-shadow": "off",
-    "import/no-unresolved": "off"
+    "import/no-unresolved": "off",
+    "prefer-const": "off",
+    "no-unused-vars": "off",
+    "no-use-before-define": "off"
   },
   parserOptions: {
     parser: "babel-eslint"
