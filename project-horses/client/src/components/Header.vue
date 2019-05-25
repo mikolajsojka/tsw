@@ -1,6 +1,7 @@
 <template>
     <div id="navbar">
         <button id="auth" @click="random">Losuj dane</button>
+        <button id="check" @click="check">Check</button>
         <router-link to="/auth">
             <button id="auth">Zaloguj</button>
         </router-link>
@@ -12,6 +13,17 @@
     export default {
         name: "Header",
         methods: {
+            check () {
+                let checked = () => {
+                    axios
+                        .get("http://localhost:3001/user/user")
+                        .then(response => {
+                            console.log(response.data);
+                        }); ;
+                };
+                checked();
+            },
+
             random () {
                 let classes = () => {
                     axios

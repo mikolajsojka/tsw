@@ -32,7 +32,6 @@ router.get("/createadmin", (_req, res) => {
 
 router.post("/login", (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
-        console.log(user);
         if (err) {
             return next(err);
         }
@@ -42,8 +41,7 @@ router.post("/login", (req, res, next) => {
         }
 
         req.login(user, (_err) => {
-            res.send("Logged in");
-            console.log(req.session.passport);
+            res.send(user);
         });
     })(req, res, next);
 });
@@ -65,10 +63,10 @@ let authMiddleware = (req, res, next) => {
     }
 };
 
-router.get("/user", authMiddleware, (req, res) => {
-    console.log(req.session);
+router.get("/user", (req, res) => {
+    // console.log(req.session);
 
-    res.status(200).send();
+    res.status(200).json(req.user);
 });
 
 passport.serializeUser((user, done) => {
@@ -77,7 +75,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser((id, done) => {
     User.getUserById(id, (err, user) => {
-        done(err, user.id);
+        done(err, user);
     });
 });
 

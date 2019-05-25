@@ -30,7 +30,8 @@ module.exports = {
     "import/no-unresolved": "off",
     "prefer-const": "off",
     "no-unused-vars": "off",
-    "no-use-before-define": "off"
+    "no-use-before-define": "off",
+    "no-underscore-dangle":"off"
   },
   parserOptions: {
     parser: "babel-eslint"
