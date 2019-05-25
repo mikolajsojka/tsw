@@ -1,22 +1,11 @@
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const User = require("../models/User");
+const express = require("express");
 
-let users = [
-    {
-        id: 1,
-        name: "Jude",
-        email: "user@email.com",
-        password: "password"
-    },
-    {
-        id: 2,
-        name: "Emma",
-        email: "emma@email.com",
-        password: "password2"
-    }
-];
-exports.create_admin = (_req, res) => {
+const router = express.Router();
+
+router.get("/createadmin", (_req, res) => {
     User.findOne(
         {
             username: "admin"
@@ -27,9 +16,9 @@ exports.create_admin = (_req, res) => {
             }
             else {
                 let newUser = new User({
-                    username: "admin",
+                    username: "administrator",
                     password:
-            "$2y$12$GnXV53KsMDhE7QMF1jL1.uHp7eo7EUjB5AYIgtAa4ZXWKwSX9aPua"
+            "$2y$12$GlsWA92yzaErHSKv.6HXeeSv0wBVt7Xeoi0hGhFozFjWZ9ROp3QuK"
                 });
                 User.createUser(newUser, (err, user) => {
                     if (err) throw err;
@@ -39,10 +28,11 @@ exports.create_admin = (_req, res) => {
             }
         }
     );
-};
+});
 
-exports.login = (req, res, next) => {
+router.post("/login", (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
+        console.log(user);
         if (err) {
             return next(err);
         }
@@ -53,17 +43,18 @@ exports.login = (req, res, next) => {
 
         req.login(user, (_err) => {
             res.send("Logged in");
+            console.log(req.session.passport);
         });
     })(req, res, next);
-};
+});
 
-exports.logout = (req, res) => {
+router.get("/logout", (req, res) => {
     req.logout();
 
     console.log("Wylogowano");
 
     return res.send();
-};
+});
 
 let authMiddleware = (req, res, next) => {
     if (!req.isAuthenticated()) {
@@ -74,9 +65,8 @@ let authMiddleware = (req, res, next) => {
     }
 };
 
-exports.user = (authMiddleware,
-(req, res) => {
-    console.log(req.session.passport);
+router.get("/user", authMiddleware, (req, res) => {
+    console.log(req.session);
 
     res.status(200).send();
 });
@@ -86,29 +76,28 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((id, done) => {
-    let user = users.find(user => user.id === id);
-
-    done(null, user);
+    User.getUserById(id, (err, user) => {
+        done(err, user.id);
+    });
 });
 
 passport.use(
-    new LocalStrategy(
-        {
-            usernameField: "username",
-            passwordField: "password"
-        },
-
-        (username, password, done) => {
-            let user = users.find(
-                user => user.name === username && user.password === password
-            );
-
-            if (user) {
-                done(null, user);
+    new LocalStrategy((username, password, done) => {
+        User.getUserByUsername(username, (err, user) => {
+            if (err) throw err;
+            if (!user) {
+                return done(null, false, { message: "Niepoprawny login lub hasło" });
             }
-            else {
-                done(null, false, { message: "Incorrect username or password" });
-            }
-        }
-    )
+
+            User.comparePassword(password, user.password, (err, isMatch) => {
+                if (err) throw err;
+                if (isMatch) {
+                    return done(null, user);
+                }
+                return done(null, false, { message: "Niepoprawny login lub hasło" });
+            });
+        });
+    })
 );
+
+module.exports = router;

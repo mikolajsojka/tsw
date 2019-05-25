@@ -27,7 +27,7 @@
             login () {
                 let login = () => {
                     axios
-                        .post("http://localhost:3001/login", this.user)
+                        .post("http://localhost:3001/user/login", this.user)
                         .then(response => {
                             console.log("Zalogowano");
                             // router.push("/");

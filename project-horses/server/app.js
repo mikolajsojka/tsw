@@ -2,10 +2,9 @@ const express = require("express");
 
 const app = express();
 const port = process.env.PORT || 3001;
+var session = require("express-session");
 
 const serveStatic = require("serve-static");
-
-const indexRouter = require("./routes/index");
 
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -13,21 +12,32 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.json({ limit: "10mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
 
-const cookieSession = require("cookie-session");
-
 const passport = require("passport");
 
+passport.serializeUser((user, done) => {
+    done(null, user);
+});
+
+passport.deserializeUser((obj, done) => {
+    done(null, obj);
+});
+
 app.use(
-    cookieSession({
-        name: "mysession",
-        keys: ["vueauthrandomkey"],
-        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    session({
+        secret: "horses",
+        saveUninitialized: true,
+        resave: true
     })
 );
 
 app.use(passport.initialize());
 
 app.use(passport.session());
+
+const userRouter = require("./routes/user");
+const horseRouter = require("./routes/horse");
+const judgeRouter = require("./routes/judge");
+const classRouter = require("./routes/class");
 
 const mongoose = require("mongoose");
 
@@ -43,7 +53,11 @@ db.once("open", () => {
 });
 
 app.use(cors());
-app.use("/", indexRouter);
+app.use("/user", userRouter);
+app.use("/horse", horseRouter);
+app.use("/judge", judgeRouter);
+app.use("/class", classRouter);
+
 app.use(serveStatic("public"));
 
 const server = app.listen(port, () => {

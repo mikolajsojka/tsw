@@ -18,7 +18,7 @@
                         .get("http://localhost:3000/klasy")
                         .then(response => {
                             axios
-                                .post("http://localhost:3001/data/randomclasses", {
+                                .post("http://localhost:3001/class/randomclasses", {
                                     classes: response.data
                                 })
                                 .then(response => {
@@ -38,7 +38,7 @@
                         .get("http://localhost:3000/sedziowie")
                         .then(response => {
                             axios
-                                .post("http://localhost:3001/data/randomjudges", {
+                                .post("http://localhost:3001/judge/randomjudges", {
                                     judges: response.data
                                 })
                                 .then(response => {
@@ -58,7 +58,7 @@
                         .get("http://localhost:3000/konie")
                         .then(response => {
                             axios
-                                .post("http://localhost:3001/data/randomhorses", {
+                                .post("http://localhost:3001/horse/randomhorses", {
                                     horses: response.data
                                 })
                                 .then(response => {

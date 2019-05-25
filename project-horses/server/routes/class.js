@@ -1,6 +1,10 @@
 const Class = require("../models/Class");
 
-exports.random_classes = (req, res) => {
+const express = require("express");
+
+const router = express.Router();
+
+router.post("/randomclasses", (req, res) => {
     let { classes } = req.body;
 
     classes.forEach((element) => {
@@ -26,4 +30,6 @@ exports.random_classes = (req, res) => {
     });
 
     res.send("Serwer działa na porcie 3000");
-};
+});
+
+module.exports = router;

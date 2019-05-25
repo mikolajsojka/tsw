@@ -1,6 +1,9 @@
 const Judge = require("../models/Judge");
+const express = require("express");
 
-exports.random_judges = (req, res) => {
+const router = express.Router();
+
+router.post("/randomjudges", (req, res) => {
     let { judges } = req.body;
 
     judges.forEach((element) => {
@@ -26,4 +29,6 @@ exports.random_judges = (req, res) => {
     });
 
     res.send("Serwer działa na porcie 3000");
-};
+});
+
+module.exports = router;

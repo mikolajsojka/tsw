@@ -1,6 +1,9 @@
 const Horse = require("../models/Horse");
+const express = require("express");
 
-exports.random_horses = (req, res) => {
+const router = express.Router();
+
+router.post("/randomhorses", (req, res) => {
     let { horses } = req.body;
 
     horses.forEach((element) => {
@@ -70,4 +73,6 @@ exports.random_horses = (req, res) => {
     });
 
     res.send("Serwer działa na porcie 3000");
-};
+});
+
+module.exports = router;
