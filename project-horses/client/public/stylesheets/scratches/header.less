@@ -7,7 +7,7 @@
   justify-content: flex-end;
 
   .auth {
-    background-color: rgb(250, 243, 243);
+    background-color: white;
     width: 200px;
     height: 100%;
     margin-right: 20px;
@@ -16,6 +16,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
+    &:hover {
+      background-color: rgb(110, 110, 110);
+      color: white;
+      transition-duration: 2s;
+    }
   }
 }
 
@@ -24,8 +30,7 @@
     justify-content: center;
 
     .auth {
-      margin: 0;
-      padding: 5px;
+      margin: 0 10px 0 10px;
     }
   }
 }
@@ -34,10 +39,10 @@
   #navbar {
     justify-content: center;
     flex-direction: column;
-    padding: 10px 0 10px 0;
+    height:100px;
 
     .auth {
-      margin:0;
+      margin: 10px 0 0 0;
       width: 100%;
     }
   }

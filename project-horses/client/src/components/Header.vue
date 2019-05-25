@@ -1,8 +1,8 @@
 <template>
     <div id="navbar">
-        <button class="auth" @click="random">Losuj dane</button>
+        <div class="auth" @click="random">Losuj dane</div>
 
-        <button class="auth" @click="redirect">Zaloguj</button>
+        <div class="auth" @click="redirect">Zaloguj</div>
     </div>
 </template>
 
