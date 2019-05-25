@@ -8,6 +8,9 @@ const HorseSchema = mongoose.Schema({
     class: {
         type: Number
     },
+    id: {
+        type: Number
+    },
     name: {
         type: String
     },

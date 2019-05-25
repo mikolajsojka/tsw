@@ -7,6 +7,7 @@ exports.random_horses = (req, res) => {
         Horse.findOne(
             {
                 number: element.numer,
+                id: element.id,
                 name: element.nazwa,
                 country: element.kraj,
                 yob: element.rocznik,
@@ -26,6 +27,7 @@ exports.random_horses = (req, res) => {
                         });
                     });
                     let newHorse = new Horse({
+                        id: element.id,
                         number: element.numer,
                         class: element.klasa,
                         name: element.nazwa,
