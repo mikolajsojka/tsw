@@ -10,7 +10,11 @@
 </template>
 
 <script>
+
     export default {
-        name: "Main"
+        name: "Main",
+        created () {
+            console.log(this.$store.state.user);
+        }
     };
 </script>

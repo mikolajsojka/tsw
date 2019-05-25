@@ -30,6 +30,7 @@
                     axios
                         .post("http://localhost:3001/user/login", this.user)
                         .then(response => {
+                            this.$store.commit("USER", response.data);
                             router.push("/main");
                         })
                         .catch(errors => {
