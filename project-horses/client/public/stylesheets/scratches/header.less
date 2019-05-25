@@ -6,7 +6,7 @@
   display: flex;
   justify-content: flex-end;
 
-  #auth {
+  .auth {
     background-color: rgb(250, 243, 243);
     width: 200px;
     height: 100%;
@@ -19,14 +19,26 @@
   }
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 800px) {
   #navbar {
     justify-content: center;
 
-    #auth {
+    .auth {
       margin: 0;
-      width: 100px;
       padding: 5px;
+    }
+  }
+}
+
+@media (max-width: 400px) {
+  #navbar {
+    justify-content: center;
+    flex-direction: column;
+    padding: 10px 0 10px 0;
+
+    .auth {
+      margin:0;
+      width: 100%;
     }
   }
 }

@@ -1,29 +1,20 @@
 <template>
     <div id="navbar">
-        <button id="auth" @click="random">Losuj dane</button>
-        <button id="check" @click="check">Check</button>
-        <router-link to="/auth">
-            <button id="auth">Zaloguj</button>
-        </router-link>
+        <button class="auth" @click="random">Losuj dane</button>
+
+        <button class="auth" @click="redirect">Zaloguj</button>
     </div>
 </template>
 
 <script>
+    import router from "../router";
     import axios from "axios";
     export default {
         name: "Header",
         methods: {
-            check () {
-                let checked = () => {
-                    axios
-                        .get("http://localhost:3001/user/user")
-                        .then(response => {
-                            console.log(response.data);
-                        }); ;
-                };
-                checked();
+            redirect () {
+                router.push("/auth");
             },
-
             random () {
                 let classes = () => {
                     axios

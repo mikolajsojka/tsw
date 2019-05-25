@@ -12,6 +12,7 @@
 
 <script>
     import axios from "axios";
+    import router from "../router";
 
     export default {
         name: "Login",
@@ -29,11 +30,10 @@
                     axios
                         .post("http://localhost:3001/user/login", this.user)
                         .then(response => {
-                            console.log("Zalogowano");
-                            // router.push("/");
+                            router.push("/main");
                         })
                         .catch(errors => {
-                            console.log("Wystąpił problem z zalogowaniem");
+                            alert("Wystąpił problem z zalogowaniem");
                         });
                 };
 
