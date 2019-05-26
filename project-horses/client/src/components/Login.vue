@@ -11,9 +11,6 @@
 </template>
 
 <script>
-    import axios from "axios";
-    import router from "../router";
-
     export default {
         name: "Login",
         data () {
@@ -26,19 +23,7 @@
         },
         methods: {
             login () {
-                let login = () => {
-                    axios
-                        .post("http://localhost:3001/user/login", this.user)
-                        .then(response => {
-                            this.$store.commit("USER", response.data);
-                            router.push("/main");
-                        })
-                        .catch(errors => {
-                            alert("Wystąpił problem z zalogowaniem");
-                        });
-                };
-
-                login();
+                this.$store.dispatch("LOGIN", this.user);
             }
         }
     };

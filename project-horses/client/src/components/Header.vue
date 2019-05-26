@@ -8,7 +8,7 @@
 
 <script>
     import router from "../router";
-    import axios from "axios";
+
     export default {
         name: "Header",
         methods: {
@@ -16,69 +16,13 @@
                 router.push("/auth");
             },
             random () {
-                let classes = () => {
-                    axios
-                        .get("http://localhost:3000/klasy")
-                        .then(response => {
-                            axios
-                                .post("http://localhost:3001/class/randomclasses", {
-                                    classes: response.data
-                                })
-                                .then(response => {
-                                    console.log(response.data);
-                                })
-                                .catch(errors => {
-                                    console.log("Wystąpił problem z losowaniem");
-                                });
-                        })
-                        .catch(errors => {
-                            console.log("Wystąpił problem z losowaniem");
-                        });
-                };
+                this.$store.dispatch("RANDOMCLASSES");
+                this.$store.dispatch("RANDOMHORSES");
+                this.$store.dispatch("RANDOMJUDGES");
 
-                let judges = () => {
-                    axios
-                        .get("http://localhost:3000/sedziowie")
-                        .then(response => {
-                            axios
-                                .post("http://localhost:3001/judge/randomjudges", {
-                                    judges: response.data
-                                })
-                                .then(response => {
-                                    console.log(response.data);
-                                })
-                                .catch(errors => {
-                                    console.log("Wystąpił problem z losowaniem");
-                                });
-                        })
-                        .catch(errors => {
-                            console.log("Wystąpił problem z losowaniem");
-                        });
-                };
-
-                let horses = () => {
-                    axios
-                        .get("http://localhost:3000/konie")
-                        .then(response => {
-                            axios
-                                .post("http://localhost:3001/horse/randomhorses", {
-                                    horses: response.data
-                                })
-                                .then(response => {
-                                    console.log(response.data);
-                                })
-                                .catch(errors => {
-                                    console.log("Wystąpił problem z losowaniem");
-                                });
-                        })
-                        .catch(errors => {
-                            console.log("Wystąpił problem z losowaniem");
-                        });
-                };
-
-                judges();
-                horses();
-                classes();
+                console.log(this.$store.state.classes);
+                console.log(this.$store.state.horses);
+                console.log(this.$store.state.judges);
             }
         }
     };

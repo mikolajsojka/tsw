@@ -3,6 +3,12 @@ const express = require("express");
 
 const router = express.Router();
 
+router.get("/getjudges", (_req, res) => {
+    Judge.find({}, (_err, judges) => {
+        res.status(200).json(judges);
+    });
+});
+
 router.post("/randomjudges", (req, res) => {
     let { judges } = req.body;
 
@@ -28,7 +34,9 @@ router.post("/randomjudges", (req, res) => {
         );
     });
 
-    res.send("Serwer działa na porcie 3000");
+    Judge.find({}, (_err, judges) => {
+        res.status(200).json(judges);
+    });
 });
 
 module.exports = router;

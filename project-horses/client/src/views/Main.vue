@@ -14,7 +14,9 @@
     export default {
         name: "Main",
         created () {
-            console.log(this.$store.state.user);
+            console.log(this.$store.state.classes);
+            console.log(this.$store.state.horses);
+            console.log(this.$store.state.judges);
         }
     };
 </script>

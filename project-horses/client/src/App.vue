@@ -1,6 +1,7 @@
 <template>
     <div id="app">
         <Header/>
+        <div id="user">{{this.$store.state.user._id}}</div>
         <router-view/>
     </div>
 </template>

@@ -4,6 +4,12 @@ const express = require("express");
 
 const router = express.Router();
 
+router.get("/getclasses", (_req, res) => {
+    Class.find({}, (_err, classes) => {
+        res.status(200).json(classes);
+    });
+});
+
 router.post("/randomclasses", (req, res) => {
     let { classes } = req.body;
 
@@ -29,7 +35,9 @@ router.post("/randomclasses", (req, res) => {
         );
     });
 
-    res.send("Serwer działa na porcie 3000");
+    Class.find({}, (_err, classes) => {
+        res.status(200).json(classes);
+    });
 });
 
 module.exports = router;

@@ -3,6 +3,12 @@ const express = require("express");
 
 const router = express.Router();
 
+router.get("/gethorses", (_req, res) => {
+    Horse.find({}, (_err, horses) => {
+        res.status(200).json(horses);
+    });
+});
+
 router.post("/randomhorses", (req, res) => {
     let { horses } = req.body;
 
@@ -72,7 +78,9 @@ router.post("/randomhorses", (req, res) => {
         );
     });
 
-    res.send("Serwer działa na porcie 3000");
+    Horse.find({}, (_err, horses) => {
+        res.status(200).json(horses);
+    });
 });
 
 module.exports = router;
