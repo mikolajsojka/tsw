@@ -1,0 +1,51 @@
+<template>
+    <div class="horses">
+        <div id="change-collection">
+            <button @click="decrement">-1</button>
+            {{pagecounter}}
+            <button @click="increment">+1</button>
+        </div>
+        <div id="collection">
+            <ul>
+                <li v-for="horse in horses" :key="horse._id">{{ horse.name }}</li>
+            </ul>
+        </div>
+    </div>
+</template>
+
+<script>
+    export default {
+        name: "Horses",
+
+        data () {
+            let allhorses = this.$store.state.horses;
+            return {
+                counter: 0,
+                pagecounter: 1,
+                limit: Math.ceil(allhorses.length / 8) * 8,
+                horses: Array.from(allhorses).slice(0, 8)
+            };
+        },
+        methods: {
+            renderhorses () {
+                let allhorses = this.$store.state.horses;
+                return Array.from(allhorses).slice(this.counter, this.counter + 8);
+            },
+
+            increment () {
+                if (this.counter + 8 < this.limit) {
+                    this.counter += 8;
+                    this.pagecounter += 1;
+                    this.horses = this.renderhorses();
+                }
+            },
+            decrement () {
+                if (this.counter > 0) {
+                    this.counter -= 8;
+                    this.pagecounter -= 1;
+                    this.horses = this.renderhorses();
+                }
+            }
+        }
+    };
+</script>
