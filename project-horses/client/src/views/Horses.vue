@@ -7,13 +7,14 @@
         </div>
         <div id="collection">
             <ul>
-                <li v-for="horse in horses" :key="horse._id">{{ horse.name }}</li>
+                <li v-for="horse in horses" :key="horse._id" @click="renderhorse(horse._id)">{{ horse.name }}</li>
             </ul>
         </div>
     </div>
 </template>
 
 <script>
+    import router from "../router";
     export default {
         name: "Horses",
 
@@ -27,6 +28,9 @@
             };
         },
         methods: {
+            renderhorse (id) {
+                router.push(`/horse/${id}`);
+            },
             renderhorses () {
                 let allhorses = this.$store.state.horses;
                 return Array.from(allhorses).slice(this.counter, this.counter + 8);

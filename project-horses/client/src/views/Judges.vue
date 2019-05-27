@@ -7,13 +7,14 @@
         </div>
         <div id="collection">
             <ul>
-                <li v-for="judge in judges" :key="judge._id">{{ judge.judge }}</li>
+                <li v-for="judge in judges" :key="judge._id" @click="renderjudge(judge._id)">{{ judge.judge }}</li>
             </ul>
         </div>
     </div>
 </template>
 
 <script>
+    import router from "../router";
     export default {
         name: "Judges",
 
@@ -27,6 +28,9 @@
             };
         },
         methods: {
+            renderjudge (id) {
+                router.push(`/judge/${id}`);
+            },
             renderjudges () {
                 let alljudges = this.$store.state.judges;
                 return Array.from(alljudges).slice(this.counter, this.counter + 8);

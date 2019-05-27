@@ -3,6 +3,8 @@ const express = require("express");
 
 const router = express.Router();
 
+const mongoose = require("mongoose");
+
 router.get("/gethorses", (_req, res) => {
     Horse.find({}, (_err, horses) => {
         res.status(200).json(horses);
@@ -12,16 +14,21 @@ router.get("/gethorses", (_req, res) => {
 router.post("/randomhorses", (req, res) => {
     let { horses } = req.body;
 
+    mongoose.connect("mongodb://localhost:27017/project-horses", {
+        useNewUrlParser: true
+    });
+
+    const db = mongoose.connection;
+
+    db.dropCollection("horses", (err, result) => {});
+
+    let responsehorses = [];
+    let counter = 0;
+
     horses.forEach((element) => {
         Horse.findOne(
             {
-                number: element.numer,
-                id: element.id,
-                name: element.nazwa,
-                country: element.kraj,
-                yob: element.rocznik,
-                sex: element.plec,
-                hair: element.masc
+                id: element.id
             },
             (_err, horse) => {
                 if (!horse) {
@@ -70,16 +77,17 @@ router.post("/randomhorses", (req, res) => {
                             notes
                         }
                     });
+                    counter += 1;
+                    responsehorses.push(newHorse);
                     Horse.createHorse(newHorse, (err, _horse) => {
                         if (err) throw err;
                     });
+                    if (counter === horses.length) {
+                        res.status(200).json(responsehorses);
+                    }
                 }
             }
         );
-    });
-
-    Horse.find({}, (_err, horses) => {
-        res.status(200).json(horses);
     });
 });
 

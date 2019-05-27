@@ -7,13 +7,14 @@
         </div>
         <div id="collection">
             <ul>
-                <li v-for="item in classes" :key="item._id">{{ item.category }}</li>
+                <li v-for="item in classes" :key="item._id" @click="renderclass(item._id)">{{ item.category }}</li>
             </ul>
         </div>
     </div>
 </template>
 
 <script>
+    import router from "../router";
     export default {
         name: "Classes",
 
@@ -27,6 +28,9 @@
             };
         },
         methods: {
+            renderclass (id) {
+                router.push(`/class/${id}`);
+            },
             renderclasses () {
                 let allclasses = this.$store.state.classes;
                 return Array.from(allclasses).slice(this.counter, this.counter + 8);

@@ -19,10 +19,7 @@
                 this.$store.dispatch("RANDOMCLASSES");
                 this.$store.dispatch("RANDOMHORSES");
                 this.$store.dispatch("RANDOMJUDGES");
-
-                console.log(this.$store.state.classes);
-                console.log(this.$store.state.horses);
-                console.log(this.$store.state.judges);
+                router.push("/main");
             }
         }
     };

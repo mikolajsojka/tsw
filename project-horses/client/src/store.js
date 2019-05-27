@@ -18,12 +18,15 @@ export default new Vuex.Store({
         },
         FETCH_HORSES (state, horses) {
             state.horses = horses;
+            console.log("Załadowano kolekcję: konie");
         },
         FETCH_JUDGES (state, judges) {
             state.judges = judges;
+            console.log("Załadowano kolekcję: sędziowie");
         },
         FETCH_CLASSES (state, classes) {
             state.classes = classes;
+            console.log("Załadowano kolekcję: klasy");
         }
     },
     getters: {
@@ -33,14 +36,11 @@ export default new Vuex.Store({
         classes: state => state.classes
     },
     actions: {
-        LOGIN ({ commit, dispatch }, payload) {
+        LOGIN ({ commit }, payload) {
             axios
                 .post("http://localhost:3001/user/login", payload)
                 .then(response => {
                     commit("LOGIN", response.data);
-                    dispatch("FETCH_HORSES");
-                    dispatch("FETCH_JUDGES");
-                    dispatch("FETCH_CLASSES");
 
                     router.push("/main");
                 })
