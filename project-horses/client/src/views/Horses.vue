@@ -7,7 +7,7 @@
         </div>
         <div id="collection">
             <ul>
-                <li v-for="horse in horses" :key="horse._id" @click="renderhorse(horse._id)">{{ horse.name }}</li>
+                <li v-for="horse in horses" :key="horse._id" @click="renderhorse(horse)">{{ horse.name }}</li>
             </ul>
         </div>
     </div>
@@ -28,8 +28,9 @@
             };
         },
         methods: {
-            renderhorse (id) {
-                router.push(`/horse/${id}`);
+            renderhorse (horse) {
+                this.$store.commit("CLICKED", { type: "horse", data: horse });
+                router.push(`/horse/${horse._id}`);
             },
             renderhorses () {
                 let allhorses = this.$store.state.horses;

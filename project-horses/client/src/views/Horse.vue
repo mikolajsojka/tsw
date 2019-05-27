@@ -1,9 +1,16 @@
 <template>
-    <div>Wybrany koń: </div>
+    <div id="horse">
+        <div v-html="renderhorse()"></div>
+    </div>
 </template>
 
-<script>
+    <script>
     export default {
-        name: "Horse"
+        name: "Horse",
+        methods: {
+            renderhorse () {
+                return "<b>test</b>";
+            }
+        }
     };
 </script>

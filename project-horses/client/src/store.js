@@ -10,9 +10,16 @@ export default new Vuex.Store({
         user: "",
         horses: {},
         classes: {},
-        judges: {}
+        judges: {},
+        clicked: {
+            type: "",
+            data: {}
+        }
     },
     mutations: {
+        CLICKED (state, clicked) {
+            state.clicked = clicked;
+        },
         LOGIN (state, user) {
             state.user = user;
         },
@@ -33,7 +40,8 @@ export default new Vuex.Store({
         user: state => state.user,
         horses: state => state.horses,
         judges: state => state.judges,
-        classes: state => state.classes
+        classes: state => state.classes,
+        clicked: state => state.clicked
     },
     actions: {
         LOGIN ({ commit }, payload) {

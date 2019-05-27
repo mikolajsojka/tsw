@@ -1,9 +1,15 @@
 <template>
-    <div>Wybrany sędzia: </div>
+    <div>Wybrany sędzia: {{judge}}</div>
 </template>
 
 <script>
     export default {
-        name: "Judge"
+        name: "Judge",
+
+        data () {
+            return {
+                judge: ""
+            };
+        }
     };
 </script>
