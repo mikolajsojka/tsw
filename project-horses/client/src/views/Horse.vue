@@ -1,7 +1,6 @@
 <template>
     <div id="horse">
         <div class="panel" v-html="renderhorse()"></div>
-
     </div>
 </template>
 

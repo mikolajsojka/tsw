@@ -5,7 +5,7 @@
 
             <input v-model="user.password" type="password">
 
-            <button @click="login">Zaloguj</button>
+            <div id="login" @click="login">Zaloguj</div>
         </form>
     </div>
 </template>
