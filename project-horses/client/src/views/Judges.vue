@@ -1,9 +1,9 @@
 <template>
     <div class="judges">
         <div id="change-collection">
-            <button @click="decrement">-1</button>
-            {{pagecounter}}
-            <button @click="increment">+1</button>
+            <div @click="decrement">Poprzednia</div>
+            <div id="pages">{{pagecounter}}/{{limit/8}}</div>
+            <div @click="increment">Następna</div>
         </div>
         <div id="collection">
             <ul>
