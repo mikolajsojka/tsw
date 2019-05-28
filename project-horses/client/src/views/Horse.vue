@@ -11,9 +11,24 @@
         methods: {
             renderhorse () {
                 let horse;
+                let classes;
+                let actualclass;
                 Array.from(this.$store.state.horses).forEach(element => {
                     if (element._id === this.$route.params.id) {
                         horse = element;
+
+                        classes = "<select>";
+                        Array.from(this.$store.state.classes).forEach(item => {
+                            if (element.class === item.number) {
+                                actualclass = item.category;
+                                console.log(item.category);
+                                console.log(actualclass);
+                                classes += `<option selected="selected" value="element.class">${item.category}</option>`;
+                            } else {
+                                classes += `<option value="item.number">${item.category}</option>`;
+                            }
+                        });
+                        classes += "</select>";
                     }
                 });
                 if (horse) {
@@ -34,7 +49,7 @@
                         <label>Płeć</label>
                         <input name="sex" value="${horse.sex}"></input>
                         <label>Klasa startowa</label>
-                        <input name="class" value="${horse.class}"></input>
+                        ${classes}
                         </div>  
 
                         <div id="second">

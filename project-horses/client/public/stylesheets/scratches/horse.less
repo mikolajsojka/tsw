@@ -9,13 +9,13 @@
     display: flex;
     align-items: center;
     padding: 5px;
-    max-height: 550px;
+    min-height: 550px;
     flex-direction: column;
-    border: 1px solid black;
 
     #info {
       display: flex;
-
+      border: 1px solid black;
+      padding:5px;
       #first {
         display: flex;
         flex-direction: column;
@@ -30,6 +30,10 @@
 
         label {
           margin-bottom: 5px;
+        }
+
+        select {
+          width: 100%;
         }
       }
 
@@ -71,4 +75,10 @@
       margin: 0 0 10px 0;
     }
   }
+}
+
+@media (max-width: 400px) {
+    #info{
+        flex-direction: column;
+    }
 }
