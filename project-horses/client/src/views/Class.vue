@@ -6,7 +6,7 @@
                 <div id="info">
                     <div id="first">
                         <label>Nazwa klasy</label>
-                        <input name="name" v-model="item.category">
+                        <input name="name" v-model="item.category" @change="change">
                     </div>
                 </div>
             </div>
@@ -39,6 +39,11 @@
             }
         },
         methods: {
+            change ({ target }) {
+                if (target.name === "name") {
+                    this.item.category = target.value;
+                }
+            },
             deleteclass () {
                 if (confirm("Czy na pewno chcesz usunąć?")) {
                     this.$store.dispatch("DELETE_CLASS", this.$route.params.id);
