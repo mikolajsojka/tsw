@@ -17,6 +17,21 @@ export default new Vuex.Store({
         }
     },
     mutations: {
+        DELETE_JUDGE: (state, id) => {
+            let index = state.judges.findIndex(judge => judge._id === id);
+            state.judges.splice(index, 1);
+            router.push("/judges");
+        },
+        DELETE_CLASS: (state, id) => {
+            let index = state.classes.findIndex(item => item._id === id);
+            state.classes.splice(index, 1);
+            router.push("/classes");
+        },
+        DELETE_HORSE: (state, id) => {
+            let index = state.horses.findIndex(horse => horse._id === id);
+            state.horses.splice(index, 1);
+            router.push("/horses");
+        },
         CLICKED (state, clicked) {
             state.clicked = clicked;
         },

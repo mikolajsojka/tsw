@@ -1,13 +1,27 @@
 <template>
     <div id="class">
-        <div class="panel" v-html="renderClass()"></div>
+        <div class="panel" >
+            <div class="button delete" @click="deleteclass">Usuń Klasę</div>
+            <div class="main" v-html="renderClass()"></div>
+            <div class="button">Zatwierdź</div>
+        </div>
     </div>
 </template>
 
 <script>
+    import router from "../router";
     export default {
         name: "Class",
+        data () {
+            return {
+                deletecheck: 0
+            };
+        },
         methods: {
+            deleteclass () {
+                this.$store.commit("DELETE_CLASS", this.$route.params.id);
+                this.deletecheck = 1;
+            },
             renderClass () {
                 let item;
 
@@ -18,7 +32,7 @@
                 });
                 if (item) {
                     return `
-                    <div class="button delete">Usuń Klasę</div>
+                    
                     <div id="info">
                         <div id="first">
                         <label>Nazwa klasy</label>
@@ -26,11 +40,14 @@
                         </div>  
 
                     </div>
-                    <div class="button">Zatwierdź</div>
+                    
                         
                     `;
                 } else {
-                    return "<div>Nie znaleziono takiej klasy</div>";
+                    router.push("/main");
+                    if (!this.deletecheck) {
+                        alert("Nie znaleziono takiej klasy");
+                    }
                 }
             }
         }

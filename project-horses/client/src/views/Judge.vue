@@ -1,14 +1,27 @@
 <template>
     <div id="judge">
-        <div class="panel" v-html="renderJudge()"></div>
+        <div class="panel" >
+            <div class="button delete" @click="deletejudge">Usuń sędziego</div>
+            <div class="main" v-html="renderJudge()"></div>
+            <div class="button">Zatwierdź</div>
+        </div>
     </div>
 </template>
 
 <script>
+    import router from "../router";
     export default {
         name: "Judge",
-
+        data () {
+            return {
+                deletecheck: 0
+            };
+        },
         methods: {
+            deletejudge () {
+                this.$store.commit("DELETE_JUDGE", this.$route.params.id);
+                this.deletecheck = 1;
+            },
             renderJudge () {
                 let judge;
 
@@ -19,7 +32,7 @@
                 });
                 if (judge) {
                     return `
-                    <div class="button delete">Usuń sędziego</div>
+                    
                     <div id="info">
                         <div id="first">
                         <label>Imię</label>
@@ -29,11 +42,14 @@
                         </div>  
 
                     </div>
-                    <div class="button">Zatwierdź</div>
+                    
                         
                     `;
                 } else {
-                    return "<div>Nie znaleziono takiego sędziego</div>";
+                    router.push("/main");
+                    if (!this.deletecheck) {
+                        alert("Nie znaleziono takiego sędziego");
+                    }
                 }
             }
         }

@@ -1,13 +1,27 @@
 <template>
     <div id="horse">
-        <div class="panel" v-html="renderhorse()"></div>
+        <div class="panel">
+            <div class="button delete" @click="deletehorse">Usuń konia</div>
+            <div class="main" v-html="renderhorse()"></div>
+            <div class="button">Zatwierdź</div>
+        </div>
     </div>
 </template>
 
     <script>
+    import router from "../router";
     export default {
         name: "Horse",
+        data () {
+            return {
+                deletecheck: 0
+            };
+        },
         methods: {
+            deletehorse () {
+                this.$store.commit("DELETE_HORSE", this.$route.params.id);
+                this.deletecheck = 1;
+            },
             renderhorse () {
                 let horse;
                 let classes;
@@ -32,7 +46,6 @@
                 });
                 if (horse) {
                     return `
-                    <div class="button delete">Usuń konia</div>
                     <div id="info">
                         <div id="first">
                         <label>Imię</label>
@@ -69,11 +82,14 @@
                         <input name="owner-country" value="${horse.owner.country}"></input>
                         </div>
                     </div>
-                    <div class="button">Zatwierdź</div>
+                    
                         
                     `;
                 } else {
-                    return "<div>Nie znaleziono takiego konia</div>";
+                    router.push("/main");
+                    if (!this.deletecheck) {
+                        alert("Nie znaleziono takiego konia");
+                    }
                 }
             }
         }

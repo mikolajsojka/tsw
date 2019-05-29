@@ -9,13 +9,37 @@
     display: flex;
     align-items: center;
     padding: 5px;
-    min-height: 550px;
     flex-direction: column;
+
+    .button {
+      width: 100%;
+      height: 50px;
+      color: white;
+      background-color: rgb(34, 34, 34);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background-color: white;
+        color: black;
+        transition-duration: 2s;
+      }
+    }
+
+    .delete {
+      background-color: rgb(219, 82, 82);
+    }
+
+    .main{
+      margin:0;
+      padding:5px 0 5px 0;
 
     #info {
       display: flex;
       border: 1px solid black;
-      padding: 5px;
+      padding:5px;
       #first {
         display: flex;
         flex-direction: column;
@@ -32,35 +56,33 @@
           margin-bottom: 5px;
         }
 
+        select {
+          width: 100%;
+        }
+      }
+
+      #second {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100%;
+
+        input {
+          margin-bottom: 5px;
+        }
+
+        label {
+          margin-bottom: 5px;
+        }
       }
     }
-    .button {
-      width: 100%;
-      height: 50px;
-      color: white;
-      background-color: rgb(34, 34, 34);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 10px 0 0 0;
-
-      &:hover {
-        background-color: white;
-        color: black;
-        transition-duration: 2s;
-      }
-    }
-
-    .delete {
-      background-color: rgb(219, 82, 82);
-      margin: 0 0 10px 0;
-    }
+    
   }
+}
 }
 
 @media (max-width: 400px) {
-  #info {
-    flex-direction: column;
-  }
+    #info{
+        flex-direction: column;
+    }
 }
