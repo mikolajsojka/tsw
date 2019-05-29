@@ -21,6 +21,7 @@
                         <label>Klasa startowa</label>
                         <select>
                             <option v-for="item in classes" :key="item._id">{{item.name}}</option>
+                            <option selected>{{actualclass.name}}</option>
                         </select>
                     </div>
 
@@ -99,7 +100,10 @@
                         name: ""
                     }
                 ],
-                actualclass: ""
+                actualclass: {
+                    id: "",
+                    name: ""
+                }
             };
         },
         created () {
@@ -109,15 +113,14 @@
                     this.horse = element;
                     Array.from(this.$store.state.classes).forEach(item => {
                         if (element.class === item.number) {
-                            this.actualclass = item.category;
-                            this.classes.push({ id: element.class, name: item.category });
+                            this.actualclass.name = item.category;
+                            this.actualclass.id = element.class;
                         } else {
                             this.classes.push({ id: item.number, name: item.category });
                         }
                     });
                 }
             });
-
             if (this.check === 0) {
                 router.push("/main");
                 alert("Nie znaleziono takiego konia");
