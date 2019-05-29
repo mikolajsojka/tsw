@@ -7,6 +7,7 @@
         </div>
         <div id="collection">
             <ul>
+                <div class="add">Dodaj sędziego</div>
                 <li v-for="judge in judges" :key="judge._id" @click="renderjudge(judge)">{{ judge.judge }}</li>
             </ul>
         </div>

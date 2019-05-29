@@ -7,6 +7,7 @@
         </div>
         <div id="collection">
             <ul>
+                <div class="add">Dodaj konia</div>
                 <li v-for="horse in horses" :key="horse._id" @click="renderhorse(horse)">{{ horse.name }}</li>
             </ul>
         </div>

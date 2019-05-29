@@ -7,6 +7,7 @@
         </div>
         <div id="collection">
             <ul>
+                <div class="add">Dodaj klasę</div>
                 <li v-for="item in classes" :key="item._id" @click="renderclass(item)">{{ item.category }}</li>
             </ul>
         </div>
