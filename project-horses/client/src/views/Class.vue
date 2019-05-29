@@ -2,7 +2,14 @@
     <div id="class">
         <div class="panel">
             <div class="button delete" @click="deleteclass">Usuń Klasę</div>
-            <div class="main" v-html="renderClass()"></div>
+            <div class="main">
+                <div id="info">
+                    <div id="first">
+                        <label>Nazwa klasy</label>
+                        <input name="name" v-model="item.category">
+                    </div>
+                </div>
+            </div>
             <div class="button">Zatwierdź</div>
         </div>
     </div>
@@ -14,8 +21,22 @@
         name: "Class",
         data () {
             return {
-                deletecheck: 0
+                check: 0,
+                item: {}
             };
+        },
+        created () {
+            Array.from(this.$store.state.classes).forEach(element => {
+                if (element._id === this.$route.params.id) {
+                    this.check = 1;
+                    this.item = element;
+                }
+            });
+
+            if (this.check === 0) {
+                router.push("/main");
+                alert("Nie znaleziono takiej klasy");
+            }
         },
         methods: {
             deleteclass () {
@@ -25,34 +46,6 @@
                 }
 
                 this.deletecheck = 1;
-            },
-            renderClass () {
-                let item;
-
-                Array.from(this.$store.state.classes).forEach(element => {
-                    if (element._id === this.$route.params.id) {
-                        item = element;
-                    }
-                });
-                if (item) {
-                    return `
-                    
-                    <div id="info">
-                        <div id="first">
-                        <label>Nazwa klasy</label>
-                        <input name="name" value="${item.category}"></input>
-                        </div>  
-
-                    </div>
-                    
-                        
-                    `;
-                } else {
-                    router.push("/main");
-                    if (!this.deletecheck) {
-                        alert("Nie znaleziono takiej klasy");
-                    }
-                }
             }
         }
     };

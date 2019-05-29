@@ -2,7 +2,84 @@
     <div id="horse">
         <div class="panel">
             <div class="button delete" @click="deletehorse">Usuń konia</div>
-            <div class="main" v-html="renderhorse()"></div>
+
+            <div class="main">
+                <div id="info">
+                    <div id="first">
+                        <label>Imię</label>
+                        <input name="name" v-model="horse.name">
+                        <label>Numer startowy</label>
+                        <input name="number" v-model="horse.number">
+                        <label>Kraj Pochodzenia</label>
+                        <input name="country" v-model="horse.country">
+                        <label>Data urodzenia</label>
+                        <input name="yob" v-model="horse.yob">
+                        <label>Sierść</label>
+                        <input name="hair" v-model="horse.hair">
+                        <label>Płeć</label>
+                        <input name="sex" v-model="horse.sex">
+                        <label>Klasa startowa</label>
+                        <select>
+                            <option v-for="item in classes" :key="item._id">{{item.name}}</option>
+                        </select>
+                    </div>
+
+                    <div id="second">
+                        <label>Rodowód - Ojciec</label>
+                        <input
+                            name="bloodline-father"
+                            v-model="
+                                horse.bloodline.father.name
+                            "
+                        >
+                        <input
+                            name="bloodline-father"
+                            v-model="horse.bloodline.father.country
+                            "
+                        >
+                        <label>Rodowód - Matka</label>
+                        <input
+                            name="bloodline-mother"
+                            v-model="horse.bloodline.mother.name
+                            "
+                        >
+                        <input
+                            name="bloodline-mother"
+                            v-model="horse.bloodline.mother.country
+                            "
+                        >
+                        <label>Rodowód - Ojciec Matki</label>
+                        <input
+                            name="bloodline-father-mother"
+                            v-model="horse.bloodline.fathermother.name
+                            "
+                        >
+                        <input
+                            name="bloodline-father-mother"
+                            v-model="horse.bloodline.fathermother.country
+                            "
+                        >
+                        <label>Hodowca</label>
+                        <input
+                            name="breeder-name"
+                            v-model="
+                                horse.breeder.name
+                            "
+                        >
+                        <input name="breeder-country" v-model="horse.breeder.country
+                        ">
+                        <label>Właściciel</label>
+                        <input name="owner-name" v-model="horse.owner.name
+                        ">
+                        <input
+                            name="owner-country"
+                            v-model="
+                                horse.owner.country
+                            "
+                        >
+                    </div>
+                </div>
+            </div>
             <div class="button">Zatwierdź</div>
         </div>
     </div>
@@ -14,112 +91,42 @@
         name: "Horse",
         data () {
             return {
-                deletecheck: 0,
+                check: 0,
                 horse: {},
-                classes: "",
+                classes: [
+                    {
+                        id: "",
+                        name: ""
+                    }
+                ],
                 actualclass: ""
             };
         },
         created () {
             Array.from(this.$store.state.horses).forEach(element => {
                 if (element._id === this.$route.params.id) {
+                    this.check = 1;
                     this.horse = element;
-
-                    this.classes = "<select>";
                     Array.from(this.$store.state.classes).forEach(item => {
                         if (element.class === item.number) {
                             this.actualclass = item.category;
-                            this.classes += `<option selected="selected" value="element.class">${
-                                item.category
-                            }</option>`;
+                            this.classes.push({ id: element.class, name: item.category });
                         } else {
-                            this.classes += `<option value="item.number">${
-                                item.category
-                            }</option>`;
+                            this.classes.push({ id: item.number, name: item.category });
                         }
                     });
-                    this.classes += "</select>";
                 }
             });
 
-            console.log(this.horse);
+            if (this.check === 0) {
+                router.push("/main");
+                alert("Nie znaleziono takiego konia");
+            }
         },
         methods: {
             deletehorse () {
                 if (confirm("Czy na pewno chcesz usunąć?")) {
                     this.$store.dispatch("DELETE_HORSE", this.$route.params.id);
-                } else {
-                }
-                this.deletecheck = 1;
-            },
-
-            renderhorse () {
-                if (this.horse) {
-                    return `
-                    <div id="info">
-                        <div id="first">
-                        <label>Imię</label>
-                        <input name="name" value="${this.horse.name}" />
-                        <label>Numer startowy</label>
-                        <input name="number" value="${this.horse.number}"/>
-                        <label>Kraj Pochodzenia</label>
-                        <input name="country" value="${this.horse.country}"/>
-                        <label>Data urodzenia</label>
-                        <input name="yob" value="${this.horse.yob}"/>
-                        <label>Sierść</label>
-                        <input name="hair" value="${this.horse.hair}"/>
-                        <label>Płeć</label>
-                        <input name="sex" value="${this.horse.sex}"/>
-                        <label>Klasa startowa</label>
-                        ${this.classes}
-                        </div>  
-
-                        <div id="second">
-                        <label>Rodowód - Ojciec</label>
-                        <input name="bloodline-father" value="${
-                        this.horse.bloodline.father.name
-                    }"/>
-                        <input name="bloodline-father" value="${
-                        this.horse.bloodline.father.country
-                    }"/>
-                        <label>Rodowód - Matka</label>
-                        <input name="bloodline-mother" value="${
-                        this.horse.bloodline.mother.name
-                    }"/>
-                        <input name="bloodline-mother" value="${
-                        this.horse.bloodline.mother.country
-                    }"/>
-                        <label>Rodowód - Ojciec Matki</label>
-                        <input name="bloodline-father-mother" value="${
-                        this.horse.bloodline.fathermother.name
-                    }"/>
-                        <input name="bloodline-father-mother" value="${
-                        this.horse.bloodline.fathermother.country
-                    }"/>
-                        <label>Hodowca</label>
-                        <input name="breeder-name" value="${
-                        this.horse.breeder.name
-                    }"/>
-                        <input name="breeder-country" value="${
-                        this.horse.breeder.country
-                    }"/>
-                        <label>Właściciel</label>
-                        <input name="owner-name" value="${
-                        this.horse.owner.name
-                    }"/>
-                        <input name="owner-country" value="${
-                        this.horse.owner.country
-                    }"/>
-                        </div>
-                    </div>
-                    
-                        
-                    `;
-                } else {
-                    router.push("/main");
-                    if (!this.deletecheck) {
-                        alert("Nie znaleziono takiego konia");
-                    }
                 }
             }
         }
