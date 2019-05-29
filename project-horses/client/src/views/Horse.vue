@@ -56,17 +56,17 @@
                     <div id="info">
                         <div id="first">
                         <label>Imię</label>
-                        <input name="name" value="${horse.name}"></input>
+                        <input name="name" value="${horse.name}" />
                         <label>Numer startowy</label>
-                        <input name="number" value="${horse.number}"></input>
+                        <input name="number" value="${horse.number}"/>
                         <label>Kraj Pochodzenia</label>
-                        <input name="country" value="${horse.country}"></input>
+                        <input name="country" value="${horse.country}"/>
                         <label>Data urodzenia</label>
-                        <input name="yob" value="${horse.yob}"></input>
+                        <input name="yob" value="${horse.yob}"/>
                         <label>Sierść</label>
-                        <input name="hair" value="${horse.hair}"></input>
+                        <input name="hair" value="${horse.hair}"/>
                         <label>Płeć</label>
-                        <input name="sex" value="${horse.sex}"></input>
+                        <input name="sex" value="${horse.sex}"/>
                         <label>Klasa startowa</label>
                         ${classes}
                         </div>  
@@ -75,38 +75,38 @@
                         <label>Rodowód - Ojciec</label>
                         <input name="bloodline-father" value="${
                         horse.bloodline.father.name
-                    }"></input>
+                    }"/>
                         <input name="bloodline-father" value="${
                         horse.bloodline.father.country
-                    }"></input>
+                    }"/>
                         <label>Rodowód - Matka</label>
                         <input name="bloodline-mother" value="${
                         horse.bloodline.mother.name
-                    }"></input>
+                    }"/>
                         <input name="bloodline-mother" value="${
                         horse.bloodline.mother.country
-                    }"></input>
+                    }"/>
                         <label>Rodowód - Ojciec Matki</label>
                         <input name="bloodline-father-mother" value="${
                         horse.bloodline.fathermother.name
-                    }"></input>
+                    }"/>
                         <input name="bloodline-father-mother" value="${
                         horse.bloodline.fathermother.country
-                    }"></input>
+                    }"/>
                         <label>Hodowca</label>
                         <input name="breeder-name" value="${
                         horse.breeder.name
-                    }"></input>
+                    }"/>
                         <input name="breeder-country" value="${
                         horse.breeder.country
-                    }"></input>
+                    }"/>
                         <label>Właściciel</label>
                         <input name="owner-name" value="${
                         horse.owner.name
-                    }"></input>
+                    }"/>
                         <input name="owner-country" value="${
                         horse.owner.country
-                    }"></input>
+                    }"/>
                         </div>
                     </div>
                     
