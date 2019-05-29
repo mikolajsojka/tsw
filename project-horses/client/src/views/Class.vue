@@ -7,6 +7,12 @@
                     <div id="first">
                         <label>Nazwa klasy</label>
                         <input name="name" v-model="item.category" @change="change">
+                        <label>Sędziowie</label>
+
+                        <ul>
+                            <li v-for="judge in judges" :key="judge.id">{{judge.name}}</li>
+                        </ul>
+                        <button>Dodaj sędziego</button>
                     </div>
                 </div>
             </div>
@@ -22,7 +28,9 @@
         data () {
             return {
                 check: 0,
-                item: {}
+                item: {},
+                judges: [],
+                judgesall: []
             };
         },
         created () {
@@ -30,9 +38,19 @@
                 if (element._id === this.$route.params.id) {
                     this.check = 1;
                     this.item = element;
+                    Array.from(this.$store.state.judges).forEach(judge => {
+                        element.committee.forEach(item => {
+                            if (judge.id === item) {
+                                this.judges.push({ id: judge.id, name: judge.judge });
+                            }
+                        });
+
+                        this.judgesall.push({ id: judge.id, name: judge.judge });
+                    });
                 }
             });
 
+            console.log(this.judgesall);
             if (this.check === 0) {
                 router.push("/main");
                 alert("Nie znaleziono takiej klasy");

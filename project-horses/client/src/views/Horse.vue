@@ -32,52 +32,68 @@
                             v-model="
                                 horse.bloodline.father.name
                             "
-                            @change="change">
+                            @change="change"
+                        >
                         <input
                             name="bloodline-father-country"
                             v-model="horse.bloodline.father.country
                             "
-                            @change="change">
+                            @change="change"
+                        >
                         <label>Rodowód - Matka</label>
                         <input
                             name="bloodline-mother"
                             v-model="horse.bloodline.mother.name
                             "
-                            @change="change">
+                            @change="change"
+                        >
                         <input
                             name="bloodline-mother-country"
                             v-model="horse.bloodline.mother.country
                             "
-                            @change="change">
+                            @change="change"
+                        >
                         <label>Rodowód - Ojciec Matki</label>
                         <input
                             name="bloodline-father-mother"
                             v-model="horse.bloodline.fathermother.name
                             "
-                            @change="change">
+                            @change="change"
+                        >
                         <input
                             name="bloodline-father-mother-country"
                             v-model="horse.bloodline.fathermother.country
                             "
-                            @change="change">
+                            @change="change"
+                        >
                         <label>Hodowca</label>
                         <input
                             name="breeder-name"
                             v-model="
                                 horse.breeder.name
                             "
-                            @change="change">
-                        <input name="breeder-country" v-model="horse.breeder.country
-                        " @change="change">
+                            @change="change"
+                        >
+                        <input
+                            name="breeder-country"
+                            v-model="horse.breeder.country
+                            "
+                            @change="change"
+                        >
                         <label>Właściciel</label>
-                        <input name="owner-name" v-model="horse.owner.name
-                        " @change="change">
+                        <input
+                            name="owner-name"
+                            v-model="horse.owner.name
+                            "
+                            @change="change"
+                        >
                         <input
                             name="owner-country"
                             v-model="
                                 horse.owner.country
                             "
-                            @change="change" >
+                            @change="change"
+                        >
                     </div>
                 </div>
             </div>
@@ -94,12 +110,7 @@
             return {
                 check: 0,
                 horse: {},
-                classes: [
-                    {
-                        id: "",
-                        name: ""
-                    }
-                ],
+                classes: [],
                 actualclass: {
                     id: "",
                     name: ""
