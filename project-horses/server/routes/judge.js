@@ -1,5 +1,6 @@
 const Judge = require("../models/Judge");
 const express = require("express");
+const ObjectId = require("mongodb").ObjectID;
 
 const router = express.Router();
 
@@ -8,6 +9,19 @@ const mongoose = require("mongoose");
 router.get("/getjudges", (_req, res) => {
     Judge.find({}, (_err, judges) => {
         res.status(200).json(judges);
+    });
+});
+
+router.post("/delete/:id", (req, res) => {
+    let { id } = req.params;
+
+    Judge.deleteOne({ _id: ObjectId(id) }, (err, judge) => {
+        if (err) {
+            res.status(400).send("Coś poszło nie tak..");
+        }
+        else {
+            res.status(200).send("OK");
+        }
     });
 });
 

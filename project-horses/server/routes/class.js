@@ -1,4 +1,5 @@
 const Class = require("../models/Class");
+const ObjectId = require("mongodb").ObjectID;
 
 const express = require("express");
 
@@ -9,6 +10,19 @@ const mongoose = require("mongoose");
 router.get("/getclasses", (_req, res) => {
     Class.find({}, (_err, classes) => {
         res.status(200).json(classes);
+    });
+});
+
+router.post("/delete/:id", (req, res) => {
+    let { id } = req.params;
+
+    Class.deleteOne({ _id: ObjectId(id) }, (err, item) => {
+        if (err) {
+            res.status(400).send("Coś poszło nie tak..");
+        }
+        else {
+            res.status(200).send("OK");
+        }
     });
 });
 

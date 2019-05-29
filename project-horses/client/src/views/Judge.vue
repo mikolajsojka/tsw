@@ -1,6 +1,6 @@
 <template>
     <div id="judge">
-        <div class="panel" >
+        <div class="panel">
             <div class="button delete" @click="deletejudge">Usuń sędziego</div>
             <div class="main" v-html="renderJudge()"></div>
             <div class="button">Zatwierdź</div>
@@ -19,7 +19,11 @@
         },
         methods: {
             deletejudge () {
-                this.$store.commit("DELETE_JUDGE", this.$route.params.id);
+                if (confirm("Czy na pewno chcesz usunąć?")) {
+                    this.$store.dispatch("DELETE_JUDGE", this.$route.params.id);
+                } else {
+                }
+
                 this.deletecheck = 1;
             },
             renderJudge () {
@@ -53,6 +57,5 @@
                 }
             }
         }
-
     };
 </script>

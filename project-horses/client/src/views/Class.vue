@@ -1,6 +1,6 @@
 <template>
     <div id="class">
-        <div class="panel" >
+        <div class="panel">
             <div class="button delete" @click="deleteclass">Usuń Klasę</div>
             <div class="main" v-html="renderClass()"></div>
             <div class="button">Zatwierdź</div>
@@ -19,7 +19,11 @@
         },
         methods: {
             deleteclass () {
-                this.$store.commit("DELETE_CLASS", this.$route.params.id);
+                if (confirm("Czy na pewno chcesz usunąć?")) {
+                    this.$store.dispatch("DELETE_CLASS", this.$route.params.id);
+                } else {
+                }
+
                 this.deletecheck = 1;
             },
             renderClass () {

@@ -1,5 +1,6 @@
 const Horse = require("../models/Horse");
 const express = require("express");
+const ObjectId = require("mongodb").ObjectID;
 
 const router = express.Router();
 
@@ -8,6 +9,19 @@ const mongoose = require("mongoose");
 router.get("/gethorses", (_req, res) => {
     Horse.find({}, (_err, horses) => {
         res.status(200).json(horses);
+    });
+});
+
+router.post("/delete/:id", (req, res) => {
+    let { id } = req.params;
+
+    Horse.deleteOne({ _id: ObjectId(id) }, (err, horse) => {
+        if (err) {
+            res.status(400).send("Coś poszło nie tak..");
+        }
+        else {
+            res.status(200).send("OK");
+        }
     });
 });
 

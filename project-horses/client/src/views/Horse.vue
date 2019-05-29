@@ -19,7 +19,10 @@
         },
         methods: {
             deletehorse () {
-                this.$store.commit("DELETE_HORSE", this.$route.params.id);
+                if (confirm("Czy na pewno chcesz usunąć?")) {
+                    this.$store.dispatch("DELETE_HORSE", this.$route.params.id);
+                } else {
+                }
                 this.deletecheck = 1;
             },
             renderhorse () {
@@ -36,9 +39,13 @@
                                 actualclass = item.category;
                                 console.log(item.category);
                                 console.log(actualclass);
-                                classes += `<option selected="selected" value="element.class">${item.category}</option>`;
+                                classes += `<option selected="selected" value="element.class">${
+                                    item.category
+                                }</option>`;
                             } else {
-                                classes += `<option value="item.number">${item.category}</option>`;
+                                classes += `<option value="item.number">${
+                                    item.category
+                                }</option>`;
                             }
                         });
                         classes += "</select>";
@@ -66,20 +73,40 @@
 
                         <div id="second">
                         <label>Rodowód - Ojciec</label>
-                        <input name="bloodline-father" value="${horse.bloodline.father.name}"></input>
-                        <input name="bloodline-father" value="${horse.bloodline.father.country}"></input>
+                        <input name="bloodline-father" value="${
+                        horse.bloodline.father.name
+                    }"></input>
+                        <input name="bloodline-father" value="${
+                        horse.bloodline.father.country
+                    }"></input>
                         <label>Rodowód - Matka</label>
-                        <input name="bloodline-mother" value="${horse.bloodline.mother.name}"></input>
-                        <input name="bloodline-mother" value="${horse.bloodline.mother.country}"></input>
+                        <input name="bloodline-mother" value="${
+                        horse.bloodline.mother.name
+                    }"></input>
+                        <input name="bloodline-mother" value="${
+                        horse.bloodline.mother.country
+                    }"></input>
                         <label>Rodowód - Ojciec Matki</label>
-                        <input name="bloodline-father-mother" value="${horse.bloodline.fathermother.name}"></input>
-                        <input name="bloodline-father-mother" value="${horse.bloodline.fathermother.country}"></input>
+                        <input name="bloodline-father-mother" value="${
+                        horse.bloodline.fathermother.name
+                    }"></input>
+                        <input name="bloodline-father-mother" value="${
+                        horse.bloodline.fathermother.country
+                    }"></input>
                         <label>Hodowca</label>
-                        <input name="breeder-name" value="${horse.breeder.name}"></input>
-                        <input name="breeder-country" value="${horse.breeder.country}"></input>
+                        <input name="breeder-name" value="${
+                        horse.breeder.name
+                    }"></input>
+                        <input name="breeder-country" value="${
+                        horse.breeder.country
+                    }"></input>
                         <label>Właściciel</label>
-                        <input name="owner-name" value="${horse.owner.name}"></input>
-                        <input name="owner-country" value="${horse.owner.country}"></input>
+                        <input name="owner-name" value="${
+                        horse.owner.name
+                    }"></input>
+                        <input name="owner-country" value="${
+                        horse.owner.country
+                    }"></input>
                         </div>
                     </div>
                     

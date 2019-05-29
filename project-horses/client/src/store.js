@@ -59,6 +59,39 @@ export default new Vuex.Store({
         clicked: state => state.clicked
     },
     actions: {
+        DELETE_HORSE ({ commit }, payload) {
+            commit("DELETE_HORSE", payload);
+
+            axios
+                .post(`http://localhost:3001/horse/delete/${payload}`)
+                .then(response => {})
+                .catch(errors => {
+                    console.log(errors);
+                    alert("Wystąpił problem z zalogowaniem");
+                });
+        },
+        DELETE_JUDGE ({ commit }, payload) {
+            commit("DELETE_JUDGE", payload);
+
+            axios
+                .post(`http://localhost:3001/judge/delete/${payload}`)
+                .then(response => {})
+                .catch(errors => {
+                    console.log(errors);
+                    alert("Wystąpił problem z zalogowaniem");
+                });
+        },
+        DELETE_CLASS ({ commit }, payload) {
+            commit("DELETE_CLASS", payload);
+
+            axios
+                .post(`http://localhost:3001/class/delete/${payload}`)
+                .then(response => {})
+                .catch(errors => {
+                    console.log(errors);
+                    alert("Wystąpił problem z zalogowaniem");
+                });
+        },
         LOGIN ({ commit }, payload) {
             axios
                 .post("http://localhost:3001/user/login", payload)
