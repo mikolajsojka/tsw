@@ -21,7 +21,6 @@
                     </div>
                 </div>
             </div>
-            <div class="button">Zatwierdź</div>
         </div>
     </div>
 </template>

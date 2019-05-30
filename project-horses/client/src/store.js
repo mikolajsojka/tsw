@@ -21,6 +21,14 @@ export default new Vuex.Store({
             let index = state.classes.findIndex(item => item._id === payload._id);
             state.classes[index] = payload;
         },
+        EDIT_HORSE: (state, payload) => {
+            let index = state.horses.findIndex(item => item._id === payload._id);
+            state.horses[index] = payload;
+        },
+        EDIT_JUDGE: (state, payload) => {
+            let index = state.judges.findIndex(item => item._id === payload._id);
+            state.judges[index] = payload;
+        },
         DELETE_JUDGE: (state, id) => {
             let index = state.judges.findIndex(judge => judge._id === id);
             state.judges.splice(index, 1);
@@ -65,6 +73,12 @@ export default new Vuex.Store({
     actions: {
         EDIT_CLASS ({ commit }, payload) {
             commit("EDIT_CLASS", payload);
+        },
+        EDIT_HORSE ({ commit }, payload) {
+            commit("EDIT_HORSE", payload);
+        },
+        EDIT_JUDGE ({ commit }, payload) {
+            commit("EDIT_JUDGE", payload);
         },
         DELETE_HORSE ({ commit }, payload) {
             commit("DELETE_HORSE", payload);

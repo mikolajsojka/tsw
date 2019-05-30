@@ -97,7 +97,6 @@
                     </div>
                 </div>
             </div>
-            <div class="button">Zatwierdź</div>
         </div>
     </div>
 </template>
@@ -191,6 +190,8 @@
                 if (target.name === "classes") {
                     this.horse.class = target.value;
                 }
+
+                this.$store.dispatch("EDIT_HORSE", this.horse);
             },
             deletehorse () {
                 if (confirm("Czy na pewno chcesz usunąć?")) {

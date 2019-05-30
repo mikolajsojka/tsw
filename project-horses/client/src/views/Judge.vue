@@ -12,7 +12,6 @@
                     </div>
                 </div>
             </div>
-            <div class="button">Zatwierdź</div>
         </div>
     </div>
 </template>
@@ -47,6 +46,7 @@
                 if (target.name === "country") {
                     this.judge.country = target.value;
                 }
+                this.$store.dispatch("EDIT_JUDGE", this.judge);
             },
             deletejudge () {
                 if (confirm("Czy na pewno chcesz usunąć?")) {
