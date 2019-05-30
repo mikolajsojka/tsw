@@ -12,6 +12,29 @@ router.get("/getjudges", (_req, res) => {
     });
 });
 
+router.post("/edit", (req, res) => {
+    let { item } = req.body;
+    Judge.updateOne(
+        { _id: ObjectId(item._id) },
+        {
+            $set: {
+                judge: item.judge,
+                country: item.country,
+                id: item.id
+
+            }
+        },
+        (err) => {
+            if (err) {
+                res.status(400).send("Coś poszło nie tak..");
+            }
+            else {
+                res.status(200).send("OK");
+            }
+        }
+    );
+});
+
 router.post("/delete/:id", (req, res) => {
     let { id } = req.params;
 

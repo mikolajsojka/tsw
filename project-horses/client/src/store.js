@@ -73,12 +73,36 @@ export default new Vuex.Store({
     actions: {
         EDIT_CLASS ({ commit }, payload) {
             commit("EDIT_CLASS", payload);
+
+            axios
+                .post("http://localhost:3001/class/edit", { item: payload })
+                .then(response => {})
+                .catch(errors => {
+                    console.log(errors);
+                    alert("Wystąpił problem z edycją klasy");
+                });
         },
         EDIT_HORSE ({ commit }, payload) {
             commit("EDIT_HORSE", payload);
+
+            axios
+                .post("http://localhost:3001/horse/edit", { item: payload })
+                .then(response => {})
+                .catch(errors => {
+                    console.log(errors);
+                    alert("Wystąpił problem z edycją konia");
+                });
         },
         EDIT_JUDGE ({ commit }, payload) {
             commit("EDIT_JUDGE", payload);
+
+            axios
+                .post("http://localhost:3001/judge/edit", { item: payload })
+                .then(response => {})
+                .catch(errors => {
+                    console.log(errors);
+                    alert("Wystąpił problem z edycją sędziego");
+                });
         },
         DELETE_HORSE ({ commit }, payload) {
             commit("DELETE_HORSE", payload);

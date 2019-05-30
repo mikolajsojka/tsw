@@ -13,6 +13,30 @@ router.get("/getclasses", (_req, res) => {
     });
 });
 
+router.post("/edit", (req, res) => {
+    let { item } = req.body;
+
+    Class.updateOne(
+        { _id: ObjectId(item._id) },
+        {
+            $set: {
+                committee: item.committee,
+                number: item.number,
+                category: item.category
+
+            }
+        },
+        (err) => {
+            if (err) {
+                res.status(400).send("Coś poszło nie tak..");
+            }
+            else {
+                res.status(200).send("OK");
+            }
+        }
+    );
+});
+
 router.post("/delete/:id", (req, res) => {
     let { id } = req.params;
 
