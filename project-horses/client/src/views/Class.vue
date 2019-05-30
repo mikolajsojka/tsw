@@ -14,7 +14,10 @@
                             <div @click="increment">+</div>
                         </div>
                         <div class="judge add">Dodaj sędziego</div>
-                        <div class="judge" v-for="judge in judgespagination" :key="judge.id">{{judge.name}}</div>
+                        <div class="judge" v-for="judge in judgespagination" :key="judge.id">
+                            <div class="name">{{judge.name}}</div>
+                            <div class="delete">x</div>
+                        </div>
                     </div>
                 </div>
             </div>
