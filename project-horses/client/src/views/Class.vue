@@ -14,8 +14,8 @@
                             <div @click="increment">+</div>
                         </div>
                         <label>Dodaj sędziego</label>
-                        <select name="judges" @change="change">
-                            <option selected></option>
+                        <select name="judges" id="select" @change="change">
+                            <option selected ></option>
                             <option v-for="judge in judgesall" :value="judge.id" :key="judge._id">{{judge.name}}</option>
                         </select>
 
@@ -109,6 +109,7 @@
                         this.pagecounter = 0;
                     }
                 }
+                document.getElementById("select").value = "";
                 this.$store.dispatch("EDIT_CLASS", this.item);
             },
             deleteclass () {
@@ -134,9 +135,6 @@
                     }
                 });
 
-                this.$store.dispatch("EDIT_CLASS", this.item);
-            },
-            add () {
                 this.$store.dispatch("EDIT_CLASS", this.item);
             },
             renderjudges () {
