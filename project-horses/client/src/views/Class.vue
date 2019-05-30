@@ -8,11 +8,10 @@
                         <label>Nazwa klasy</label>
                         <input name="name" v-model="item.category" @change="change">
                         <label>Sędziowie</label>
+                        <div class="judge add">Dodaj sędziego</div>
 
-                        <ul>
-                            <li v-for="judge in judges" :key="judge.id">{{judge.name}}</li>
-                        </ul>
-                        <button>Dodaj sędziego</button>
+                        <div class="judge" v-for="judge in judges" :key="judge.id">{{judge.name}}</div >
+
                     </div>
                 </div>
             </div>
