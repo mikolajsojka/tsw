@@ -8,10 +8,13 @@
                         <label>Nazwa klasy</label>
                         <input name="name" v-model="item.category" @change="change">
                         <label>Sędziowie</label>
+                        <div class="judge-pagination">
+                            <div @click="decrement">-</div>
+                            <div id="pages">{{pagecounter}}/{{limit/3}}</div>
+                            <div @click="increment">+</div>
+                        </div>
                         <div class="judge add">Dodaj sędziego</div>
-
-                        <div class="judge" v-for="judge in judges" :key="judge.id">{{judge.name}}</div >
-
+                        <div class="judge" v-for="judge in judgespagination" :key="judge.id">{{judge.name}}</div>
                     </div>
                 </div>
             </div>
@@ -29,7 +32,11 @@
                 check: 0,
                 item: {},
                 judges: [],
-                judgesall: []
+                judgesall: [],
+                judgespagination: [],
+                counter: 0,
+                pagecounter: 1,
+                limit: 0
             };
         },
         created () {
@@ -49,7 +56,9 @@
                 }
             });
 
-            console.log(this.judgesall);
+            this.limit = Math.ceil(this.judges.length / 3) * 3;
+            this.judgespagination = Array.from(this.judges).slice(0, 3);
+
             if (this.check === 0) {
                 router.push("/main");
                 alert("Nie znaleziono takiej klasy");
@@ -68,6 +77,23 @@
                 }
 
                 this.deletecheck = 1;
+            },
+            renderjudges () {
+                return Array.from(this.judges).slice(this.counter, this.counter + 3);
+            },
+            increment () {
+                if (this.counter + 3 < this.limit) {
+                    this.counter += 3;
+                    this.pagecounter += 1;
+                    this.judgespagination = this.renderjudges();
+                }
+            },
+            decrement () {
+                if (this.counter > 0) {
+                    this.counter -= 3;
+                    this.pagecounter -= 1;
+                    this.judgespagination = this.renderjudges();
+                }
             }
         }
     };

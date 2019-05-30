@@ -132,6 +132,7 @@
                     });
                 }
             });
+
             if (this.check === 0) {
                 router.push("/main");
                 alert("Nie znaleziono takiego konia");
