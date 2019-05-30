@@ -10,7 +10,7 @@
                         <label>Sędziowie</label>
                         <div class="judge-pagination">
                             <div @click="decrement">-</div>
-                            <div class="pages">{{pagecounter}}/{{limit/3}}</div>
+                            <div class="pages">{{pagecounter}}/{{limit/2}}</div>
                             <div @click="increment">+</div>
                         </div>
                         <label>Dodaj sędziego</label>
@@ -77,8 +77,8 @@
                     }
                 });
 
-                this.limit = Math.ceil(this.judges.length / 3) * 3;
-                this.judgespagination = Array.from(this.judges).slice(0, 3);
+                this.limit = Math.ceil(this.judges.length / 2) * 2;
+                this.judgespagination = Array.from(this.judges).slice(0, 2);
 
                 if (this.check === 0) {
                     router.push("/main");
@@ -103,7 +103,7 @@
                     this.judgesall.splice(index, 1);
 
                     this.judgespagination = this.renderjudges();
-                    this.limit = Math.ceil(this.judges.length / 3) * 3;
+                    this.limit = Math.ceil(this.judges.length / 2) * 2;
 
                     if (this.judges.length === 0) {
                         this.pagecounter = 0;
@@ -127,7 +127,7 @@
                         this.judgesall.push(this.judges[index2]);
                         this.judges.splice(index2, 1);
                         this.judgespagination = this.renderjudges();
-                        this.limit = Math.ceil(this.judges.length / 3) * 3;
+                        this.limit = Math.ceil(this.judges.length / 2) * 2;
 
                         if (this.judges.length === 0) {
                             this.pagecounter = 0;
@@ -138,18 +138,18 @@
                 this.$store.dispatch("EDIT_CLASS", this.item);
             },
             renderjudges () {
-                return Array.from(this.judges).slice(this.counter, this.counter + 3);
+                return Array.from(this.judges).slice(this.counter, this.counter + 2);
             },
             increment () {
-                if (this.counter + 3 < this.limit) {
-                    this.counter += 3;
+                if (this.counter + 2 < this.limit) {
+                    this.counter += 2;
                     this.pagecounter += 1;
                     this.judgespagination = this.renderjudges();
                 }
             },
             decrement () {
                 if (this.counter > 0) {
-                    this.counter -= 3;
+                    this.counter -= 2;
                     this.pagecounter -= 1;
                     this.judgespagination = this.renderjudges();
                 }
