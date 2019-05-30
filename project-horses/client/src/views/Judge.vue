@@ -1,10 +1,10 @@
 <template>
-    <div id="judge">
+    <div class="judge">
         <div class="panel">
             <div class="button delete" @click="deletejudge">Usuń sędziego</div>
             <div class="main">
-                <div id="info">
-                    <div id="first">
+                <div class="info">
+                    <div class="first">
                         <label>Imię</label>
                         <input name="name" v-model="judge.judge" @change="change">
                         <label>Kraj</label>

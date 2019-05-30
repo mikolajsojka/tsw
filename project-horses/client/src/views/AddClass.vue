@@ -1,20 +1,20 @@
 <template>
-    <div id="class">
+    <div class="class">
         <div class="panel">
             <div class="button save" @click="saveclass">Zatwierdź</div>
             <div class="main">
-                <div id="info">
-                    <div id="first">
+                <div class="info">
+                    <div class="first">
                         <label>Nazwa klasy</label>
                         <input name="name" v-model="item.category" @change="change">
                         <label>Sędziowie</label>
                         <div class="judge-pagination">
                             <div @click="decrement">-</div>
-                            <div id="pages">{{pagecounter}}/{{limit/3}}</div>
+                            <div class="pages">{{pagecounter}}/{{limit/3}}</div>
                             <div @click="increment">+</div>
                         </div>
                         <label>Dodaj sędziego</label>
-                        <select name="judges" id="select" @change="change">
+                        <select name="judges" class="select" id="select" @change="change">
                             <option selected></option>
                             <option v-for="judge in judgesall" :value="judge.id" :key="judge._id">{{judge.name}}</option>
                         </select>

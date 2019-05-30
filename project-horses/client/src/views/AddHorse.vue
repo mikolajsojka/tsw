@@ -1,11 +1,11 @@
 <template>
-    <div id="horse">
+    <div class="horse">
         <div class="panel">
             <div class="button save" @click="savehorse">Zatwierdź</div>
 
             <div class="main">
-                <div id="info">
-                    <div id="first">
+                <div class="info">
+                    <div class="first">
                         <label>Imię</label>
                         <input name="name" v-model="horse.name" @change="change">
                         <label>Numer startowy</label>
@@ -25,7 +25,7 @@
                         </select>
                     </div>
 
-                    <div id="second">
+                    <div class="second">
                         <label>Rodowód - Ojciec</label>
                         <input
                             name="bloodline-father"
