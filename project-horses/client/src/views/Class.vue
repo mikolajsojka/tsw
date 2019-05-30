@@ -38,12 +38,15 @@
                 judgesall: [],
                 judgespagination: [],
                 counter: 0,
-                pagecounter: 1,
+                pagecounter: 0,
                 limit: 0
             };
         },
         created () {
             this.render();
+            if (this.judges.length !== 0) {
+                this.pagecounter = 1;
+            }
         },
         methods: {
             render () {
@@ -90,9 +93,13 @@
                         this.item.committee.splice(index, 1);
 
                         let index2 = this.judges.findIndex(item => item.id === id);
-                        console.log(index2);
                         this.judges.splice(index2, 1);
-                        this.judgespagination.splice(index2, 1);
+                        this.judgespagination = this.renderjudges();
+                        this.limit = Math.ceil(this.judges.length / 3) * 3;
+
+                        if (this.judges.length === 0) {
+                            this.pagecounter = 0;
+                        }
                     }
                 });
 
