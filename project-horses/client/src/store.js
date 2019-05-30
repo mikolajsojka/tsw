@@ -17,6 +17,10 @@ export default new Vuex.Store({
         }
     },
     mutations: {
+        EDIT_CLASS: (state, payload) => {
+            let index = state.classes.findIndex(item => item._id === payload._id);
+            state.classes[index] = payload;
+        },
         DELETE_JUDGE: (state, id) => {
             let index = state.judges.findIndex(judge => judge._id === id);
             state.judges.splice(index, 1);
@@ -59,6 +63,9 @@ export default new Vuex.Store({
         clicked: state => state.clicked
     },
     actions: {
+        EDIT_CLASS ({ commit }, payload) {
+            commit("EDIT_CLASS", payload);
+        },
         DELETE_HORSE ({ commit }, payload) {
             commit("DELETE_HORSE", payload);
 

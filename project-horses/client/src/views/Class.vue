@@ -16,7 +16,7 @@
                         <div class="judge add">Dodaj sędziego</div>
                         <div class="judge" v-for="judge in judgespagination" :key="judge.id">
                             <div class="name">{{judge.name}}</div>
-                            <div class="delete">x</div>
+                            <div class="delete" @click="deletejudge(judge.id)">x</div>
                         </div>
                     </div>
                 </div>
@@ -43,43 +43,60 @@
             };
         },
         created () {
-            Array.from(this.$store.state.classes).forEach(element => {
-                if (element._id === this.$route.params.id) {
-                    this.check = 1;
-                    this.item = element;
-                    Array.from(this.$store.state.judges).forEach(judge => {
-                        element.committee.forEach(item => {
-                            if (judge.id === item) {
-                                this.judges.push({ id: judge.id, name: judge.judge });
-                            }
-                        });
-
-                        this.judgesall.push({ id: judge.id, name: judge.judge });
-                    });
-                }
-            });
-
-            this.limit = Math.ceil(this.judges.length / 3) * 3;
-            this.judgespagination = Array.from(this.judges).slice(0, 3);
-
-            if (this.check === 0) {
-                router.push("/main");
-                alert("Nie znaleziono takiej klasy");
-            }
+            this.render();
         },
         methods: {
+            render () {
+                Array.from(this.$store.state.classes).forEach(element => {
+                    if (element._id === this.$route.params.id) {
+                        this.check = 1;
+                        this.item = element;
+                        Array.from(this.$store.state.judges).forEach(judge => {
+                            element.committee.forEach(item => {
+                                if (judge.id === item) {
+                                    this.judges.push({ id: judge.id, name: judge.judge });
+                                }
+                            });
+
+                            this.judgesall.push({ id: judge.id, name: judge.judge });
+                        });
+                    }
+                });
+
+                this.limit = Math.ceil(this.judges.length / 3) * 3;
+                this.judgespagination = Array.from(this.judges).slice(0, 3);
+
+                if (this.check === 0) {
+                    router.push("/main");
+                    alert("Nie znaleziono takiej klasy");
+                }
+            },
             change ({ target }) {
                 if (target.name === "name") {
                     this.item.category = target.value;
                 }
+
+                this.$store.dispatch("EDIT_CLASS", this.item);
             },
             deleteclass () {
                 if (confirm("Czy na pewno chcesz usunąć?")) {
                     this.$store.dispatch("DELETE_CLASS", this.$route.params.id);
-                } else {
                 }
-
                 this.deletecheck = 1;
+            },
+            deletejudge (id) {
+                this.item.committee.forEach((element, index) => {
+                    if (element === id) {
+                        this.item.committee.splice(index, 1);
+
+                        let index2 = this.judges.findIndex(item => item.id === id);
+                        console.log(index2);
+                        this.judges.splice(index2, 1);
+                        this.judgespagination.splice(index2, 1);
+                    }
+                });
+
+                this.$store.dispatch("EDIT_CLASS", this.item);
             },
             renderjudges () {
                 return Array.from(this.judges).slice(this.counter, this.counter + 3);
