@@ -8,6 +8,9 @@ import Judges from "./views/Judges.vue";
 import Horse from "./views/Horse.vue";
 import Judge from "./views/Judge.vue";
 import Class from "./views/Class.vue";
+import AddHorse from "./views/AddHorse.vue";
+import AddClass from "./views/AddClass.vue";
+import AddJudge from "./views/AddJudge.vue";
 
 Vue.use(Router);
 
@@ -52,6 +55,21 @@ export default new Router({
             path: "/class/:id",
             name: "class",
             component: Class
+        },
+        {
+            path: "/addhorse",
+            name: "addhorse",
+            component: AddHorse
+        },
+        {
+            path: "/addclass",
+            name: "addclass",
+            component: AddClass
+        },
+        {
+            path: "/addjudge",
+            name: "addjudge",
+            component: AddJudge
         }
     ]
 });
