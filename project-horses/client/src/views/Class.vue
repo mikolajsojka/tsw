@@ -10,7 +10,8 @@
                         <label>Sędziowie</label>
                         <div class="judge-pagination">
                             <div @click="decrement">-</div>
-                            <div class="pages">{{pagecounter}}/{{limit/2}}</div>
+                            <div id="pages" v-if="limit > 0">{{pagecounter}}/{{limit/2}}</div>
+                            <div id="pages" v-else>0/0</div>
                             <div @click="increment">+</div>
                         </div>
                         <label>Dodaj sędziego</label>

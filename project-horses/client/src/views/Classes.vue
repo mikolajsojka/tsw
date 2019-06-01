@@ -2,7 +2,8 @@
     <div class="classes">
         <div id="change-collection">
             <div @click="decrement">Poprzednia</div>
-            <div id="pages">{{pagecounter}}/{{limit/8}}</div>
+            <div id="pages" v-if="limit > 0">{{pagecounter}}/{{limit/8}}</div>
+            <div id="pages" v-else>0/0</div>
             <div @click="increment">Następna</div>
         </div>
         <div id="collection">
