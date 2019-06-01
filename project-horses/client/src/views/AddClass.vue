@@ -46,15 +46,12 @@
                 judgesall: [],
                 judgespagination: [],
                 counter: 0,
-                pagecounter: 0,
+                pagecounter: 1,
                 limit: 0
             };
         },
         created () {
             this.render();
-            if (this.judges.length !== 0) {
-                this.pagecounter = 1;
-            }
         },
         methods: {
             render () {
@@ -86,10 +83,6 @@
 
                     this.judgespagination = this.renderjudges();
                     this.limit = Math.ceil(this.judges.length / 2) * 2;
-
-                    if (this.judges.length === 0) {
-                        this.pagecounter = 0;
-                    }
                 }
                 document.getElementById("select").value = "";
             },
@@ -106,14 +99,12 @@
                         this.limit = Math.ceil(this.judges.length / 2) * 2;
 
                         if (this.judgespagination.length === 0) {
-                            this.counter -= 2;
-                            this.pagecounter -= 1;
+                            if (this.pagecounter - 1 > 0) {
+                                this.pagecounter -= 1;
+                                this.counter -= 2;
+                            }
                             this.judgespagination = this.renderjudges();
                             this.limit = Math.ceil(this.judges.length / 2) * 2;
-                        }
-
-                        if (this.judges.length === 0) {
-                            this.pagecounter = 0;
                         }
                     }
                 });
