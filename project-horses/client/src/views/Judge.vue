@@ -58,6 +58,8 @@
                         });
                     });
                     this.$store.dispatch("DELETE_JUDGE", this.$route.params.id);
+
+                    this.$store.commit("FILL_COUNTER_JUDGES");
                 }
             }
         }

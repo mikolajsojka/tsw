@@ -36,14 +36,29 @@ export default new Vuex.Store({
         FILL_COUNTER_HORSES: (state) => {
             state.counters.horses.limit = Math.ceil(state.horses.length / 8) * 8;
             state.counters.horses.horses = Array.from(state.horses).slice(state.counters.horses.counter, state.counters.horses.counter + 8);
+
+            if (typeof state.horses[state.counters.horses.counter] === "undefined" && state.horses.length > 0) {
+                state.counters.horses.counter -= 8;
+                state.counters.horses.pagecounter -= 1;
+            }
         },
         FILL_COUNTER_CLASSES: (state) => {
             state.counters.classes.limit = Math.ceil(state.classes.length / 8) * 8;
             state.counters.classes.classes = Array.from(state.classes).slice(state.counters.classes.counter, state.counters.classes.counter + 8);
+
+            if (typeof state.classes[state.counters.classes.counter] === "undefined" && state.classes.length > 0) {
+                state.counters.classes.counter -= 8;
+                state.counters.classes.pagecounter -= 1;
+            }
         },
         FILL_COUNTER_JUDGES: (state) => {
             state.counters.judges.limit = Math.ceil(state.judges.length / 8) * 8;
             state.counters.judges.judges = Array.from(state.judges).slice(state.counters.judges.counter, state.counters.judges.counter + 8);
+
+            if (typeof state.judges[state.counters.judges.counter] === "undefined" && state.judges.length > 0) {
+                state.counters.judges.counter -= 8;
+                state.counters.judges.pagecounter -= 1;
+            }
         },
         COUNTER_HORSES: (state, payload) => {
             state.counters.horses.counter = payload.counter;
@@ -84,6 +99,7 @@ export default new Vuex.Store({
         DELETE_JUDGE: (state, id) => {
             let index = state.judges.findIndex(judge => judge._id === id);
             state.judges.splice(index, 1);
+
             router.push("/judges");
         },
         DELETE_CLASS: (state, id) => {
