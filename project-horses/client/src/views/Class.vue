@@ -15,7 +15,7 @@
                         </div>
                         <label>Dodaj sędziego</label>
                         <select name="judges" class="select" id="select" @change="change">
-                            <option selected ></option>
+                            <option selected></option>
                             <option v-for="judge in judgesall" :value="judge.id" :key="judge._id">{{judge.name}}</option>
                         </select>
 
@@ -65,7 +65,11 @@
                             element.committee.forEach(item => {
                                 if (judge.id === item) {
                                     if (this.judges.findIndex(jud => jud.id === judge.id) === -1) {
-                                        this.judges.push({ id: judge.id, name: judge.judge, _id: judge._id });
+                                        this.judges.push({
+                                            id: judge.id,
+                                            name: judge.judge,
+                                            _id: judge._id
+                                        });
                                     }
                                 }
                             });
@@ -74,7 +78,11 @@
                                 this.judgesall.findIndex(jud => jud.id === judge.id) === -1 &&
                                 this.judges.findIndex(jud => jud.id === judge.id) === -1
                             ) {
-                                this.judgesall.push({ id: judge.id, name: judge.judge, _id: judge._id });
+                                this.judgesall.push({
+                                    id: judge.id,
+                                    name: judge.judge,
+                                    _id: judge._id
+                                });
                             }
                         });
                     }
@@ -102,7 +110,9 @@
                         }
                     });
 
-                    let index = this.judgesall.findIndex(item => item.id === parseInt(target.value));
+                    let index = this.judgesall.findIndex(
+                        item => item.id === parseInt(target.value)
+                    );
                     this.judgesall.splice(index, 1);
 
                     this.judgespagination = this.renderjudges();
@@ -131,6 +141,13 @@
                         this.judges.splice(index2, 1);
                         this.judgespagination = this.renderjudges();
                         this.limit = Math.ceil(this.judges.length / 2) * 2;
+
+                        if (this.judgespagination.length === 0) {
+                            this.counter -= 2;
+                            this.pagecounter -= 1;
+                            this.judgespagination = this.renderjudges();
+                            this.limit = Math.ceil(this.judges.length / 2) * 2;
+                        }
 
                         if (this.judges.length === 0) {
                             this.pagecounter = 0;

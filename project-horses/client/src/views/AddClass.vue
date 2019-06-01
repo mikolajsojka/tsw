@@ -10,7 +10,7 @@
                         <label>Sędziowie</label>
                         <div class="judge-pagination">
                             <div @click="decrement">-</div>
-                            <div class="pages">{{pagecounter}}/{{limit/3}}</div>
+                            <div class="pages">{{pagecounter}}/{{limit/2}}</div>
                             <div @click="increment">+</div>
                         </div>
                         <label>Dodaj sędziego</label>
@@ -62,8 +62,8 @@
                     this.judgesall.push({ id: judge.id, name: judge.judge });
                 });
 
-                this.limit = Math.ceil(this.judges.length / 3) * 3;
-                this.judgespagination = Array.from(this.judges).slice(0, 3);
+                this.limit = Math.ceil(this.judges.length / 2) * 2;
+                this.judgespagination = Array.from(this.judges).slice(0, 2);
             },
             change ({ target }) {
                 if (target.name === "name") {
@@ -79,15 +79,13 @@
                         }
                     });
 
-                    console.log(this.judges);
-
                     let index = this.judgesall.findIndex(
                         item => item.id === parseInt(target.value)
                     );
                     this.judgesall.splice(index, 1);
 
                     this.judgespagination = this.renderjudges();
-                    this.limit = Math.ceil(this.judges.length / 3) * 3;
+                    this.limit = Math.ceil(this.judges.length / 2) * 2;
 
                     if (this.judges.length === 0) {
                         this.pagecounter = 0;
@@ -105,7 +103,14 @@
                         this.judgesall.push(this.judges[index2]);
                         this.judges.splice(index2, 1);
                         this.judgespagination = this.renderjudges();
-                        this.limit = Math.ceil(this.judges.length / 3) * 3;
+                        this.limit = Math.ceil(this.judges.length / 2) * 2;
+
+                        if (this.judgespagination.length === 0) {
+                            this.counter -= 2;
+                            this.pagecounter -= 1;
+                            this.judgespagination = this.renderjudges();
+                            this.limit = Math.ceil(this.judges.length / 2) * 2;
+                        }
 
                         if (this.judges.length === 0) {
                             this.pagecounter = 0;
@@ -114,18 +119,18 @@
                 });
             },
             renderjudges () {
-                return Array.from(this.judges).slice(this.counter, this.counter + 3);
+                return Array.from(this.judges).slice(this.counter, this.counter + 2);
             },
             increment () {
-                if (this.counter + 3 < this.limit) {
-                    this.counter += 3;
+                if (this.counter + 2 < this.limit) {
+                    this.counter += 2;
                     this.pagecounter += 1;
                     this.judgespagination = this.renderjudges();
                 }
             },
             decrement () {
                 if (this.counter > 0) {
-                    this.counter -= 3;
+                    this.counter -= 2;
                     this.pagecounter -= 1;
                     this.judgespagination = this.renderjudges();
                 }
