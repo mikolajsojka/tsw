@@ -70,6 +70,9 @@ export default new Vuex.Store({
         },
         AFTER_DELETE_JUDGE (state, payload) {
             state.classes[payload.indexclasses].committee.splice(payload.indexcommittee, 1);
+        },
+        AFTER_DELETE_CLASS (state, payload) {
+            state.horses[payload.indexhorses].class = -1;
         }
     },
     getters: {
@@ -83,6 +86,9 @@ export default new Vuex.Store({
 
         AFTER_DELETE_JUDGE ({ commit }, payload) {
             commit("AFTER_DELETE_JUDGE", payload);
+        },
+        AFTER_DELETE_CLASS ({ commit }, payload) {
+            commit("AFTER_DELETE_CLASS", payload);
         },
         ADD_HORSE ({ commit }, payload) {
             axios
