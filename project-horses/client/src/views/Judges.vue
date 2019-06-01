@@ -22,8 +22,8 @@
         data () {
             let alljudges = this.$store.state.judges;
             return {
-                counter: 0,
-                pagecounter: 1,
+                counter: this.$store.state.counters.judges.counter,
+                pagecounter: this.$store.state.counters.judges.pagecounter,
                 limit: Math.ceil(alljudges.length / 8) * 8,
                 judges: Array.from(alljudges).slice(0, 8)
             };
@@ -33,7 +33,6 @@
                 router.push("/addjudge");
             },
             renderjudge (judge) {
-                this.$store.commit("CLICKED", { type: "judge", data: judge });
                 router.push(`/judge/${judge._id}`);
             },
             renderjudges () {
@@ -46,6 +45,7 @@
                     this.counter += 8;
                     this.pagecounter += 1;
                     this.judges = this.renderjudges();
+                    this.$store.commit("COUNTER_JUDGES", { counter: this.counter, pagecounter: this.pagecounter });
                 }
             },
             decrement () {
@@ -53,6 +53,7 @@
                     this.counter -= 8;
                     this.pagecounter -= 1;
                     this.judges = this.renderjudges();
+                    this.$store.commit("COUNTER_JUDGES", { counter: this.counter, pagecounter: this.pagecounter });
                 }
             }
         }

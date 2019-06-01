@@ -22,8 +22,8 @@
         data () {
             let allhorses = this.$store.state.horses;
             return {
-                counter: 0,
-                pagecounter: 1,
+                counter: this.$store.state.counters.horses.counter,
+                pagecounter: this.$store.state.counters.horses.pagecounter,
                 limit: Math.ceil(allhorses.length / 8) * 8,
                 horses: Array.from(allhorses).slice(0, 8)
             };
@@ -33,7 +33,6 @@
                 router.push("/addhorse");
             },
             renderhorse (horse) {
-                this.$store.commit("CLICKED", { type: "horse", data: horse });
                 router.push(`/horse/${horse._id}`);
             },
             renderhorses () {
@@ -46,6 +45,7 @@
                     this.counter += 8;
                     this.pagecounter += 1;
                     this.horses = this.renderhorses();
+                    this.$store.commit("COUNTER_HORSES", { counter: this.counter, pagecounter: this.pagecounter });
                 }
             },
             decrement () {
@@ -53,6 +53,7 @@
                     this.counter -= 8;
                     this.pagecounter -= 1;
                     this.horses = this.renderhorses();
+                    this.$store.commit("COUNTER_HORSES", { counter: this.counter, pagecounter: this.pagecounter });
                 }
             }
         }

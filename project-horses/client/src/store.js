@@ -11,12 +11,34 @@ export default new Vuex.Store({
         horses: [],
         classes: [],
         judges: [],
-        clicked: {
-            type: "",
-            data: {}
+        counters: {
+            horses: {
+                counter: 0,
+                pagecounter: 1
+            },
+            judges: {
+                counter: 0,
+                pagecounter: 1
+            },
+            classes: {
+                counter: 0,
+                pagecounter: 1
+            }
         }
     },
     mutations: {
+        COUNTER_HORSES: (state, payload) => {
+            state.counters.horses.counter = payload.counter;
+            state.counters.horses.pagecounter = payload.pagecounter;
+        },
+        COUNTER_JUDGES: (state, payload) => {
+            state.counters.judges.counter = payload.counter;
+            state.counters.judges.pagecounter = payload.pagecounter;
+        },
+        COUNTER_CLASSES: (state, payload) => {
+            state.counters.classes.counter = payload.counter;
+            state.counters.classes.pagecounter = payload.pagecounter;
+        },
         ADD_CLASS: (state, payload) => {
             state.classes.push(payload);
             router.push("/classes");
@@ -56,9 +78,6 @@ export default new Vuex.Store({
             state.horses.splice(index, 1);
             router.push("/horses");
         },
-        CLICKED (state, clicked) {
-            state.clicked = clicked;
-        },
         LOGIN (state, user) {
             state.user = user;
         },
@@ -83,7 +102,7 @@ export default new Vuex.Store({
         horses: state => state.horses,
         judges: state => state.judges,
         classes: state => state.classes,
-        clicked: state => state.clicked
+        counters: state => state.counters
     },
     actions: {
 

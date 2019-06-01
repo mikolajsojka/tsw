@@ -22,8 +22,8 @@
         data () {
             let allclasses = this.$store.state.classes;
             return {
-                counter: 0,
-                pagecounter: 1,
+                counter: this.$store.state.counters.classes.counter,
+                pagecounter: this.$store.state.counters.classes.pagecounter,
                 limit: Math.ceil(allclasses.length / 8) * 8,
                 classes: Array.from(allclasses).slice(0, 8)
             };
@@ -33,7 +33,6 @@
                 router.push("/addclass");
             },
             renderclass (item) {
-                this.$store.commit("CLICKED", { type: "class", data: item });
                 router.push(`/class/${item._id}`);
             },
             renderclasses () {
@@ -46,6 +45,7 @@
                     this.counter += 8;
                     this.pagecounter += 1;
                     this.classes = this.renderclasses();
+                    this.$store.commit("COUNTER_CLASSES", { counter: this.counter, pagecounter: this.pagecounter });
                 }
             },
             decrement () {
@@ -53,6 +53,7 @@
                     this.counter -= 8;
                     this.pagecounter -= 1;
                     this.classes = this.renderclasses();
+                    this.$store.commit("COUNTER_CLASSES", { counter: this.counter, pagecounter: this.pagecounter });
                 }
             }
         }
