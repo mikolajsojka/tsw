@@ -7,7 +7,7 @@
         </div>
         <div id="collection">
             <ul>
-                <div class="add">Dodaj sędziego</div>
+                <div class="add" @click="addjudge">Dodaj sędziego</div>
                 <li v-for="judge in judges" :key="judge._id" @click="renderjudge(judge)">{{ judge.judge }}</li>
             </ul>
         </div>
@@ -29,6 +29,9 @@
             };
         },
         methods: {
+            addjudge () {
+                router.push("/addjudge");
+            },
             renderjudge (judge) {
                 this.$store.commit("CLICKED", { type: "judge", data: judge });
                 router.push(`/judge/${judge._id}`);

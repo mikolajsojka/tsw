@@ -7,7 +7,7 @@
         </div>
         <div id="collection">
             <ul>
-                <div class="add">Dodaj klasę</div>
+                <div class="add" @click="addclass">Dodaj klasę</div>
                 <li v-for="item in classes" :key="item._id" @click="renderclass(item)">{{ item.category }}</li>
             </ul>
         </div>
@@ -29,6 +29,9 @@
             };
         },
         methods: {
+            addclass () {
+                router.push("/addclass");
+            },
             renderclass (item) {
                 this.$store.commit("CLICKED", { type: "class", data: item });
                 router.push(`/class/${item._id}`);

@@ -20,7 +20,7 @@
                         </select>
 
                         <div class="judge" v-for="judge in judgespagination" :key="judge._id">
-                            <div class="name">{{judge.name}}</div>
+                            <div class="name" @click="judgeredirect(judge._id)">{{judge.name}}</div>
                             <div class="delete" @click="deletejudge(judge.id)">x</div>
                         </div>
                     </div>
@@ -53,6 +53,9 @@
             }
         },
         methods: {
+            judgeredirect (id) {
+                router.push(`/judge/${id}`);
+            },
             render () {
                 Array.from(this.$store.state.classes).forEach(element => {
                     if (element._id === this.$route.params.id) {
@@ -62,7 +65,7 @@
                             element.committee.forEach(item => {
                                 if (judge.id === item) {
                                     if (this.judges.findIndex(jud => jud.id === judge.id) === -1) {
-                                        this.judges.push({ id: judge.id, name: judge.judge });
+                                        this.judges.push({ id: judge.id, name: judge.judge, _id: judge._id });
                                     }
                                 }
                             });
@@ -71,7 +74,7 @@
                                 this.judgesall.findIndex(jud => jud.id === judge.id) === -1 &&
                                 this.judges.findIndex(jud => jud.id === judge.id) === -1
                             ) {
-                                this.judgesall.push({ id: judge.id, name: judge.judge });
+                                this.judgesall.push({ id: judge.id, name: judge.judge, _id: judge._id });
                             }
                         });
                     }
