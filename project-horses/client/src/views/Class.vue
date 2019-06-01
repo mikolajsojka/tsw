@@ -122,7 +122,7 @@
                 if (confirm("Czy na pewno chcesz usunąć?")) {
                     Array.from(this.$store.state.horses).forEach((element, index) => {
                         if (parseInt(element.class) === parseInt(this.item.number)) {
-                            this.$store.dispatch("AFTER_DELETE_CLASS", {
+                            this.$store.commit("AFTER_DELETE_CLASS", {
                                 item: this.item,
                                 indexhorses: index
                             });

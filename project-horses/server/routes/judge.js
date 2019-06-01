@@ -1,4 +1,5 @@
 const Judge = require("../models/Judge");
+const Class = require("../models/Class");
 const express = require("express");
 const ObjectId = require("mongodb").ObjectID;
 
@@ -46,7 +47,6 @@ router.post("/edit", (req, res) => {
                 judge: item.judge,
                 country: item.country,
                 id: item.id
-
             }
         },
         (err) => {
@@ -62,6 +62,35 @@ router.post("/edit", (req, res) => {
 
 router.post("/delete/:id", (req, res) => {
     let { id } = req.params;
+
+    Judge.findOne({ _id: ObjectId(id) }, (err, judge) => {
+        Class.find({}, (err, classes) => {
+            classes.forEach((element) => {
+                let newcommittee = [];
+                element.committee.forEach((item) => {
+                    if (item !== judge.id) {
+                        newcommittee.push(item);
+                    }
+                });
+
+                if (newcommittee !== element.committee) {
+                    Class.updateOne(
+                        { _id: ObjectId(element._id) },
+                        {
+                            $set: {
+                                committee: newcommittee
+                            }
+                        },
+                        (err) => {
+                            if (err) {
+                                res.status(400).send("Coś poszło nie tak..");
+                            }
+                        }
+                    );
+                }
+            });
+        });
+    });
 
     Judge.deleteOne({ _id: ObjectId(id) }, (err, judge) => {
         if (err) {

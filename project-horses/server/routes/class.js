@@ -1,4 +1,5 @@
 const Class = require("../models/Class");
+const Horse = require("../models/Horse");
 const ObjectId = require("mongodb").ObjectID;
 
 const express = require("express");
@@ -37,6 +38,7 @@ router.post("/add", (req, res) => {
         });
     });
 });
+
 router.post("/edit", (req, res) => {
     let { item } = req.body;
 
@@ -63,6 +65,22 @@ router.post("/edit", (req, res) => {
 
 router.post("/delete/:id", (req, res) => {
     let { id } = req.params;
+
+    Class.findOne({ _id: ObjectId(id) }, (err, item) => {
+        Horse.updateMany(
+            { class: item.number },
+            {
+                $set: {
+                    class: -1
+                }
+            },
+            (err) => {
+                if (err) {
+                    res.status(400).send("Coś poszło nie tak..");
+                }
+            }
+        );
+    });
 
     Class.deleteOne({ _id: ObjectId(id) }, (err, item) => {
         if (err) {

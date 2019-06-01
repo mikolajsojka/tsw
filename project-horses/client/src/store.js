@@ -84,12 +84,6 @@ export default new Vuex.Store({
     },
     actions: {
 
-        AFTER_DELETE_JUDGE ({ commit }, payload) {
-            commit("AFTER_DELETE_JUDGE", payload);
-        },
-        AFTER_DELETE_CLASS ({ commit }, payload) {
-            commit("AFTER_DELETE_CLASS", payload);
-        },
         ADD_HORSE ({ commit }, payload) {
             axios
                 .post("http://localhost:3001/horse/add", { item: payload })
