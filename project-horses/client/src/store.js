@@ -14,19 +14,37 @@ export default new Vuex.Store({
         counters: {
             horses: {
                 counter: 0,
-                pagecounter: 1
+                pagecounter: 1,
+                limit: 0,
+                horses: 0
             },
             judges: {
                 counter: 0,
-                pagecounter: 1
+                pagecounter: 1,
+                limit: 0,
+                judges: 0
             },
             classes: {
                 counter: 0,
-                pagecounter: 1
+                pagecounter: 1,
+                limit: 0,
+                classes: 0
             }
         }
     },
     mutations: {
+        FILL_COUNTER_HORSES: (state) => {
+            state.counters.horses.limit = Math.ceil(state.horses.length / 8) * 8;
+            state.counters.horses.horses = Array.from(state.horses).slice(state.counters.horses.counter, state.counters.horses.counter + 8);
+        },
+        FILL_COUNTER_CLASSES: (state) => {
+            state.counters.classes.limit = Math.ceil(state.classes.length / 8) * 8;
+            state.counters.classes.classes = Array.from(state.classes).slice(state.counters.classes.counter, state.counters.classes.counter + 8);
+        },
+        FILL_COUNTER_JUDGES: (state) => {
+            state.counters.judges.limit = Math.ceil(state.judges.length / 8) * 8;
+            state.counters.judges.judges = Array.from(state.judges).slice(state.counters.judges.counter, state.counters.judges.counter + 8);
+        },
         COUNTER_HORSES: (state, payload) => {
             state.counters.horses.counter = payload.counter;
             state.counters.horses.pagecounter = payload.pagecounter;

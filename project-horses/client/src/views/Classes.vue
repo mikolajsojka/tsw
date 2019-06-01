@@ -20,13 +20,17 @@
         name: "Classes",
 
         data () {
-            let allclasses = this.$store.state.classes;
             return {
                 counter: this.$store.state.counters.classes.counter,
                 pagecounter: this.$store.state.counters.classes.pagecounter,
-                limit: Math.ceil(allclasses.length / 8) * 8,
-                classes: Array.from(allclasses).slice(0, 8)
+                limit: 0,
+                classes: 0
             };
+        },
+        created () {
+            this.$store.commit("FILL_COUNTER_CLASSES");
+            this.limit = this.$store.state.counters.classes.limit;
+            this.classes = this.$store.state.counters.classes.classes;
         },
         methods: {
             addclass () {

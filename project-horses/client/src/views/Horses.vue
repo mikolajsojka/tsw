@@ -20,13 +20,17 @@
         name: "Horses",
 
         data () {
-            let allhorses = this.$store.state.horses;
             return {
                 counter: this.$store.state.counters.horses.counter,
                 pagecounter: this.$store.state.counters.horses.pagecounter,
-                limit: Math.ceil(allhorses.length / 8) * 8,
-                horses: Array.from(allhorses).slice(0, 8)
+                limit: 0,
+                horses: 0
             };
+        },
+        created () {
+            this.$store.commit("FILL_COUNTER_HORSES");
+            this.limit = this.$store.state.counters.horses.limit;
+            this.horses = this.$store.state.counters.horses.horses;
         },
         methods: {
             addhorse () {

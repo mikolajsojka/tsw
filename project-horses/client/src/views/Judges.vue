@@ -20,13 +20,17 @@
         name: "Judges",
 
         data () {
-            let alljudges = this.$store.state.judges;
             return {
                 counter: this.$store.state.counters.judges.counter,
                 pagecounter: this.$store.state.counters.judges.pagecounter,
-                limit: Math.ceil(alljudges.length / 8) * 8,
-                judges: Array.from(alljudges).slice(0, 8)
+                limit: 0,
+                judges: 0
             };
+        },
+        created () {
+            this.$store.commit("FILL_COUNTER_JUDGES");
+            this.limit = this.$store.state.counters.judges.limit;
+            this.judges = this.$store.state.counters.judges.judges;
         },
         methods: {
             addjudge () {
