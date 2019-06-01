@@ -153,7 +153,7 @@
         },
         methods: {
             savehorse () {
-
+                this.$store.dispatch("ADD_HORSE", this.horse);
             },
             change ({ target }) {
                 if (target.name === "name") {

@@ -33,7 +33,7 @@
         },
         methods: {
             savejudge () {
-
+                this.$store.dispatch("ADD_JUDGE", this.judge);
             },
             change ({ target }) {
                 if (target.name === "name") {

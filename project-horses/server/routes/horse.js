@@ -12,6 +12,70 @@ router.get("/gethorses", (_req, res) => {
     });
 });
 
+router.post("/add", (req, res) => {
+    let { item } = req.body;
+    let id = 0;
+
+    let breeder = {
+        name: item.breeder.name,
+        country: item.breeder.country
+    };
+    let owner = {
+        name: item.owner.name,
+        country: item.owner.country
+    };
+
+    let bloodline = {
+        father: {
+            name: item.bloodline.father.name,
+            country: item.bloodline.father.country
+        },
+        mother: {
+            name: item.bloodline.mother.name,
+            country: item.bloodline.mother.country
+        },
+        fathermother: {
+            name: item.bloodline.fathermother.name,
+            country: item.bloodline.fathermother.country
+        }
+    };
+
+    Horse.find({}, (err, items) => {
+        items.forEach((element) => {
+            if (parseInt(element.id) > id) {
+                id = parseInt(element.id);
+            }
+        });
+        id += 1;
+        let newHorse = new Horse({
+            id,
+            number: item.number,
+            class: item.class,
+            name: item.name,
+            country: item.country,
+            yob: item.yob,
+            hair: item.hair,
+            sex: item.sex,
+            breeder,
+            owner,
+            bloodline,
+            result: {
+                htype: "",
+                head: "",
+                barrel: "",
+                legs: "",
+                move: ""
+            }
+        });
+
+        Horse.createHorse(newHorse, (err, _horse) => {
+            if (err) throw err;
+
+            res.status(200).json(newHorse);
+        });
+    });
+});
+
 router.post("/edit", (req, res) => {
     let { item } = req.body;
     let breeder = {

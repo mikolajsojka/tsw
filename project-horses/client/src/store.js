@@ -20,6 +20,12 @@ export default new Vuex.Store({
         ADD_CLASS: (state, payload) => {
             state.classes.push(payload);
         },
+        ADD_HORSE: (state, payload) => {
+            state.horses.push(payload);
+        },
+        ADD_JUDGE: (state, payload) => {
+            state.judges.push(payload);
+        },
         EDIT_CLASS: (state, payload) => {
             let index = state.classes.findIndex(item => item._id === payload._id);
             state.classes[index] = payload;
@@ -61,6 +67,9 @@ export default new Vuex.Store({
         },
         FETCH_CLASSES (state, classes) {
             state.classes = classes;
+        },
+        AFTER_DELETE_JUDGE (state, payload) {
+            state.classes[payload.indexclasses].committee.splice(payload.indexcommittee, 1);
         }
     },
     getters: {
@@ -72,6 +81,20 @@ export default new Vuex.Store({
     },
     actions: {
 
+        AFTER_DELETE_JUDGE ({ commit }, payload) {
+            commit("AFTER_DELETE_JUDGE", payload);
+        },
+        ADD_HORSE ({ commit }, payload) {
+            axios
+                .post("http://localhost:3001/horse/add", { item: payload })
+                .then(response => {
+                    commit("ADD_HORSE", response.data);
+                })
+                .catch(errors => {
+                    console.log(errors);
+                    alert("Wystąpił problem z dodawaniem konia");
+                });
+        },
         ADD_CLASS ({ commit }, payload) {
             axios
                 .post("http://localhost:3001/class/add", { item: payload })
@@ -81,6 +104,17 @@ export default new Vuex.Store({
                 .catch(errors => {
                     console.log(errors);
                     alert("Wystąpił problem z dodawaniem klasy");
+                });
+        },
+        ADD_JUDGE ({ commit }, payload) {
+            axios
+                .post("http://localhost:3001/judge/add", { item: payload })
+                .then(response => {
+                    commit("ADD_JUDGE", response.data);
+                })
+                .catch(errors => {
+                    console.log(errors);
+                    alert("Wystąpił problem z dodawaniem sędziego");
                 });
         },
         EDIT_CLASS ({ commit }, payload) {

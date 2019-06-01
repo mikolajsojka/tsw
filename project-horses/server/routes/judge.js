@@ -12,6 +12,31 @@ router.get("/getjudges", (_req, res) => {
     });
 });
 
+router.post("/add", (req, res) => {
+    let { item } = req.body;
+    let id = 0;
+
+    Judge.find({}, (err, items) => {
+        items.forEach((element) => {
+            if (parseInt(element.id) > id) {
+                id = parseInt(element.id);
+            }
+        });
+        id += 1;
+        let newJudge = new Judge({
+            id,
+            judge: item.judge,
+            country: item.country
+        });
+
+        Judge.createJudge(newJudge, (err, _judge) => {
+            if (err) throw err;
+
+            res.status(200).json(newJudge);
+        });
+    });
+});
+
 router.post("/edit", (req, res) => {
     let { item } = req.body;
     Judge.updateOne(

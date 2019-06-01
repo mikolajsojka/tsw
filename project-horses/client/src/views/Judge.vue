@@ -50,6 +50,13 @@
             },
             deletejudge () {
                 if (confirm("Czy na pewno chcesz usunąć?")) {
+                    Array.from(this.$store.state.classes).forEach((element, index) => {
+                        element.committee.forEach((item, index2) => {
+                            if (parseInt(item) === parseInt(this.judge.id)) {
+                                this.$store.dispatch("AFTER_DELETE_JUDGE", { judge: this.judge, indexcommittee: index2, indexclasses: index });
+                            }
+                        });
+                    });
                     this.$store.dispatch("DELETE_JUDGE", this.$route.params.id);
                 }
             }
