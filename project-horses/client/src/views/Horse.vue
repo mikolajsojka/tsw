@@ -110,10 +110,7 @@
                 check: 0,
                 horse: {},
                 classes: [],
-                actualclass: {
-                    id: "",
-                    name: ""
-                }
+                actualclass: {}
             };
         },
         created () {
@@ -122,7 +119,7 @@
                     this.check = 1;
                     this.horse = element;
                     Array.from(this.$store.state.classes).forEach(item => {
-                        if (element.class === item.number) {
+                        if (parseInt(element.class) === parseInt(item.number)) {
                             this.actualclass.name = item.category;
                             this.actualclass.id = element.class;
                         } else {
