@@ -19,12 +19,15 @@ export default new Vuex.Store({
     mutations: {
         ADD_CLASS: (state, payload) => {
             state.classes.push(payload);
+            router.push("/classes");
         },
         ADD_HORSE: (state, payload) => {
             state.horses.push(payload);
+            router.push("/horses");
         },
         ADD_JUDGE: (state, payload) => {
             state.judges.push(payload);
+            router.push("/judges");
         },
         EDIT_CLASS: (state, payload) => {
             let index = state.classes.findIndex(item => item._id === payload._id);

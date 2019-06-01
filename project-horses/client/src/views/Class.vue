@@ -133,28 +133,30 @@
                 this.deletecheck = 1;
             },
             deletejudge (id) {
-                this.item.committee.forEach((element, index) => {
-                    if (element === id) {
-                        this.item.committee.splice(index, 1);
+                if (confirm("Czy na pewno chcesz usunąć?")) {
+                    this.item.committee.forEach((element, index) => {
+                        if (element === id) {
+                            this.item.committee.splice(index, 1);
 
-                        let index2 = this.judges.findIndex(item => item.id === id);
-                        this.judgesall.push(this.judges[index2]);
-                        this.judges.splice(index2, 1);
-                        this.judgespagination = this.renderjudges();
-                        this.limit = Math.ceil(this.judges.length / 2) * 2;
-
-                        if (this.judgespagination.length === 0) {
-                            if (this.pagecounter - 1 > 0) {
-                                this.pagecounter -= 1;
-                                this.counter -= 2;
-                            }
+                            let index2 = this.judges.findIndex(item => item.id === id);
+                            this.judgesall.push(this.judges[index2]);
+                            this.judges.splice(index2, 1);
                             this.judgespagination = this.renderjudges();
                             this.limit = Math.ceil(this.judges.length / 2) * 2;
-                        }
-                    }
-                });
 
-                this.$store.dispatch("EDIT_CLASS", this.item);
+                            if (this.judgespagination.length === 0) {
+                                if (this.pagecounter - 1 > 0) {
+                                    this.pagecounter -= 1;
+                                    this.counter -= 2;
+                                }
+                                this.judgespagination = this.renderjudges();
+                                this.limit = Math.ceil(this.judges.length / 2) * 2;
+                            }
+                        }
+                    });
+
+                    this.$store.dispatch("EDIT_CLASS", this.item);
+                }
             },
             renderjudges () {
                 return Array.from(this.judges).slice(this.counter, this.counter + 2);
