@@ -86,7 +86,9 @@
                 }
                 document.getElementById("select").value = "";
             },
-            saveclass () {},
+            saveclass () {
+                this.$store.dispatch("ADD_CLASS", this.item);
+            },
             deletejudge (id) {
                 this.item.committee.forEach((element, index) => {
                     if (element === id) {

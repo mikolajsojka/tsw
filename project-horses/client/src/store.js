@@ -8,15 +8,18 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         user: "",
-        horses: {},
-        classes: {},
-        judges: {},
+        horses: [],
+        classes: [],
+        judges: [],
         clicked: {
             type: "",
             data: {}
         }
     },
     mutations: {
+        ADD_CLASS: (state, payload) => {
+            state.classes.push(payload);
+        },
         EDIT_CLASS: (state, payload) => {
             let index = state.classes.findIndex(item => item._id === payload._id);
             state.classes[index] = payload;
@@ -52,15 +55,12 @@ export default new Vuex.Store({
         },
         FETCH_HORSES (state, horses) {
             state.horses = horses;
-            console.log("Załadowano kolekcję: konie");
         },
         FETCH_JUDGES (state, judges) {
             state.judges = judges;
-            console.log("Załadowano kolekcję: sędziowie");
         },
         FETCH_CLASSES (state, classes) {
             state.classes = classes;
-            console.log("Załadowano kolekcję: klasy");
         }
     },
     getters: {
@@ -71,6 +71,18 @@ export default new Vuex.Store({
         clicked: state => state.clicked
     },
     actions: {
+
+        ADD_CLASS ({ commit }, payload) {
+            axios
+                .post("http://localhost:3001/class/add", { item: payload })
+                .then(response => {
+                    commit("ADD_CLASS", response.data);
+                })
+                .catch(errors => {
+                    console.log(errors);
+                    alert("Wystąpił problem z dodawaniem klasy");
+                });
+        },
         EDIT_CLASS ({ commit }, payload) {
             commit("EDIT_CLASS", payload);
 

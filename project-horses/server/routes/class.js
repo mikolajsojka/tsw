@@ -13,6 +13,30 @@ router.get("/getclasses", (_req, res) => {
     });
 });
 
+router.post("/add", (req, res) => {
+    let { item } = req.body;
+    let number = 0;
+
+    Class.find({}, (err, items) => {
+        items.forEach((element) => {
+            if (parseInt(element.number) > number) {
+                number = parseInt(element.number);
+            }
+        });
+        number += 1;
+        let newClass = new Class({
+            number,
+            category: item.category,
+            committee: item.committee
+        });
+
+        Class.createClass(newClass, (err, _class) => {
+            if (err) throw err;
+
+            res.status(200).json(newClass);
+        });
+    });
+});
 router.post("/edit", (req, res) => {
     let { item } = req.body;
 
