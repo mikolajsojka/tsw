@@ -1,4 +1,5 @@
 const Judge = require("../models/Judge");
+const Horse = require("../models/Horse");
 const Class = require("../models/Class");
 const express = require("express");
 const ObjectId = require("mongodb").ObjectID;
@@ -67,7 +68,7 @@ router.post("/delete/:id", (req, res) => {
         Class.find({}, (err, classes) => {
             classes.forEach((element) => {
                 let newcommittee = [];
-                element.committee.forEach((item) => {
+                element.committee.forEach((item, index) => {
                     if (item !== judge.id) {
                         newcommittee.push(item);
                     }
