@@ -1,8 +1,14 @@
 <template>
     <div id="calculator">
-        <div class="category">{{actualclass.position+1}}/{{classesamount}}. {{actualclass.category}}
+        <div class="category">
+            <div class="pagination" @click="decrement">-</div>
+            <div class="name"> {{actualclass.position+1}}/{{classesamount}}. {{actualclass.category}}</div>
+            <div class="pagination" @click="increment">+</div>
         </div>
 
+        <select name="choosehorse" class="choosehorse size">
+            <option v-for="horse in horses" :value="horse.id" :key="horse._id">{{horse.name}}</option>
+        </select>
     </div>
 </template>
 
@@ -40,7 +46,8 @@
             });
         },
         methods: {
-
+            increment () {},
+            decrement () {}
         }
     };
 </script>
