@@ -143,6 +143,14 @@ export default new Vuex.Store({
             state.classes = classes;
         },
         AFTER_DELETE_JUDGE (state, payload) {
+            Array.from(state.horses).forEach((element, index) => {
+                if (
+                    parseInt(element.class) ===
+          parseInt(state.classes[payload.indexclasses].number)
+                ) {
+                    state.horses[index].result.notes.splice(payload.indexcommittee, 1);
+                }
+            });
             state.classes[payload.indexclasses].committee.splice(
                 payload.indexcommittee,
                 1
