@@ -1,6 +1,6 @@
 <template>
     <div id="calculator">
-        <div class="category">{{actualclass.category}}
+        <div class="category">{{actualclass.position+1}}/{{classesamount}}. {{actualclass.category}}
         </div>
 
     </div>
@@ -12,14 +12,17 @@
         data () {
             return {
                 actualclass: {},
+                classesamount: 0,
                 horses: [],
                 judges: []
             };
         },
         created () {
-            Array.from(this.$store.state.classes).forEach(element => {
+            Array.from(this.$store.state.classes).forEach((element, index) => {
+                this.classesamount += 1;
                 if (element._id === this.$route.params.id) {
                     this.actualclass = element;
+                    this.actualclass.position = index;
                     Array.from(this.$store.state.horses).forEach(element2 => {
                         if (parseInt(element2.class) === parseInt(element.number)) {
                             this.horses.push(element2);
