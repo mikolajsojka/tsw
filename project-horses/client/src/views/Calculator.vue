@@ -8,6 +8,15 @@
             <option v-for="horse in horses" :value="horse._id" :key="horse._id">{{horse.name}}</option>
         </select>
 
+        <div class="notes">
+            <div class="row" v-for="note in actualhorse.result.notes" :key="note._id">
+                <input v-model="note.barrel">
+                <input v-model="note.head">
+                <input v-model="note.htype">
+                <input v-model="note.legs">
+                <input v-model="note.move">
+            </div>
+        </div>
     </div>
 </template>
 
