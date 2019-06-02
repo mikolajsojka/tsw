@@ -4,9 +4,10 @@
             <div class="name">{{actualclass.position+1}}/{{classesamount}}. {{actualclass.category}}</div>
         </div>
 
-        <select name="choosehorse" class="choosehorse size">
-            <option v-for="horse in horses" :value="horse.id" :key="horse._id">{{horse.name}}</option>
+        <select name="choosehorse" class="choosehorse size" @change="change">
+            <option v-for="horse in horses" :value="horse._id" :key="horse._id">{{horse.name}}</option>
         </select>
+
     </div>
 </template>
 
@@ -17,6 +18,7 @@
         data () {
             return {
                 actualclass: {},
+                actualhorse: {},
                 classesamount: 0,
                 horses: [],
                 judges: []
@@ -29,8 +31,13 @@
                     this.actualclass = element;
                     this.actualclass.position = index;
 
+                    let check = 0;
                     Array.from(this.$store.state.horses).forEach(element2 => {
                         if (parseInt(element2.class) === parseInt(element.number)) {
+                            if (check === 0) {
+                                this.actualhorse = element2;
+                                check = 1;
+                            }
                             this.horses.push(element2);
                         }
                     });
@@ -45,6 +52,13 @@
                 }
             });
         },
-        methods: {}
+        methods: {
+            change ({ target }) {
+                if (target.name === "choosehorse") {
+                    let index = this.horses.findIndex(item => item._id === target.value);
+                    this.actualhorse = this.horses[index];
+                }
+            }
+        }
     };
 </script>
