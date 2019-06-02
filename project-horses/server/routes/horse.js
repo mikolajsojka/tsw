@@ -114,7 +114,10 @@ router.post("/edit", (req, res) => {
                 sex: item.sex,
                 breeder,
                 owner,
-                bloodline
+                bloodline,
+                result: {
+                    notes: item.result.notes
+                }
             }
         },
         (err) => {

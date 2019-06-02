@@ -71,24 +71,41 @@
                 }
 
                 if (target.name === "barrel") {
-                    console.log(target.id);
+                    let index = this.actualhorse.result.notes.findIndex(
+                        item => item._id === target.id
+                    );
+                    this.actualhorse.result.notes[index].barrel = target.value;
                 }
 
                 if (target.name === "head") {
-                    console.log(target.id);
+                    let index = this.actualhorse.result.notes.findIndex(
+                        item => item._id === target.id
+                    );
+                    this.actualhorse.result.notes[index].head = target.value;
                 }
 
                 if (target.name === "htype") {
-                    console.log(target.id);
+                    let index = this.actualhorse.result.notes.findIndex(
+                        item => item._id === target.id
+                    );
+                    this.actualhorse.result.notes[index].htype = target.value;
                 }
 
                 if (target.name === "legs") {
-                    console.log(target.id);
+                    let index = this.actualhorse.result.notes.findIndex(
+                        item => item._id === target.id
+                    );
+                    this.actualhorse.result.notes[index].legs = target.value;
                 }
 
                 if (target.name === "move") {
-                    console.log(target.id);
+                    let index = this.actualhorse.result.notes.findIndex(
+                        item => item._id === target.id
+                    );
+                    this.actualhorse.result.notes[index].move = target.value;
                 }
+
+                this.$store.dispatch("EDIT_HORSE", this.actualhorse);
             }
         }
     };
