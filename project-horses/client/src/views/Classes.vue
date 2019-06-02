@@ -9,7 +9,10 @@
         <div id="collection">
             <ul>
                 <div class="add" @click="addclass">Dodaj klasę</div>
-                <li v-for="item in classes" :key="item._id" @click="renderclass(item)">{{ item.category }}</li>
+                <li v-for="item in classes" :key="item._id" >
+                    <div class="calculator" >{{ item.category }}</div>
+                    <div class="edit" @click="renderclass(item)">E</div>
+                </li>
             </ul>
         </div>
     </div>
@@ -50,7 +53,10 @@
                     this.counter += 8;
                     this.pagecounter += 1;
                     this.classes = this.renderclasses();
-                    this.$store.commit("COUNTER_CLASSES", { counter: this.counter, pagecounter: this.pagecounter });
+                    this.$store.commit("COUNTER_CLASSES", {
+                        counter: this.counter,
+                        pagecounter: this.pagecounter
+                    });
                 }
             },
             decrement () {
@@ -58,7 +64,10 @@
                     this.counter -= 8;
                     this.pagecounter -= 1;
                     this.classes = this.renderclasses();
-                    this.$store.commit("COUNTER_CLASSES", { counter: this.counter, pagecounter: this.pagecounter });
+                    this.$store.commit("COUNTER_CLASSES", {
+                        counter: this.counter,
+                        pagecounter: this.pagecounter
+                    });
                 }
             }
         }

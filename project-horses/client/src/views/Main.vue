@@ -1,6 +1,5 @@
 <template>
     <div class="main">
-        <div class="first-main">Wprowadzaj wyniki</div>
         <div class="second-main">
             <div class="main-button" @click="horseredirect">Konie</div>
             <div class="main-button" @click="judgesredirect">Sędziowie</div>
