@@ -10,7 +10,7 @@
             <ul>
                 <div class="add" @click="addclass">Dodaj klasę</div>
                 <li v-for="item in classes" :key="item._id" >
-                    <div class="calculator" >{{ item.category }}</div>
+                    <div class="calculator" @click="tocalc(item)">{{ item.category }}</div>
                     <div class="edit" @click="renderclass(item)">E</div>
                 </li>
             </ul>
@@ -42,6 +42,9 @@
             },
             renderclass (item) {
                 router.push(`/class/${item._id}`);
+            },
+            tocalc (item) {
+                router.push(`/calculator/${item._id}`);
             },
             renderclasses () {
                 let allclasses = this.$store.state.classes;

@@ -11,6 +11,7 @@ import Class from "./views/Class.vue";
 import AddHorse from "./views/AddHorse.vue";
 import AddClass from "./views/AddClass.vue";
 import AddJudge from "./views/AddJudge.vue";
+import Calculator from "./views/Calculator.vue";
 
 Vue.use(Router);
 
@@ -70,6 +71,11 @@ export default new Router({
             path: "/addjudge",
             name: "addjudge",
             component: AddJudge
+        },
+        {
+            path: "/calculator/:id",
+            name: "calculator",
+            component: Calculator
         }
     ]
 });
