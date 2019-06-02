@@ -1,9 +1,7 @@
 <template>
     <div id="calculator">
         <div class="category">
-            <div class="pagination" @click="decrement">-</div>
-            <div class="name"> {{actualclass.position+1}}/{{classesamount}}. {{actualclass.category}}</div>
-            <div class="pagination" @click="increment">+</div>
+            <div class="name">{{actualclass.position+1}}/{{classesamount}}. {{actualclass.category}}</div>
         </div>
 
         <select name="choosehorse" class="choosehorse size">
@@ -13,6 +11,7 @@
 </template>
 
 <script>
+// import router from "../router";
     export default {
         name: "Calculator",
         data () {
@@ -29,6 +28,7 @@
                 if (element._id === this.$route.params.id) {
                     this.actualclass = element;
                     this.actualclass.position = index;
+
                     Array.from(this.$store.state.horses).forEach(element2 => {
                         if (parseInt(element2.class) === parseInt(element.number)) {
                             this.horses.push(element2);
@@ -45,9 +45,6 @@
                 }
             });
         },
-        methods: {
-            increment () {},
-            decrement () {}
-        }
+        methods: {}
     };
 </script>
