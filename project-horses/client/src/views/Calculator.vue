@@ -9,12 +9,13 @@
         </select>
 
         <div class="notes">
-            <div class="row" v-for="note in actualhorse.result.notes" :key="note._id">
+            <div class="row" v-for="(note,index) in actualhorse.result.notes" :key="note._id">
                 <input v-model="note.barrel">
                 <input v-model="note.head">
                 <input v-model="note.htype">
                 <input v-model="note.legs">
                 <input v-model="note.move">
+                <div class="judge">{{judges[index].judge}}</div>
             </div>
         </div>
     </div>
@@ -34,6 +35,7 @@
             };
         },
         created () {
+            console.log("created");
             Array.from(this.$store.state.classes).forEach((element, index) => {
                 this.classesamount += 1;
                 if (element._id === this.$route.params.id) {
