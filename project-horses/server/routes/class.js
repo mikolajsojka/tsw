@@ -71,7 +71,10 @@ router.post("/delete/:id", (req, res) => {
             { class: item.number },
             {
                 $set: {
-                    class: -1
+                    class: -1,
+                    result: {
+                        notes: []
+                    }
                 }
             },
             (err) => {
