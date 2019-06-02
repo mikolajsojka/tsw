@@ -10,11 +10,11 @@
 
         <div class="notes">
             <div class="row" v-for="(note,index) in actualhorse.result.notes" :key="note._id">
-                <input v-model="note.barrel">
-                <input v-model="note.head">
-                <input v-model="note.htype">
-                <input v-model="note.legs">
-                <input v-model="note.move">
+                <input v-bind:id="note._id" @change="change" name="barrel" v-model="note.barrel">
+                <input v-bind:id="note._id" @change="change" name="head" v-model="note.head">
+                <input v-bind:id="note._id" @change="change" name="htype" v-model="note.htype">
+                <input v-bind:id="note._id" @change="change" name="legs" v-model="note.legs">
+                <input v-bind:id="note._id" @change="change" name="move" v-model="note.move">
                 <div class="judge">{{judges[index].judge}}</div>
             </div>
         </div>
@@ -68,6 +68,26 @@
                 if (target.name === "choosehorse") {
                     let index = this.horses.findIndex(item => item._id === target.value);
                     this.actualhorse = this.horses[index];
+                }
+
+                if (target.name === "barrel") {
+                    console.log(target.id);
+                }
+
+                if (target.name === "head") {
+                    console.log(target.id);
+                }
+
+                if (target.name === "htype") {
+                    console.log(target.id);
+                }
+
+                if (target.name === "legs") {
+                    console.log(target.id);
+                }
+
+                if (target.name === "move") {
+                    console.log(target.id);
                 }
             }
         }
