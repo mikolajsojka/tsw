@@ -164,13 +164,12 @@ export default new Vuex.Store({
             state.horses[payload.indexhorses].result.notes = [];
         },
         DELETE_NOTE_JUDGE_FROM_CLASS (state, payload) {},
+
         ADD_NOTE_JUDGE_FROM_CLASS (state, payload) {
-            Array.from(state.horses).forEach((horse, index) => {
-                payload.forEach(element => {
-                    if (horse._id === element._id) {
-                        state.horses[index] = element;
-                    }
-                });
+            console.log("hasudihsauidhgsaudyhasdyugasduyg");
+            payload.forEach(element => {
+                let index = state.horses.findIndex(horse => String(horse._id) === String(element._id));
+                state.horses[index].result = element.result;
             });
         }
     },
@@ -182,10 +181,9 @@ export default new Vuex.Store({
         counters: state => state.counters
     },
     actions: {
-        ADD_NOTE_JUDGE_FROM_CLASS ({ commit, dispatch }, payload) {
+        ADD_NOTE_JUDGE_FROM_CLASS ({ commit }, payload) {
             axios
                 .post("http://localhost:3001/horse/addnote", {
-                    judge: payload.judgeIndex,
                     cnumber: payload.classNumber
                 })
                 .then(response => {

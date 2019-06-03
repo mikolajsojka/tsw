@@ -97,11 +97,12 @@
             change ({ target }) {
                 if (target.name === "name") {
                     this.item.category = target.value;
+                    this.$store.dispatch("EDIT_CLASS", this.item);
                 }
 
                 if (target.name === "judges") {
                     this.item.committee.push(parseInt(target.value));
-                    let judgeIndex = this.item.committee.findIndex(item => item === parseInt(target.value));
+                    this.$store.dispatch("EDIT_CLASS", this.item);
                     let horsesToEdit = [];
 
                     Array.from(this.$store.state.horses).forEach((horse, index) => {
@@ -109,7 +110,7 @@
                             horsesToEdit.push(horse);
                         }
                     });
-                    this.$store.dispatch("ADD_NOTE_JUDGE_FROM_CLASS", { horses: horsesToEdit, judgeIndex: judgeIndex, classNumber: this.item.number });
+                    this.$store.dispatch("ADD_NOTE_JUDGE_FROM_CLASS", { horses: horsesToEdit, classNumber: this.item.number });
 
                     Array.from(this.judgesall).forEach(element => {
                         if (parseInt(target.value) === element.id) {
@@ -126,7 +127,6 @@
                     this.limit = Math.ceil(this.judges.length / 2) * 2;
                 }
                 document.getElementById("select").value = "";
-                this.$store.dispatch("EDIT_CLASS", this.item);
             },
             deleteclass () {
                 if (confirm("Czy na pewno chcesz usunąć?")) {
