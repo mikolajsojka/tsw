@@ -103,14 +103,8 @@
                 if (target.name === "judges") {
                     this.item.committee.push(parseInt(target.value));
                     this.$store.dispatch("EDIT_CLASS", this.item);
-                    let horsesToEdit = [];
 
-                    Array.from(this.$store.state.horses).forEach((horse, index) => {
-                        if (horse.class === this.item.number) {
-                            horsesToEdit.push(horse);
-                        }
-                    });
-                    this.$store.dispatch("ADD_NOTE_JUDGE_FROM_CLASS", { horses: horsesToEdit, classNumber: this.item.number });
+                    this.$store.dispatch("ADD_NOTE_JUDGE_FROM_CLASS", { classNumber: this.item.number });
 
                     Array.from(this.judgesall).forEach(element => {
                         if (parseInt(target.value) === element.id) {
@@ -150,21 +144,10 @@
                     this.item.committee.forEach((element, index) => {
                         if (element === id) {
                             this.item.committee.splice(index, 1);
+                            this.$store.dispatch("EDIT_CLASS", this.item);
 
+                            this.$store.dispatch("DELETE_NOTE_JUDGE_FROM_CLASS", { judge: index, classNumber: this.item.number });
                             // osobne requesty trzeba ....
-
-                            Array.from(this.$store.state.horses).forEach(
-                                (horse, indexhorse) => {
-                                    if (horse.class === this.item.number) {
-                                        let horsestate = horse;
-                                        horse.result.notes.splice(index, 1);
-                                        this.$store.dispatch("DELETE_NOTE_JUDGE_FROM_CLASS", {
-                                            horse: horsestate,
-                                            indexhorse: indexhorse
-                                        });
-                                    }
-                                }
-                            );
 
                             let index2 = this.judges.findIndex(item => item.id === id);
                             this.judgesall.push(this.judges[index2]);
@@ -182,8 +165,6 @@
                             }
                         }
                     });
-
-                    this.$store.dispatch("EDIT_CLASS", this.item);
                 }
             },
             renderjudges () {

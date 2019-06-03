@@ -72,6 +72,47 @@ router.post("/add", (req, res) => {
     });
 });
 
+router.post("/deletenote", (req, res) => {
+    let { cnumber } = req.body;
+    let { judge } = req.body;
+
+    Horse.find({ class: cnumber }, (err, horses) => {
+        horses.forEach((horse) => {
+            let newnotes = [];
+            horse.result.notes.forEach((jud) => {
+                if (jud !== judge) {
+                    newnotes.push(jud);
+                }
+            });
+
+            Horse.updateOne(
+                { _id: ObjectId(horse._id) },
+                {
+                    $set: {
+                        result: {
+                            notes: newnotes
+                        }
+                    }
+                },
+                (err) => {
+                    if (err) {
+                        res.status(400).send("Błąd przy usuwaniu not");
+                    }
+                }
+            );
+        });
+    });
+
+    Horse.find({ class: cnumber }, (err, horses) => {
+        let response = [];
+        horses.forEach((horse) => {
+            response.push(horse);
+        });
+
+        res.status(200).json(response);
+    });
+});
+
 router.post("/addnote", (req, res) => {
     let { cnumber } = req.body;
 
