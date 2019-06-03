@@ -69,7 +69,36 @@ router.post("/delete/:id", (req, res) => {
             classes.forEach((element) => {
                 let newcommittee = [];
                 element.committee.forEach((item, index) => {
-                    if (item !== judge.id) {
+                    if (item === judge.id) {
+                        Horse.find({ class: element.number }, (err, horses) => {
+                            horses.forEach((horse) => {
+                                let newNotes = [];
+                                horse.result.notes.forEach((note, indexnote) => {
+                                    if (index !== indexnote) {
+                                        newNotes.push(note);
+                                    }
+                                });
+
+                                Horse.updateOne(
+                                    { _id: ObjectId(horse._id) },
+                                    {
+                                        $set: {
+                                            result: {
+                                                notes: newNotes
+                                            }
+                                        }
+                                    },
+                                    (err) => {
+                                        console.log(`dokonano update: ${horse.name}`);
+                                        if (err) {
+                                            res.status(400).send("Błąd na pozycji: usuwanie not z kolekcji konie");
+                                        }
+                                    }
+                                );
+                            });
+                        });
+                    }
+                    else {
                         newcommittee.push(item);
                     }
                 });
@@ -84,7 +113,7 @@ router.post("/delete/:id", (req, res) => {
                         },
                         (err) => {
                             if (err) {
-                                res.status(400).send("Coś poszło nie tak..");
+                                res.status(400).send("Błąd na pozycji: usuwanie sędziego z komisji");
                             }
                         }
                     );

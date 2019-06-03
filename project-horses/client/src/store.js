@@ -324,6 +324,7 @@ export default new Vuex.Store({
                         })
                         .then(response => {
                             commit("FETCH_CLASSES", response.data);
+                            alert("Załadowano kolekcję: klasy");
                         })
                         .catch(errors => {
                             console.log("Wystąpił problem z losowaniem");
@@ -344,6 +345,7 @@ export default new Vuex.Store({
                         })
                         .then(response => {
                             commit("FETCH_HORSES", response.data);
+                            alert("Załadowano kolekcję: konie");
                         })
                         .catch(errors => {
                             console.log("Wystąpił problem z losowaniem");
@@ -363,6 +365,7 @@ export default new Vuex.Store({
                         })
                         .then(response => {
                             commit("FETCH_JUDGES", response.data);
+                            alert("Załadowano kolekcję: sędziowie");
                         })
                         .catch(errors => {
                             console.log("Wystąpił problem z losowaniem");
