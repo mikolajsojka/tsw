@@ -172,25 +172,26 @@ export default new Vuex.Store({
         counters: state => state.counters
     },
     actions: {
-        ADD_NOTE_JUDGE_FROM_CLASS ({ commit, state }, payload) {
+        GET_NOTES ({ commit, state }, payload) {
+            axios
+                .get(`http://localhost:3001/horse/getnotes/${payload}`).then(
+                    response => {
+                        let index = state.horses.findIndex(horse => horse._id === payload);
+                        state.horses[index].result.notes = response.data;
+                    }
+                );
+        },
+        ADD_NOTE_JUDGE_FROM_CLASS (payload) {
             axios
                 .post("http://localhost:3001/horse/addnote", {
                     cnumber: payload.classNumber
-                })
-                .then(response => {})
-                .catch(errors => {
-                    alert("Wystąpił problem z dodawaniem not dla konia");
                 });
         },
-        DELETE_NOTE_JUDGE_FROM_CLASS ({ commit }, payload) {
+        DELETE_NOTE_JUDGE_FROM_CLASS (payload) {
             axios
                 .post("http://localhost:3001/horse/deletenote", {
                     judge: payload.judge,
                     cnumber: payload.classNumber
-                })
-                .then(response => {})
-                .catch(errors => {
-                    alert("Wystąpił problem z dodawaniem not dla konia");
                 });
         },
         ADD_HORSE ({ commit }, payload) {

@@ -35,7 +35,6 @@
             };
         },
         created () {
-            console.log("created");
             Array.from(this.$store.state.classes).forEach((element, index) => {
                 this.classesamount += 1;
                 if (element._id === this.$route.params.id) {

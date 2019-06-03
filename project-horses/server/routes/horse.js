@@ -72,6 +72,7 @@ router.post("/add", (req, res) => {
     });
 });
 
+
 router.post("/deletenote", (req, res) => {
     let { cnumber } = req.body;
     let { judge } = req.body;
