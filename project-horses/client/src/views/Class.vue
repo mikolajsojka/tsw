@@ -101,12 +101,15 @@
 
                 if (target.name === "judges") {
                     this.item.committee.push(parseInt(target.value));
+                    let judgeIndex = this.item.committee.findIndex(item => item === parseInt(target.value));
+                    let horsesToEdit = [];
 
                     Array.from(this.$store.state.horses).forEach((horse, index) => {
                         if (horse.class === this.item.number) {
-                            this.$store.dispatch("ADD_NOTE_JUDGE_FROM_CLASS", horse);
+                            horsesToEdit.push(horse);
                         }
                     });
+                    this.$store.dispatch("ADD_NOTE_JUDGE_FROM_CLASS", { horses: horsesToEdit, judgeIndex: judgeIndex, classNumber: this.item.number });
 
                     Array.from(this.judgesall).forEach(element => {
                         if (parseInt(target.value) === element.id) {
@@ -147,6 +150,8 @@
                     this.item.committee.forEach((element, index) => {
                         if (element === id) {
                             this.item.committee.splice(index, 1);
+
+                            // osobne requesty trzeba ....
 
                             Array.from(this.$store.state.horses).forEach(
                                 (horse, indexhorse) => {

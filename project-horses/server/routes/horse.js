@@ -60,11 +60,13 @@ router.post("/add", (req, res) => {
             owner,
             bloodline,
             result: {
-                htype: "",
-                head: "",
-                barrel: "",
-                legs: "",
-                move: ""
+                notes: {
+                    htype: "",
+                    head: "",
+                    barrel: "",
+                    legs: "",
+                    move: ""
+                }
             }
         });
 
@@ -73,6 +75,44 @@ router.post("/add", (req, res) => {
 
             res.status(200).json(newHorse);
         });
+    });
+});
+
+router.post("/addnote", (req, res) => {
+    let { judge } = req.body;
+    let { cnumber } = req.body;
+    let horses = [];
+
+    Horse.find({ class: cnumber }, (err, horses) => {
+        horses.forEach((horse) => {
+            let newnotes = horse.result.notes;
+            newnotes.push({
+                htype: 0,
+                head: 0,
+                barrel: 0,
+                legs: 0,
+                move: 0
+            });
+
+            Horse.updateOne(
+                { _id: ObjectId(horse._id) },
+                {
+                    $set: {
+                        result: {
+                            notes: newnotes
+                        }
+                    }
+                },
+                (err) => {
+                    if (err) {
+                        res.status(400).send("Błąd przy dodawaniu not");
+                    }
+                }
+            );
+        });
+    });
+    Horse.find({ class: cnumber }, (err, horses) => {
+        res.status(200).json(horses);
     });
 });
 

@@ -164,7 +164,12 @@ export default new Vuex.Store({
             state.horses[payload.indexhorses].result.notes = [];
         },
         DELETE_NOTE_JUDGE_FROM_CLASS (state, payload) {
-            state.horses[payload.indexhorse] = payload.horse;
+
+        },
+        ADD_NOTE_JUDGE_FROM_CLASS (state, payload) {
+            payload.forEach((element, index) => {
+                state.horses[index] = element;
+            });
         }
     },
     getters: {
@@ -176,18 +181,17 @@ export default new Vuex.Store({
     },
     actions: {
         ADD_NOTE_JUDGE_FROM_CLASS ({ commit, dispatch }, payload) {
-            payload.result.notes.push({
-                htype: 0,
-                head: 0,
-                barrel: 0,
-                legs: 0,
-                move: 0
-            });
-            dispatch("EDIT_HORSE", payload);
+            axios
+                .post("http://localhost:3001/horse/addnote", { judge: payload.judgeIndex, cnumber: payload.classNumber })
+                .then(response => {
+                    commit("ADD_NOTE_JUDGE_FROM_CLASS", response.data);
+                })
+                .catch(errors => {
+                    alert("Wystąpił problem z dodawaniem not dla konia");
+                });
         },
         DELETE_NOTE_JUDGE_FROM_CLASS ({ commit, dispatch }, payload) {
-            commit("DELETE_NOTE_JUDGE_FROM_CLASS", payload);
-            dispatch("EDIT_HORSE", payload.horse);
+
         },
         ADD_HORSE ({ commit }, payload) {
             axios
@@ -196,7 +200,6 @@ export default new Vuex.Store({
                     commit("ADD_HORSE", response.data);
                 })
                 .catch(errors => {
-                    console.log(errors);
                     alert("Wystąpił problem z dodawaniem konia");
                 });
         },
@@ -207,7 +210,6 @@ export default new Vuex.Store({
                     commit("ADD_CLASS", response.data);
                 })
                 .catch(errors => {
-                    console.log(errors);
                     alert("Wystąpił problem z dodawaniem klasy");
                 });
         },
@@ -218,7 +220,6 @@ export default new Vuex.Store({
                     commit("ADD_JUDGE", response.data);
                 })
                 .catch(errors => {
-                    console.log(errors);
                     alert("Wystąpił problem z dodawaniem sędziego");
                 });
         },
@@ -229,7 +230,6 @@ export default new Vuex.Store({
                 .post("http://localhost:3001/class/edit", { item: payload })
                 .then(response => {})
                 .catch(errors => {
-                    console.log(errors);
                     alert("Wystąpił problem z edycją klasy");
                 });
         },
@@ -250,7 +250,6 @@ export default new Vuex.Store({
                 .post("http://localhost:3001/judge/edit", { item: payload })
                 .then(response => {})
                 .catch(errors => {
-                    console.log(errors);
                     alert("Wystąpił problem z edycją sędziego");
                 });
         },
@@ -261,8 +260,7 @@ export default new Vuex.Store({
                 .post(`http://localhost:3001/horse/delete/${payload}`)
                 .then(response => {})
                 .catch(errors => {
-                    console.log(errors);
-                    alert("Wystąpił problem z zalogowaniem");
+                    alert("Wystąpił problem z usuwaniem konia");
                 });
         },
         DELETE_JUDGE ({ commit }, payload) {
@@ -272,8 +270,7 @@ export default new Vuex.Store({
                 .post(`http://localhost:3001/judge/delete/${payload}`)
                 .then(response => {})
                 .catch(errors => {
-                    console.log(errors);
-                    alert("Wystąpił problem z zalogowaniem");
+                    alert("Wystąpił problem z usuwaniem sędziego");
                 });
         },
         DELETE_CLASS ({ commit }, payload) {
@@ -283,8 +280,7 @@ export default new Vuex.Store({
                 .post(`http://localhost:3001/class/delete/${payload}`)
                 .then(response => {})
                 .catch(errors => {
-                    console.log(errors);
-                    alert("Wystąpił problem z zalogowaniem");
+                    alert("Wystąpił problem z usuwaniem klasy");
                 });
         },
         LOGIN ({ commit }, payload) {
@@ -296,7 +292,6 @@ export default new Vuex.Store({
                     router.push("/main");
                 })
                 .catch(errors => {
-                    console.log(errors);
                     alert("Wystąpił problem z zalogowaniem");
                 });
         },
@@ -307,8 +302,7 @@ export default new Vuex.Store({
                     commit("FETCH_HORSES", response.data);
                 })
                 .catch(errors => {
-                    console.log(errors);
-                    alert("Wystąpił problem z zalogowaniem");
+                    alert("Wystąpił problem z pobraniem koni");
                 });
         },
         FETCH_CLASSES ({ commit }) {
@@ -318,8 +312,7 @@ export default new Vuex.Store({
                     commit("FETCH_CLASSES", response.data);
                 })
                 .catch(errors => {
-                    console.log(errors);
-                    alert("Wystąpił problem z zalogowaniem");
+                    alert("Wystąpił problem z pobraniem klas");
                 });
         },
         FETCH_JUDGES ({ commit }) {
@@ -329,8 +322,7 @@ export default new Vuex.Store({
                     commit("FETCH_JUDGES", response.data);
                 })
                 .catch(errors => {
-                    console.log(errors);
-                    alert("Wystąpił problem z zalogowaniem");
+                    alert("Wystąpił problem z pobraniem sędziów");
                 });
         },
         RANDOMCLASSES ({ commit }) {
@@ -345,11 +337,11 @@ export default new Vuex.Store({
                             commit("FETCH_CLASSES", response.data);
                         })
                         .catch(errors => {
-                            console.log("Wystąpił problem z losowaniem");
+                            alert("Wystąpił problem z losowaniem klas");
                         });
                 })
                 .catch(errors => {
-                    console.log("Wystąpił problem z losowaniem");
+                    alert("Wystąpił problem z losowaniem klas v2");
                 });
         },
 
@@ -365,11 +357,11 @@ export default new Vuex.Store({
                             commit("FETCH_HORSES", response.data);
                         })
                         .catch(errors => {
-                            console.log("Wystąpił problem z losowaniem");
+                            alert("Wystąpił problem z losowaniem koni");
                         });
                 })
                 .catch(errors => {
-                    console.log("Wystąpił problem z losowaniem");
+                    alert("Wystąpił problem z losowaniem koni v2");
                 });
         },
         RANDOMJUDGES ({ commit }) {
@@ -384,11 +376,11 @@ export default new Vuex.Store({
                             commit("FETCH_JUDGES", response.data);
                         })
                         .catch(errors => {
-                            console.log("Wystąpił problem z losowaniem");
+                            alert("Wystąpił problem z losowaniem sędziów");
                         });
                 })
                 .catch(errors => {
-                    console.log("Wystąpił problem z losowaniem");
+                    alert("Wystąpił problem z losowaniem sędziów v2");
                 });
         }
     }
