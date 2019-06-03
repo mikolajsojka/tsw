@@ -60,13 +60,7 @@ router.post("/add", (req, res) => {
             owner,
             bloodline,
             result: {
-                notes: {
-                    htype: "",
-                    head: "",
-                    barrel: "",
-                    legs: "",
-                    move: ""
-                }
+                notes: []
             }
         });
 
@@ -79,9 +73,7 @@ router.post("/add", (req, res) => {
 });
 
 router.post("/addnote", (req, res) => {
-    let { judge } = req.body;
     let { cnumber } = req.body;
-    let horses = [];
 
     Horse.find({ class: cnumber }, (err, horses) => {
         horses.forEach((horse) => {
@@ -111,8 +103,14 @@ router.post("/addnote", (req, res) => {
             );
         });
     });
+
     Horse.find({ class: cnumber }, (err, horses) => {
-        res.status(200).json(horses);
+        let response = [];
+        horses.forEach((horse) => {
+            response.push(horse);
+        });
+
+        res.status(200).json(response);
     });
 });
 
