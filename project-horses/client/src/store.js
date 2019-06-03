@@ -162,6 +162,9 @@ export default new Vuex.Store({
         AFTER_DELETE_CLASS (state, payload) {
             state.horses[payload.indexhorses].class = -1;
             state.horses[payload.indexhorses].result.notes = [];
+        },
+        DELETE_NOTE_JUDGE_FROM_CLASS (state, payload) {
+            state.horses[payload.indexhorse] = payload.horse;
         }
     },
     getters: {
@@ -172,6 +175,10 @@ export default new Vuex.Store({
         counters: state => state.counters
     },
     actions: {
+        DELETE_NOTE_JUDGE_FROM_CLASS ({ commit, dispatch }, payload) {
+            commit("DELETE_NOTE_JUDGE_FROM_CLASS", payload);
+            dispatch("EDIT_HORSE", payload.horse);
+        },
         ADD_HORSE ({ commit }, payload) {
             axios
                 .post("http://localhost:3001/horse/add", { item: payload })

@@ -142,6 +142,19 @@
                         if (element === id) {
                             this.item.committee.splice(index, 1);
 
+                            Array.from(this.$store.state.horses).forEach(
+                                (horse, indexhorse) => {
+                                    if (horse.class === this.item.number) {
+                                        let horsestate = horse;
+                                        horse.result.notes.splice(index, 1);
+                                        this.$store.dispatch("DELETE_NOTE_JUDGE_FROM_CLASS", {
+                                            horse: horsestate,
+                                            indexhorse: indexhorse
+                                        });
+                                    }
+                                }
+                            );
+
                             let index2 = this.judges.findIndex(item => item.id === id);
                             this.judgesall.push(this.judges[index2]);
                             this.judges.splice(index2, 1);
