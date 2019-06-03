@@ -135,12 +135,15 @@ export default new Vuex.Store({
         },
         FETCH_HORSES (state, horses) {
             state.horses = horses;
+            alert("Załadowano kolekcję: konie");
         },
         FETCH_JUDGES (state, judges) {
             state.judges = judges;
+            alert("Załadowano kolekcję: sędziowie");
         },
         FETCH_CLASSES (state, classes) {
             state.classes = classes;
+            alert("Załadowano kolekcję: klasy");
         },
         AFTER_DELETE_JUDGE (state, payload) {
             Array.from(state.horses).forEach((element, index) => {
@@ -324,7 +327,6 @@ export default new Vuex.Store({
                         })
                         .then(response => {
                             commit("FETCH_CLASSES", response.data);
-                            alert("Załadowano kolekcję: klasy");
                         })
                         .catch(errors => {
                             console.log("Wystąpił problem z losowaniem");
@@ -345,7 +347,6 @@ export default new Vuex.Store({
                         })
                         .then(response => {
                             commit("FETCH_HORSES", response.data);
-                            alert("Załadowano kolekcję: konie");
                         })
                         .catch(errors => {
                             console.log("Wystąpił problem z losowaniem");
@@ -365,7 +366,6 @@ export default new Vuex.Store({
                         })
                         .then(response => {
                             commit("FETCH_JUDGES", response.data);
-                            alert("Załadowano kolekcję: sędziowie");
                         })
                         .catch(errors => {
                             console.log("Wystąpił problem z losowaniem");
