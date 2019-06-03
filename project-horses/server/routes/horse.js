@@ -79,8 +79,8 @@ router.post("/deletenote", (req, res) => {
     Horse.find({ class: cnumber }, (err, horses) => {
         horses.forEach((horse) => {
             let newnotes = [];
-            horse.result.notes.forEach((jud) => {
-                if (jud !== judge) {
+            horse.result.notes.forEach((jud, index) => {
+                if (parseInt(index) !== parseInt(judge)) {
                     newnotes.push(jud);
                 }
             });
@@ -95,6 +95,7 @@ router.post("/deletenote", (req, res) => {
                     }
                 },
                 (err) => {
+                    console.log(newnotes);
                     if (err) {
                         res.status(400).send("Błąd przy usuwaniu not");
                     }
@@ -102,16 +103,9 @@ router.post("/deletenote", (req, res) => {
             );
         });
     });
-
-    Horse.find({ class: cnumber }, (err, horses) => {
-        let response = [];
-        horses.forEach((horse) => {
-            response.push(horse);
-        });
-
-        res.status(200).json(response);
-    });
+    res.status(200).send();
 });
+
 
 router.post("/addnote", (req, res) => {
     let { cnumber } = req.body;

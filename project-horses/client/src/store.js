@@ -162,19 +162,6 @@ export default new Vuex.Store({
         AFTER_DELETE_CLASS (state, payload) {
             state.horses[payload.indexhorses].class = -1;
             state.horses[payload.indexhorses].result.notes = [];
-        },
-        DELETE_NOTE_JUDGE_FROM_CLASS (state, payload) {
-            payload.forEach(element => {
-                let index = state.horses.findIndex(horse => String(horse._id) === String(element._id));
-                state.horses[index].result = element.result;
-            });
-        },
-
-        ADD_NOTE_JUDGE_FROM_CLASS (state, payload) {
-            payload.forEach(element => {
-                let index = state.horses.findIndex(horse => String(horse._id) === String(element._id));
-                state.horses[index] = element;
-            });
         }
     },
     getters: {
@@ -185,14 +172,12 @@ export default new Vuex.Store({
         counters: state => state.counters
     },
     actions: {
-        ADD_NOTE_JUDGE_FROM_CLASS ({ commit }, payload) {
+        ADD_NOTE_JUDGE_FROM_CLASS ({ commit, state }, payload) {
             axios
                 .post("http://localhost:3001/horse/addnote", {
                     cnumber: payload.classNumber
                 })
-                .then(response => {
-                    commit("ADD_NOTE_JUDGE_FROM_CLASS", response.data);
-                })
+                .then(response => {})
                 .catch(errors => {
                     alert("Wystąpił problem z dodawaniem not dla konia");
                 });
@@ -203,9 +188,7 @@ export default new Vuex.Store({
                     judge: payload.judge,
                     cnumber: payload.classNumber
                 })
-                .then(response => {
-                    commit("DELETE_NOTE_JUDGE_FROM_CLASS", response.data);
-                })
+                .then(response => {})
                 .catch(errors => {
                     alert("Wystąpił problem z dodawaniem not dla konia");
                 });

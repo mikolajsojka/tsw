@@ -97,12 +97,10 @@
             change ({ target }) {
                 if (target.name === "name") {
                     this.item.category = target.value;
-                    this.$store.dispatch("EDIT_CLASS", this.item);
                 }
 
                 if (target.name === "judges") {
                     this.item.committee.push(parseInt(target.value));
-                    this.$store.dispatch("EDIT_CLASS", this.item);
 
                     this.$store.dispatch("ADD_NOTE_JUDGE_FROM_CLASS", { classNumber: this.item.number });
 
@@ -121,6 +119,7 @@
                     this.limit = Math.ceil(this.judges.length / 2) * 2;
                 }
                 document.getElementById("select").value = "";
+                this.$store.dispatch("EDIT_CLASS", this.item);
             },
             deleteclass () {
                 if (confirm("Czy na pewno chcesz usunąć?")) {
@@ -144,10 +143,8 @@
                     this.item.committee.forEach((element, index) => {
                         if (element === id) {
                             this.item.committee.splice(index, 1);
-                            this.$store.dispatch("EDIT_CLASS", this.item);
 
                             this.$store.dispatch("DELETE_NOTE_JUDGE_FROM_CLASS", { judge: index, classNumber: this.item.number });
-                            // osobne requesty trzeba ....
 
                             let index2 = this.judges.findIndex(item => item.id === id);
                             this.judgesall.push(this.judges[index2]);
@@ -164,6 +161,7 @@
                                 this.limit = Math.ceil(this.judges.length / 2) * 2;
                             }
                         }
+                        this.$store.dispatch("EDIT_CLASS", this.item);
                     });
                 }
             },
