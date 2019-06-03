@@ -175,6 +175,16 @@ export default new Vuex.Store({
         counters: state => state.counters
     },
     actions: {
+        ADD_NOTE_JUDGE_FROM_CLASS ({ commit, dispatch }, payload) {
+            payload.result.notes.push({
+                htype: 0,
+                head: 0,
+                barrel: 0,
+                legs: 0,
+                move: 0
+            });
+            dispatch("EDIT_HORSE", payload);
+        },
         DELETE_NOTE_JUDGE_FROM_CLASS ({ commit, dispatch }, payload) {
             commit("DELETE_NOTE_JUDGE_FROM_CLASS", payload);
             dispatch("EDIT_HORSE", payload.horse);
@@ -230,7 +240,6 @@ export default new Vuex.Store({
                 .post("http://localhost:3001/horse/edit", { item: payload })
                 .then(response => {})
                 .catch(errors => {
-                    console.log(errors);
                     alert("Wystąpił problem z edycją konia");
                 });
         },

@@ -125,7 +125,9 @@ router.post("/edit", (req, res) => {
                 res.status(400).send("Coś poszło nie tak..");
             }
             else {
-                res.status(200).send("OK");
+                Horse.findOne({ _id: ObjectId(item._id) }, (err, horse) => {
+                    res.status(200).json(horse);
+                });
             }
         }
     );
