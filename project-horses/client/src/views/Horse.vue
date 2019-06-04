@@ -123,11 +123,13 @@
                 item => item.number === this.horse.class
             );
 
-            this.classes = this.$store.state.classes;
+            this.actualclass = this.$store.state.classes[index2];
 
-            this.actualclass = this.classes[index2];
-
-            this.classes.slice(index2, 1);
+            this.$store.state.classes.forEach(element => {
+                if (element._id !== this.actualclass._id) {
+                    this.classes.push(element);
+                }
+            });
         },
         methods: {
             change ({ target }) {
