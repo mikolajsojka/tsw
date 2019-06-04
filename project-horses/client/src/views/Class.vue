@@ -60,7 +60,7 @@
                 );
                 this.item = this.$store.state.classes[index];
 
-                Array.from(this.$store.state.judges).forEach(judge => {
+                this.$store.state.judges.forEach(judge => {
                     this.item.committee.forEach(item => {
                         if (judge.id === item) {
                             this.judges.push(judge);
@@ -70,11 +70,7 @@
                         this.judgesall.findIndex(jud => jud.id === judge.id) === -1 &&
                         this.judges.findIndex(jud => jud.id === judge.id) === -1
                     ) {
-                        this.judgesall.push({
-                            id: judge.id,
-                            name: judge.judge,
-                            _id: judge._id
-                        });
+                        this.judgesall.push(judge);
                     }
                 });
 
@@ -107,7 +103,7 @@
             },
             deleteclass () {
                 if (confirm("Czy na pewno chcesz usunąć?")) {
-                    Array.from(this.$store.state.horses).forEach((element, index) => {
+                    this.$store.state.horses.forEach((element, index) => {
                         if (parseInt(element.class) === parseInt(this.item.number)) {
                             this.$store.commit("AFTER_DELETE_CLASS", {
                                 item: this.item,
