@@ -37,6 +37,7 @@
         name: "Class",
         data () {
             return {
+                check: 0,
                 item: {},
                 judges: [],
                 judgesall: [],
@@ -47,46 +48,57 @@
             };
         },
         created () {
-            let index = this.$store.state.classes.findIndex(
-                item => item._id === this.$route.params.id
-            );
-
-            this.item = this.$store.state.classes[index];
-            this.judgesall = this.$store.state.judges;
-
-            this.item.committee.forEach(element => {
-                let index = this.judgesall.findIndex(
-                    item => item.id === element
-                );
-
-                this.judges.push(this.judgesall[index]);
-                this.judgesall.splice(index, 1);
-            });
-
-            this.limit = Math.ceil(this.judges.length / 2) * 2;
-            this.judgespagination = Array.from(this.judges).slice(0, 2);
+            this.render();
         },
         methods: {
             judgeredirect (id) {
                 router.push(`/judge/${id}`);
             },
+            render () {
+                let index = this.$store.state.classes.findIndex(
+                    item => item._id === this.$route.params.id
+                );
+                this.item = this.$store.state.classes[index];
+
+                Array.from(this.$store.state.judges).forEach(judge => {
+                    this.item.committee.forEach(item => {
+                        if (judge.id === item) {
+                            this.judges.push(judge);
+                        }
+                    });
+                    if (
+                        this.judgesall.findIndex(jud => jud.id === judge.id) === -1 &&
+                        this.judges.findIndex(jud => jud.id === judge.id) === -1
+                    ) {
+                        this.judgesall.push({
+                            id: judge.id,
+                            name: judge.judge,
+                            _id: judge._id
+                        });
+                    }
+                });
+
+                this.limit = Math.ceil(this.judges.length / 2) * 2;
+                this.judgespagination = Array.from(this.judges).slice(0, 2);
+            },
             change ({ target }) {
                 if (target.name === "name") {
                     this.item.category = target.value;
                 }
-
                 if (target.name === "judges") {
                     this.item.committee.push(parseInt(target.value));
-
-                    this.$store.dispatch("ADD_NOTE_JUDGE_FROM_CLASS", { classNumber: this.item.number });
-
+                    this.$store.dispatch("ADD_NOTE_JUDGE_FROM_CLASS", {
+                        classNumber: this.item.number
+                    });
+                    Array.from(this.judgesall).forEach(element => {
+                        if (parseInt(target.value) === element.id) {
+                            this.judges.push(element);
+                        }
+                    });
                     let index = this.judgesall.findIndex(
                         item => item.id === parseInt(target.value)
                     );
-
-                    this.judges.push(this.judgesall[index]);
                     this.judgesall.splice(index, 1);
-
                     this.judgespagination = this.renderjudges();
                     this.limit = Math.ceil(this.judges.length / 2) * 2;
                 }
@@ -95,7 +107,7 @@
             },
             deleteclass () {
                 if (confirm("Czy na pewno chcesz usunąć?")) {
-                    this.$store.state.horses.forEach((element, index) => {
+                    Array.from(this.$store.state.horses).forEach((element, index) => {
                         if (parseInt(element.class) === parseInt(this.item.number)) {
                             this.$store.commit("AFTER_DELETE_CLASS", {
                                 item: this.item,
@@ -103,9 +115,7 @@
                             });
                         }
                     });
-
                     this.$store.dispatch("DELETE_CLASS", this.$route.params.id);
-
                     this.$store.commit("FILL_COUNTER_CLASSES");
                     router.push("/classes");
                 }
@@ -116,15 +126,15 @@
                     this.item.committee.forEach((element, index) => {
                         if (element === id) {
                             this.item.committee.splice(index, 1);
-
-                            this.$store.dispatch("DELETE_NOTE_JUDGE_FROM_CLASS", { judge: index, classNumber: this.item.number });
-
+                            this.$store.dispatch("DELETE_NOTE_JUDGE_FROM_CLASS", {
+                                judge: index,
+                                classNumber: this.item.number
+                            });
                             let index2 = this.judges.findIndex(item => item.id === id);
                             this.judgesall.push(this.judges[index2]);
                             this.judges.splice(index2, 1);
                             this.judgespagination = this.renderjudges();
                             this.limit = Math.ceil(this.judges.length / 2) * 2;
-
                             if (this.judgespagination.length === 0) {
                                 if (this.pagecounter - 1 > 0) {
                                     this.pagecounter -= 1;

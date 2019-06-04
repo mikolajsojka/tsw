@@ -29,8 +29,6 @@
                 }
             };
         },
-        created () {
-        },
         methods: {
             savejudge () {
                 this.$store.dispatch("ADD_JUDGE", this.judge);

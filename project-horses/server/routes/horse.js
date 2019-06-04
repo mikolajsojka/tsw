@@ -232,7 +232,7 @@ router.post("/editnotes", (req, res) => {
 
 router.post("/edit", (req, res) => {
     let { item } = req.body;
-    console.log(item);
+
     let newnotes = [];
     let breeder = {
         name: item.breeder.name,
@@ -274,7 +274,7 @@ router.post("/edit", (req, res) => {
                     });
                 });
             }
-            console.log(newnotes);
+
             Horse.updateOne(
                 { _id: ObjectId(item._id) },
                 {

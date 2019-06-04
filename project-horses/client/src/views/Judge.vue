@@ -22,21 +22,14 @@
         name: "Judge",
         data () {
             return {
-                check: 0,
                 judge: {}
             };
         },
         created () {
-            Array.from(this.$store.state.judges).forEach(element => {
-                if (element._id === this.$route.params.id) {
-                    this.check = 1;
-                    this.judge = element;
-                }
-            });
-            if (this.check === 0) {
-                router.push("/main");
-                alert("Nie znaleziono takiego sędziego");
-            }
+            let index = this.$store.state.judges.findIndex(
+                item => item._id === this.$route.params.id
+            );
+            this.judge = this.$store.state.judges[index];
         },
         methods: {
             change ({ target }) {
@@ -50,9 +43,9 @@
             },
             deletejudge () {
                 if (confirm("Czy na pewno chcesz usunąć?")) {
-                    Array.from(this.$store.state.classes).forEach((element, index) => {
+                    this.$store.state.classes.forEach((element, index) => {
                         element.committee.forEach((item, index2) => {
-                            if (parseInt(item) === parseInt(this.judge.id)) {
+                            if (item === this.judge.id) {
                                 this.$store.commit("AFTER_DELETE_JUDGE", { judge: this.judge, indexcommittee: index2, indexclasses: index });
                             }
                         });
