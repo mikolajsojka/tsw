@@ -86,14 +86,11 @@
                     this.$store.dispatch("ADD_NOTE_JUDGE_FROM_CLASS", {
                         classNumber: this.item.number
                     });
-                    Array.from(this.judgesall).forEach(element => {
-                        if (parseInt(target.value) === element.id) {
-                            this.judges.push(element);
-                        }
-                    });
+
                     let index = this.judgesall.findIndex(
                         item => item.id === parseInt(target.value)
                     );
+                    this.judges.push(this.judgesall[index]);
                     this.judgesall.splice(index, 1);
                     this.judgespagination = this.renderjudges();
                     this.limit = Math.ceil(this.judges.length / 2) * 2;
