@@ -17,11 +17,11 @@
                         <label>Dodaj sędziego</label>
                         <select name="judges" class="select" id="select" @change="change">
                             <option selected></option>
-                            <option v-for="judge in judgesall" :value="judge.id" :key="judge._id">{{judge.name}}</option>
+                            <option v-for="judge in judgesall" :value="judge.id" :key="judge._id">{{judge.judge}}</option>
                         </select>
 
                         <div class="judge" v-for="judge in judgespagination" :key="judge._id">
-                            <div class="name">{{judge.name}}</div>
+                            <div class="name">{{judge.judge}}</div>
                             <div class="delete" @click="deletejudge(judge.id)">x</div>
                         </div>
                     </div>
@@ -56,9 +56,7 @@
         },
         methods: {
             render () {
-                Array.from(this.$store.state.judges).forEach(judge => {
-                    this.judgesall.push({ id: judge.id, name: judge.judge });
-                });
+                this.judgesall = this.$store.state.judges;
 
                 this.limit = Math.ceil(this.judges.length / 2) * 2;
                 this.judgespagination = Array.from(this.judges).slice(0, 2);
@@ -71,15 +69,11 @@
                 if (target.name === "judges") {
                     this.item.committee.push(parseInt(target.value));
 
-                    Array.from(this.judgesall).forEach(element => {
-                        if (parseInt(target.value) === element.id) {
-                            this.judges.push(element);
-                        }
-                    });
-
                     let index = this.judgesall.findIndex(
                         item => item.id === parseInt(target.value)
                     );
+                    this.judges.push(this.judgesall[index]);
+
                     this.judgesall.splice(index, 1);
 
                     this.judgespagination = this.renderjudges();
