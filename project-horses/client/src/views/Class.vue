@@ -17,11 +17,11 @@
                         <label>Dodaj sędziego</label>
                         <select name="judges" class="select" id="select" @change="change">
                             <option selected></option>
-                            <option v-for="judge in judgesall" :value="judge.id" :key="judge._id">{{judge.name}}</option>
+                            <option v-for="judge in judgesall" :value="judge.id" :key="judge._id">{{judge.judge}}</option>
                         </select>
 
                         <div class="judge" v-for="judge in judgespagination" :key="judge._id">
-                            <div class="name" @click="judgeredirect(judge._id)">{{judge.name}}</div>
+                            <div class="name" @click="judgeredirect(judge._id)">{{judge.judge}}</div>
                             <div class="delete" @click="deletejudge(judge.id)">x</div>
                         </div>
                     </div>
@@ -37,7 +37,6 @@
         name: "Class",
         data () {
             return {
-                check: 0,
                 item: {},
                 judges: [],
                 judgesall: [],
@@ -48,51 +47,28 @@
             };
         },
         created () {
-            this.render();
+            let index = this.$store.state.classes.findIndex(
+                item => item._id === this.$route.params.id
+            );
+
+            this.item = this.$store.state.classes[index];
+            this.judgesall = this.$store.state.judges;
+
+            this.item.committee.forEach(element => {
+                let index = this.judgesall.findIndex(
+                    item => item.id === element
+                );
+
+                this.judges.push(this.judgesall[index]);
+                this.judgesall.splice(index, 1);
+            });
+
+            this.limit = Math.ceil(this.judges.length / 2) * 2;
+            this.judgespagination = Array.from(this.judges).slice(0, 2);
         },
         methods: {
             judgeredirect (id) {
                 router.push(`/judge/${id}`);
-            },
-            render () {
-                Array.from(this.$store.state.classes).forEach(element => {
-                    if (element._id === this.$route.params.id) {
-                        this.check = 1;
-                        this.item = element;
-                        Array.from(this.$store.state.judges).forEach(judge => {
-                            element.committee.forEach(item => {
-                                if (judge.id === item) {
-                                    if (this.judges.findIndex(jud => jud.id === judge.id) === -1) {
-                                        this.judges.push({
-                                            id: judge.id,
-                                            name: judge.judge,
-                                            _id: judge._id
-                                        });
-                                    }
-                                }
-                            });
-
-                            if (
-                                this.judgesall.findIndex(jud => jud.id === judge.id) === -1 &&
-                                this.judges.findIndex(jud => jud.id === judge.id) === -1
-                            ) {
-                                this.judgesall.push({
-                                    id: judge.id,
-                                    name: judge.judge,
-                                    _id: judge._id
-                                });
-                            }
-                        });
-                    }
-                });
-
-                this.limit = Math.ceil(this.judges.length / 2) * 2;
-                this.judgespagination = Array.from(this.judges).slice(0, 2);
-
-                if (this.check === 0) {
-                    router.push("/main");
-                    alert("Nie znaleziono takiej klasy");
-                }
             },
             change ({ target }) {
                 if (target.name === "name") {
@@ -104,15 +80,11 @@
 
                     this.$store.dispatch("ADD_NOTE_JUDGE_FROM_CLASS", { classNumber: this.item.number });
 
-                    Array.from(this.judgesall).forEach(element => {
-                        if (parseInt(target.value) === element.id) {
-                            this.judges.push(element);
-                        }
-                    });
-
                     let index = this.judgesall.findIndex(
                         item => item.id === parseInt(target.value)
                     );
+
+                    this.judges.push(this.judgesall[index]);
                     this.judgesall.splice(index, 1);
 
                     this.judgespagination = this.renderjudges();
@@ -123,7 +95,7 @@
             },
             deleteclass () {
                 if (confirm("Czy na pewno chcesz usunąć?")) {
-                    Array.from(this.$store.state.horses).forEach((element, index) => {
+                    this.$store.state.horses.forEach((element, index) => {
                         if (parseInt(element.class) === parseInt(this.item.number)) {
                             this.$store.commit("AFTER_DELETE_CLASS", {
                                 item: this.item,
