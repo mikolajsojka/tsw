@@ -157,13 +157,8 @@ router.post("/addnote", (req, res) => {
         });
     });
 
-    Horse.find({ class: cnumber }, (err, horses) => {
-        let response = [];
-        horses.forEach((horse) => {
-            response.push(horse);
-        });
-
-        res.status(200).json(response);
+    Horse.find({ }, (err, horses) => {
+        res.status(200).json(horses);
     });
 });
 

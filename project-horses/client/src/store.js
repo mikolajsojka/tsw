@@ -108,6 +108,7 @@ export default new Vuex.Store({
         },
         EDIT_HORSE: (state, payload) => {
             let index = state.horses.findIndex(item => item._id === payload._id);
+            console.log(payload);
             Vue.set(state.horses, index, payload);
         },
         EDIT_JUDGE: (state, payload) => {
@@ -163,6 +164,7 @@ export default new Vuex.Store({
             state.horses[payload.indexhorses].class = -1;
             state.horses[payload.indexhorses].result.notes = [];
         }
+
     },
     getters: {
         user: state => state.user,
@@ -172,14 +174,6 @@ export default new Vuex.Store({
         counters: state => state.counters
     },
     actions: {
-        GET_NOTES ({ commit, state }, payload) {
-            axios
-                .get(`http://localhost:3001/horse/getnotes/${payload}`)
-                .then(response => {
-                    let index = state.horses.findIndex(horse => horse._id === payload);
-                    state.horses[index].result.notes = response.data;
-                });
-        },
         ADD_NOTE_JUDGE_FROM_CLASS ({ commit }, payload) {
             axios
                 .post("http://localhost:3001/horse/addnote", {
