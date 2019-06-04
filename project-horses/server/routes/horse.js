@@ -9,7 +9,26 @@ const mongoose = require("mongoose");
 
 router.get("/gethorses", (_req, res) => {
     Horse.find({}, (_err, horses) => {
-        res.status(200).json(horses);
+        let response = [];
+        horses.forEach((horse) => {
+            response.push({
+                _id: horse._id,
+                id: horse.id,
+                number: horse.number,
+                class: horse.class,
+                name: horse.name,
+                country: horse.country,
+                yob: horse.yob,
+                hair: horse.hair,
+                sex: horse.sex,
+                breeder: horse.breeder,
+                owner: horse.owner,
+                bloodline: horse.bloodline
+            });
+        });
+        if (response.length === horses.length) {
+            res.status(200).json(response);
+        }
     });
 });
 
@@ -105,8 +124,21 @@ router.post("/add", (req, res) => {
 
 router.get("/freshnotes/:class", (req, res) => {
     Horse.find({ class: req.params.class }, (err, horses) => {
-        console.log(horses);
-        res.status(200).json(horses);
+        let response = [];
+
+        horses.forEach((horse) => {
+            response.push({
+                _id: horse._id,
+                id: horse.id,
+                number: horse.number,
+                class: horse.class,
+                name: horse.name,
+                result: horse.result
+            });
+        });
+        if (response.length === horses.length) {
+            res.status(200).json(response);
+        }
     });
 });
 
