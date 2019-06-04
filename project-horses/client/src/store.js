@@ -168,6 +168,10 @@ export default new Vuex.Store({
         FRESH_NOTES_HORSES (state, payload) {
             state.actualhorses = payload.response;
             router.push(`/calculator/${payload.id}`);
+        },
+        EDIT_HORSE_NOTES (state, payload) {
+            let index = state.actualhorses.findIndex(horse => horse._id === payload._id);
+            Vue.set(state.actualhorses, index, payload);
         }
     },
     getters: {
@@ -179,6 +183,11 @@ export default new Vuex.Store({
         actualhorses: state => state.actualhorses
     },
     actions: {
+        EDIT_HORSE_NOTES ({ commit }, payload) {
+            commit("EDIT_HORSE_NOTES", payload);
+            axios
+                .post("http://localhost:3001/horse/editnotes", { horse: payload });
+        },
         FRESH_NOTES_HORSES ({ commit }, payload) {
             axios
                 .get(`http://localhost:3001/horse/freshnotes/${payload.number}`).then(response => {

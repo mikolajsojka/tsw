@@ -108,8 +108,8 @@
                     );
                     this.actualhorse.result.notes[index].move = target.value;
                 }
-
-                this.$store.dispatch("EDIT_HORSE", this.actualhorse);
+                console.log(this.actualhorse);
+                this.$store.dispatch("EDIT_HORSE_NOTES", this.actualhorse);
             }
         }
     };

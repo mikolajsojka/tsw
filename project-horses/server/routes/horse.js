@@ -213,6 +213,22 @@ router.post("/addnote", (req, res) => {
     res.status(200).send("OK");
 });
 
+router.post("/editnotes", (req, res) => {
+    let { horse } = req.body;
+    Horse.updateOne({ _id: ObjectId(horse._id) }, {
+        $set: {
+            result: horse.result
+        }
+    }, (err) => {
+        if (err) {
+            res.status(400).send("Problem przy zmianie not");
+        }
+        else {
+            res.status(200).send("Noty zmienione");
+        }
+    });
+});
+
 router.post("/edit", (req, res) => {
     let { item } = req.body;
     let newnotes = [];
