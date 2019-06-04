@@ -1,4 +1,5 @@
 const Horse = require("../models/Horse");
+const Class = require("../models/Class");
 const express = require("express");
 const ObjectId = require("mongodb").ObjectID;
 
@@ -25,6 +26,8 @@ router.post("/add", (req, res) => {
         country: item.owner.country
     };
 
+    let newnotes = [];
+
     let bloodline = {
         father: {
             name: item.bloodline.father.name,
@@ -47,27 +50,41 @@ router.post("/add", (req, res) => {
             }
         });
         id += 1;
-        let newHorse = new Horse({
-            id,
-            number: item.number,
-            class: item.class,
-            name: item.name,
-            country: item.country,
-            yob: item.yob,
-            hair: item.hair,
-            sex: item.sex,
-            breeder,
-            owner,
-            bloodline,
-            result: {
-                notes: []
-            }
-        });
 
-        Horse.createHorse(newHorse, (err, _horse) => {
-            if (err) throw err;
+        Class.findOne({ number: item.class }, (err, item) => {
+            item.committee.forEach((element) => {
+                newnotes.push({
+                    htype: 0,
+                    head: 0,
+                    barrel: 0,
+                    legs: 0,
+                    move: 0
+                });
+            });
 
-            res.status(200).json(newHorse);
+            console.log(newnotes);
+            let newHorse = new Horse({
+                id,
+                number: item.number,
+                class: item.class,
+                name: item.name,
+                country: item.country,
+                yob: item.yob,
+                hair: item.hair,
+                sex: item.sex,
+                breeder,
+                owner,
+                bloodline,
+                result: {
+                    notes: newnotes
+                }
+            });
+
+            Horse.createHorse(newHorse, (err, _horse) => {
+                if (err) throw err;
+
+                res.status(200).json(newHorse);
+            });
         });
     });
 });
@@ -152,6 +169,7 @@ router.post("/addnote", (req, res) => {
 
 router.post("/edit", (req, res) => {
     let { item } = req.body;
+    let newnotes = [];
     let breeder = {
         name: item.breeder.name,
         country: item.breeder.country
@@ -175,36 +193,56 @@ router.post("/edit", (req, res) => {
             country: item.bloodline.fathermother.country
         }
     };
-    Horse.updateOne(
-        { _id: ObjectId(item._id) },
-        {
-            $set: {
-                number: item.number,
-                class: item.class,
-                name: item.name,
-                country: item.country,
-                yob: item.yob,
-                hair: item.hair,
-                sex: item.sex,
-                breeder,
-                owner,
-                bloodline,
-                result: {
-                    notes: item.result.notes
-                }
-            }
-        },
-        (err) => {
-            if (err) {
-                res.status(400).send("Coś poszło nie tak..");
+
+    Class.findOne({ number: item.class }, (err, item2) => {
+        Horse.findOne({ _id: ObjectId(item._id) }, (err, horse) => {
+            if (horse.class === item.class) {
+                newnotes = horse.result.notes;
             }
             else {
-                Horse.findOne({ _id: ObjectId(item._id) }, (err, horse) => {
-                    res.status(200).json(horse);
+                item2.committee.forEach((element) => {
+                    newnotes.push({
+                        htype: 0,
+                        head: 0,
+                        barrel: 0,
+                        legs: 0,
+                        move: 0
+                    });
                 });
             }
-        }
-    );
+            console.log(newnotes);
+            Horse.updateOne(
+                { _id: ObjectId(item._id) },
+                {
+                    $set: {
+                        number: item.number,
+                        class: item.class,
+                        name: item.name,
+                        country: item.country,
+                        yob: item.yob,
+                        hair: item.hair,
+                        sex: item.sex,
+                        breeder,
+                        owner,
+                        bloodline,
+                        result: {
+                            notes: newnotes
+                        }
+                    }
+                },
+                (err) => {
+                    if (err) {
+                        res.status(400).send("Coś poszło nie tak..");
+                    }
+                    else {
+                        Horse.findOne({ _id: ObjectId(item._id) }, (err, horse1) => {
+                            res.status(200).json(horse1);
+                        });
+                    }
+                }
+            );
+        });
+    });
 });
 
 router.post("/delete/:id", (req, res) => {
