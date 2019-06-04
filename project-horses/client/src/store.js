@@ -104,15 +104,15 @@ export default new Vuex.Store({
         },
         EDIT_CLASS: (state, payload) => {
             let index = state.classes.findIndex(item => item._id === payload._id);
-            state.classes[index] = payload;
+            Vue.set(state.classes, index, payload);
         },
         EDIT_HORSE: (state, payload) => {
             let index = state.horses.findIndex(item => item._id === payload._id);
-            state.horses[index] = payload;
+            Vue.set(state.horses, index, payload);
         },
         EDIT_JUDGE: (state, payload) => {
             let index = state.judges.findIndex(item => item._id === payload._id);
-            state.judges[index] = payload;
+            Vue.set(state.judges, index, payload);
         },
         DELETE_JUDGE: (state, id) => {
             let index = state.judges.findIndex(judge => judge._id === id);
@@ -223,31 +223,31 @@ export default new Vuex.Store({
                 });
         },
         EDIT_CLASS ({ commit }, payload) {
-            commit("EDIT_CLASS", payload);
-
             axios
                 .post("http://localhost:3001/class/edit", { item: payload })
-                .then(response => {})
+                .then(response => {
+                    commit("EDIT_CLASS", response.data);
+                })
                 .catch(errors => {
                     alert("Wystąpił problem z edycją klasy");
                 });
         },
         EDIT_HORSE ({ commit }, payload) {
-            commit("EDIT_HORSE", payload);
-
             axios
                 .post("http://localhost:3001/horse/edit", { item: payload })
-                .then(response => {})
+                .then(response => {
+                    commit("EDIT_HORSE", response.data);
+                })
                 .catch(errors => {
                     alert("Wystąpił problem z edycją konia");
                 });
         },
         EDIT_JUDGE ({ commit }, payload) {
-            commit("EDIT_JUDGE", payload);
-
             axios
                 .post("http://localhost:3001/judge/edit", { item: payload })
-                .then(response => {})
+                .then(response => {
+                    commit("EDIT_JUDGE", response.data);
+                })
                 .catch(errors => {
                     alert("Wystąpił problem z edycją sędziego");
                 });
