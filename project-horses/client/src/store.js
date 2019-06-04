@@ -10,6 +10,7 @@ export default new Vuex.Store({
         user: "",
         horses: [],
         classes: [],
+        actualhorses: [],
         judges: [],
         counters: {
             horses: {
@@ -163,17 +164,27 @@ export default new Vuex.Store({
         AFTER_DELETE_CLASS (state, payload) {
             state.horses[payload.indexhorses].class = -1;
             state.horses[payload.indexhorses].result.notes = [];
+        },
+        FRESH_NOTES_HORSES (state, payload) {
+            state.actualhorses = payload.response;
+            router.push(`/calculator/${payload.id}`);
         }
-
     },
     getters: {
         user: state => state.user,
         horses: state => state.horses,
         judges: state => state.judges,
         classes: state => state.classes,
-        counters: state => state.counters
+        counters: state => state.counters,
+        actualhorses: state => state.actualhorses
     },
     actions: {
+        FRESH_NOTES_HORSES ({ commit }, payload) {
+            axios
+                .get(`http://localhost:3001/horse/freshnotes/${payload.number}`).then(response => {
+                    commit("FRESH_NOTES_HORSES", { response: response.data, id: payload.id });
+                });
+        },
         ADD_NOTE_JUDGE_FROM_CLASS ({ commit }, payload) {
             axios
                 .post("http://localhost:3001/horse/addnote", {

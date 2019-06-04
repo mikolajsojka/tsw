@@ -83,12 +83,32 @@ router.post("/add", (req, res) => {
             Horse.createHorse(newHorse, (err, _horse) => {
                 if (err) throw err;
 
-                res.status(200).json(newHorse);
+                res.status(200).json({
+                    _id: newHorse._id,
+                    id: newHorse.id,
+                    number: newHorse.number,
+                    class: newHorse.class,
+                    name: newHorse.name,
+                    country: newHorse.country,
+                    yob: newHorse.yob,
+                    hair: newHorse.hair,
+                    sex: newHorse.sex,
+                    breeder: newHorse.breeder,
+                    owner: newHorse.owner,
+                    bloodline: newHorse.bloodline
+                });
             });
         });
     });
 });
 
+
+router.get("/freshnotes/:class", (req, res) => {
+    Horse.find({ class: req.params.class }, (err, horses) => {
+        console.log(horses);
+        res.status(200).json(horses);
+    });
+});
 
 router.post("/deletenote", (req, res) => {
     let { cnumber } = req.body;
@@ -157,9 +177,8 @@ router.post("/addnote", (req, res) => {
         });
     });
 
-    Horse.find({ }, (err, horses) => {
-        res.status(200).json(horses);
-    });
+
+    res.status(200).send("OK");
 });
 
 router.post("/edit", (req, res) => {
@@ -231,7 +250,20 @@ router.post("/edit", (req, res) => {
                     }
                     else {
                         Horse.findOne({ _id: ObjectId(item._id) }, (err, horse1) => {
-                            res.status(200).json(horse1);
+                            res.status(200).json({
+                                _id: horse1._id,
+                                id: horse1.id,
+                                number: horse1.number,
+                                class: horse1.class,
+                                name: horse1.name,
+                                country: horse1.country,
+                                yob: horse1.yob,
+                                hair: horse1.hair,
+                                sex: horse1.sex,
+                                breeder: horse1.breeder,
+                                owner: horse1.owner,
+                                bloodline: horse1.bloodline
+                            });
                         });
                     }
                 }
@@ -320,7 +352,20 @@ router.post("/randomhorses", (req, res) => {
                         }
                     });
                     counter += 1;
-                    responsehorses.push(newHorse);
+                    responsehorses.push({
+                        _id: newHorse._id,
+                        id: newHorse.id,
+                        number: newHorse.number,
+                        class: newHorse.class,
+                        name: newHorse.name,
+                        country: newHorse.country,
+                        yob: newHorse.yob,
+                        hair: newHorse.hair,
+                        sex: newHorse.sex,
+                        breeder: newHorse.breeder,
+                        owner: newHorse.owner,
+                        bloodline: newHorse.bloodline
+                    });
                     Horse.createHorse(newHorse, (err, _horse) => {
                         if (err) throw err;
                     });

@@ -44,7 +44,8 @@
                 router.push(`/class/${item._id}`);
             },
             tocalc (item) {
-                router.push(`/calculator/${item._id}`);
+                let index = this.$store.state.classes.findIndex(it => it._id === item._id);
+                this.$store.dispatch("FRESH_NOTES_HORSES", { number: this.$store.state.classes[index].number, id: item._id });
             },
             renderclasses () {
                 let allclasses = this.$store.state.classes;
