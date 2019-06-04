@@ -15,14 +15,14 @@
                 <input v-bind:id="note._id" @change="change" name="htype" v-model="note.htype">
                 <input v-bind:id="note._id" @change="change" name="legs" v-model="note.legs">
                 <input v-bind:id="note._id" @change="change" name="move" v-model="note.move">
-                <div class="judge">{{judges[index].judge}}</div>
+                <div class="judge" @click="goJudge(judges[index]._id)">{{judges[index].judge}}</div>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-// import router from "../router";
+    import router from "../router";
     export default {
         name: "Calculator",
         data () {
@@ -40,32 +40,23 @@
             }
         },
         methods: {
+            goJudge (id) {
+                router.push(`/judge/${id}`);
+            },
             fill () {
-                Array.from(this.$store.state.classes).forEach((element, index) => {
-                    this.classesamount += 1;
-                    if (element._id === this.$route.params.id) {
-                        this.actualclass = element;
-                        this.actualclass.position = index;
+                this.classesamount = this.$store.state.classes.length;
+                let index = this.$store.state.classes.findIndex(item => item._id === this.$route.params.id);
 
-                        let check = 0;
-                        Array.from(this.$store.state.actualhorses).forEach(element2 => {
-                            if (parseInt(element2.class) === parseInt(element.number)) {
-                                if (check === 0) {
-                                    this.actualhorse = element2;
-                                    check = 1;
-                                }
-                                this.horses.push(element2);
-                            }
-                        });
+                this.actualclass = this.$store.state.classes[index];
+                this.actualclass.position = index;
 
-                        element.committee.forEach(element2 => {
-                            Array.from(this.$store.state.judges).forEach(element3 => {
-                                if (parseInt(element2) === parseInt(element3.id)) {
-                                    this.judges.push(element3);
-                                }
-                            });
-                        });
-                    }
+                this.horses = this.$store.state.actualhorses;
+                this.actualhorse = this.horses[0];
+
+                this.actualclass.committee.forEach(element => {
+                    let index = this.$store.state.judges.findIndex(item => item.id === element);
+
+                    this.judges.push(this.$store.state.judges[index]);
                 });
             },
             change ({ target }) {
@@ -108,7 +99,7 @@
                     );
                     this.actualhorse.result.notes[index].move = target.value;
                 }
-                console.log(this.actualhorse);
+
                 this.$store.dispatch("EDIT_HORSE_NOTES", this.actualhorse);
             }
         }

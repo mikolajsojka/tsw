@@ -195,6 +195,7 @@
                     this.$store.dispatch("DELETE_HORSE", this.$route.params.id);
 
                     this.$store.commit("FILL_COUNTER_HORSES");
+                    router.push("/horses");
                 }
             }
         }

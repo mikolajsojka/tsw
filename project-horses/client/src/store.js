@@ -119,18 +119,14 @@ export default new Vuex.Store({
         DELETE_JUDGE: (state, id) => {
             let index = state.judges.findIndex(judge => judge._id === id);
             state.judges.splice(index, 1);
-
-            router.push("/judges");
         },
         DELETE_CLASS: (state, id) => {
             let index = state.classes.findIndex(item => item._id === id);
             state.classes.splice(index, 1);
-            router.push("/classes");
         },
         DELETE_HORSE: (state, id) => {
             let index = state.horses.findIndex(horse => horse._id === id);
             state.horses.splice(index, 1);
-            router.push("/horses");
         },
         LOGIN (state, user) {
             state.user = user;
@@ -148,14 +144,6 @@ export default new Vuex.Store({
             alert("Załadowano kolekcję: klasy");
         },
         AFTER_DELETE_JUDGE (state, payload) {
-            Array.from(state.horses).forEach((element, index) => {
-                if (
-                    parseInt(element.class) ===
-          parseInt(state.classes[payload.indexclasses].number)
-                ) {
-                    state.horses[index].result.notes.splice(payload.indexcommittee, 1);
-                }
-            });
             state.classes[payload.indexclasses].committee.splice(
                 payload.indexcommittee,
                 1

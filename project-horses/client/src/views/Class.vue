@@ -135,6 +135,7 @@
                     this.$store.dispatch("DELETE_CLASS", this.$route.params.id);
 
                     this.$store.commit("FILL_COUNTER_CLASSES");
+                    router.push("/classes");
                 }
                 this.deletecheck = 1;
             },
