@@ -20,8 +20,8 @@
                         <input name="sex" v-model="horse.sex" @change="change">
                         <label>Klasa startowa</label>
                         <select name="classes" @change="change">
-                            <option v-for="item in classes" :value="item.id" :key="item._id">{{item.name}}</option>
-                            <option :value="actualclass.id" selected>{{actualclass.name}}</option>
+                            <option v-for="item in classes" :value="item.number" :key="item._id">{{item.category}}</option>
+                            <option :value="actualclass.number" selected>{{actualclass.category}}</option>
                         </select>
                     </div>
 
@@ -114,25 +114,20 @@
             };
         },
         created () {
-            Array.from(this.$store.state.horses).forEach(element => {
-                if (element._id === this.$route.params.id) {
-                    this.check = 1;
-                    this.horse = element;
-                    Array.from(this.$store.state.classes).forEach(item => {
-                        if (parseInt(element.class) === parseInt(item.number)) {
-                            this.actualclass.name = item.category;
-                            this.actualclass.id = element.class;
-                        } else {
-                            this.classes.push({ id: item.number, name: item.category });
-                        }
-                    });
-                }
-            });
+            let index = this.$store.state.horses.findIndex(
+                item => item._id === this.$route.params.id
+            );
+            this.horse = this.$store.state.horses[index];
 
-            if (this.check === 0) {
-                router.push("/main");
-                alert("Nie znaleziono takiego konia");
-            }
+            let index2 = this.$store.state.classes.findIndex(
+                item => item.number === this.horse.class
+            );
+
+            this.classes = this.$store.state.classes;
+
+            this.actualclass = this.classes[index2];
+
+            this.classes.slice(index2, 1);
         },
         methods: {
             change ({ target }) {
