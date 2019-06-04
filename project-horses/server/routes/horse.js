@@ -34,6 +34,8 @@ router.get("/gethorses", (_req, res) => {
 
 router.post("/add", (req, res) => {
     let { item } = req.body;
+    console.log(item);
+
     let id = 0;
 
     let breeder = {
@@ -70,8 +72,8 @@ router.post("/add", (req, res) => {
         });
         id += 1;
 
-        Class.findOne({ number: item.class }, (err, item) => {
-            item.committee.forEach((element) => {
+        Class.findOne({ number: item.class }, (err, item2) => {
+            item2.committee.forEach((element) => {
                 newnotes.push({
                     htype: 0,
                     head: 0,
@@ -81,7 +83,6 @@ router.post("/add", (req, res) => {
                 });
             });
 
-            console.log(newnotes);
             let newHorse = new Horse({
                 id,
                 number: item.number,
@@ -101,21 +102,21 @@ router.post("/add", (req, res) => {
 
             Horse.createHorse(newHorse, (err, _horse) => {
                 if (err) throw err;
+            });
 
-                res.status(200).json({
-                    _id: newHorse._id,
-                    id: newHorse.id,
-                    number: newHorse.number,
-                    class: newHorse.class,
-                    name: newHorse.name,
-                    country: newHorse.country,
-                    yob: newHorse.yob,
-                    hair: newHorse.hair,
-                    sex: newHorse.sex,
-                    breeder: newHorse.breeder,
-                    owner: newHorse.owner,
-                    bloodline: newHorse.bloodline
-                });
+            res.status(200).json({
+                _id: newHorse._id,
+                id: newHorse.id,
+                number: newHorse.number,
+                class: newHorse.class,
+                name: newHorse.name,
+                country: newHorse.country,
+                yob: newHorse.yob,
+                hair: newHorse.hair,
+                sex: newHorse.sex,
+                breeder: newHorse.breeder,
+                owner: newHorse.owner,
+                bloodline: newHorse.bloodline
             });
         });
     });

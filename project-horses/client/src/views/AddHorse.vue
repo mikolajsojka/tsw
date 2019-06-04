@@ -20,7 +20,7 @@
                         <input name="sex" v-model="horse.sex" @change="change">
                         <label>Klasa startowa</label>
                         <select name="classes" @change="change">
-                            <option v-for="item in classes" :value="item.id" :key="item._id">{{item.name}}</option>
+                            <option v-for="item in classes" :value="item.number" :key="item._id">{{item.category}}</option>
                             <option :value="actualclass.id" selected>{{actualclass.name}}</option>
                         </select>
                     </div>
@@ -147,9 +147,7 @@
             };
         },
         created () {
-            Array.from(this.$store.state.classes).forEach(item => {
-                this.classes.push({ id: item.number, name: item.category });
-            });
+            this.classes = this.$store.state.classes;
         },
         methods: {
             savehorse () {
@@ -206,9 +204,8 @@
 
                 if (target.name === "classes") {
                     this.horse.class = target.value;
+                    console.log(this.horse);
                 }
-
-                // this.$store.dispatch("EDIT_HORSE", this.horse);
             }
         }
     };

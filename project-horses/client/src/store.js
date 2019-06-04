@@ -96,6 +96,7 @@ export default new Vuex.Store({
             router.push("/classes");
         },
         ADD_HORSE: (state, payload) => {
+            console.log(payload);
             state.horses.push(payload);
             router.push("/horses");
         },
