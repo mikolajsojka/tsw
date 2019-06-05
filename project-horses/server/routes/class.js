@@ -39,6 +39,8 @@ module.exports = (io) => {
                     if (err) throw err;
 
                     res.status(200).json(newClass);
+                    socket.emit("addclass", newClass);
+                    socket.broadcast.emit("addclass", newClass);
                 });
             });
         });
@@ -95,6 +97,8 @@ module.exports = (io) => {
                 }
                 else {
                     res.status(200).send("OK");
+                    socket.emit("deleteClass", id);
+                    socket.broadcast.emit("deleteClass", id);
                 }
             });
         });

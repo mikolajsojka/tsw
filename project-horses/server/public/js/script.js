@@ -8,18 +8,37 @@ document.onreadystatechange = () => {
             judges,
             classes;
 
-        generate = () => {
+        renderClasses = () => {
             classes.forEach((element) => {
                 if (element.status) {
-                    document.getElementById("actual").innerHTML += `<div id="${element._id}">${element.category}</div>`;
+                    document.getElementById("actual").innerHTML += `<div class="element" id="${element._id}">${element.category}</div>`;
                 }
                 else {
-                    document.getElementById("end").innerHTML += `<div id="${element._id}">${element.category}</div>`;
+                    document.getElementById("end").innerHTML += `<div class="element" id="${element._id}">${element.category}</div>`;
                 }
             });
         };
 
+        addClass = (data) => {
+            document.getElementById("actual").innerHTML += `<div class="element" id="${data._id}">${data.category}</div>`;
+        };
+
+        removeClass = (data) => {
+            document.getElementById(data).remove();
+        };
+
         socket.on("connect", () => {
+            socket.on("addclass", (data) => {
+                data.status = false;
+                classes.push(data);
+                addClass(data);
+            });
+
+            socket.on("deleteClass", (data) => {
+                let index = classes.findIndex(item => item._id === data);
+                classes.slice(index, 1);
+                removeClass(data);
+            });
             socket.on("gethorses", (data) => {
                 horses = data;
                 console.log(`Konie:${horses}`);
@@ -44,7 +63,7 @@ document.onreadystatechange = () => {
                         }
                     });
                 });
-                generate();
+                renderClasses();
             });
         });
     }
