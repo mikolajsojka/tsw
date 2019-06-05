@@ -32,7 +32,8 @@ module.exports = {
     "no-unused-vars": "off",
     "no-use-before-define": "off",
     "no-underscore-dangle":"off",
-    "radix":"off"
+    "radix":"off",
+    "max-len":"off"
   },
   parserOptions: {
     parser: "babel-eslint"

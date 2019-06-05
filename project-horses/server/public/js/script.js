@@ -6,8 +6,15 @@ document.onreadystatechange = () => {
         const socket = io.connect("http://localhost:3001");
 
         socket.on("connect", () => {
-            socket.emit("write", "Witam w świecie socketów");
-            // socket.broadcast("write", "Witam w świecie socketów");
+            socket.emit("getclasseswithhorses");
+            socket.emit("getjudges");
+            socket.on("getclasseswithhorses", (data) => {
+                console.log(data);
+            });
+
+            socket.on("getjudges", (data) => {
+                console.log(data);
+            });
         });
     }
 };

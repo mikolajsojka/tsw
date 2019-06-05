@@ -1,5 +1,6 @@
 const Horse = require("../models/Horse");
 const Class = require("../models/Class");
+const Judge = require("../models/Judge");
 const express = require("express");
 const ObjectId = require("mongodb").ObjectID;
 
@@ -9,8 +10,26 @@ const mongoose = require("mongoose");
 
 module.exports = (io) => {
     io.on("connect", (socket) => {
-        socket.on("write", (data) => {
-            console.log(data);
+        socket.on("getclasseswithhorses", () => {
+            Class.find({}, (err, classes) => {
+                let responseclasses = [];
+                classes.forEach((element) => {
+                    let obj = {};
+                    Horse.find({ class: element.number }, (err, horses) => {
+                        obj.class = element;
+                        obj.horses = horses;
+
+                        responseclasses.push(obj);
+                        socket.emit("getclasseswithhorses", responseclasses);
+                    });
+                });
+            });
+        });
+
+        socket.on("getjudges", () => {
+            Judge.find({}, (err, judges) => {
+                socket.emit("getjudges", judges);
+            });
         });
 
         router.get("/gethorses", (_req, res) => {
@@ -128,7 +147,6 @@ module.exports = (io) => {
             });
         });
 
-
         router.get("/freshnotes/:class", (req, res) => {
             Horse.find({ class: req.params.class }, (err, horses) => {
                 let response = [];
@@ -183,7 +201,6 @@ module.exports = (io) => {
             res.status(200).send();
         });
 
-
         router.post("/addnote", (req, res) => {
             let { cnumber } = req.body;
 
@@ -216,24 +233,27 @@ module.exports = (io) => {
                 });
             });
 
-
             res.status(200).send("OK");
         });
 
         router.post("/editnotes", (req, res) => {
             let { horse } = req.body;
-            Horse.updateOne({ _id: ObjectId(horse._id) }, {
-                $set: {
-                    result: horse.result
+            Horse.updateOne(
+                { _id: ObjectId(horse._id) },
+                {
+                    $set: {
+                        result: horse.result
+                    }
+                },
+                (err) => {
+                    if (err) {
+                        res.status(400).send("Problem przy zmianie not");
+                    }
+                    else {
+                        res.status(200).send("Noty zmienione");
+                    }
                 }
-            }, (err) => {
-                if (err) {
-                    res.status(400).send("Problem przy zmianie not");
-                }
-                else {
-                    res.status(200).send("Noty zmienione");
-                }
-            });
+            );
         });
 
         router.post("/edit", (req, res) => {
