@@ -10,28 +10,6 @@ const mongoose = require("mongoose");
 
 module.exports = (io) => {
     io.on("connect", (socket) => {
-        socket.on("getclasseswithhorses", () => {
-            Class.find({}, (err, classes) => {
-                let responseclasses = [];
-                classes.forEach((element) => {
-                    let obj = {};
-                    Horse.find({ class: element.number }, (err, horses) => {
-                        obj.class = element;
-                        obj.horses = horses;
-
-                        responseclasses.push(obj);
-                        socket.emit("getclasseswithhorses", responseclasses);
-                    });
-                });
-            });
-        });
-
-        socket.on("getjudges", () => {
-            Judge.find({}, (err, judges) => {
-                socket.emit("getjudges", judges);
-            });
-        });
-
         router.get("/gethorses", (_req, res) => {
             Horse.find({}, (_err, horses) => {
                 let response = [];
@@ -53,6 +31,8 @@ module.exports = (io) => {
                 });
                 if (response.length === horses.length) {
                     res.status(200).json(response);
+                    socket.emit("gethorses", horses);
+                    socket.broadcast.emit("gethorses", horses);
                 }
             });
         });

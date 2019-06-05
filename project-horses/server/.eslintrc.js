@@ -33,7 +33,8 @@ module.exports = {
     "no-use-before-define": "off",
     "no-underscore-dangle":"off",
     "radix":"off",
-    "max-len":"off"
+    "max-len":"off",
+    "no-undef":"off"
   },
   parserOptions: {
     parser: "babel-eslint"

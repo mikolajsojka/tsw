@@ -41,8 +41,8 @@ const io = require("socket.io")(server);
 
 const userRouter = require("./routes/user");
 const horseRouter = require("./routes/horse")(io);
-const judgeRouter = require("./routes/judge");
-const classRouter = require("./routes/class");
+const judgeRouter = require("./routes/judge")(io);
+const classRouter = require("./routes/class")(io);
 
 const mongoose = require("mongoose");
 
