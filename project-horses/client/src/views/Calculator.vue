@@ -4,11 +4,19 @@
             <div class="name">{{actualclass.position+1}}/{{classesamount}}. {{actualclass.category}}</div>
         </div>
 
-        <select name="choosehorse" class="choosehorse size" @change="change">
-            <option v-for="horse in horses" :value="horse._id" :key="horse._id">{{horse.name}}</option>
-        </select>
+        <div class="noteinfo">
+            <div>T</div>
+            <div>G</div>
+            <div>K</div>
+            <div>N</div>
+            <div>M</div>
+            <select name="choosehorse" class="choosehorse size" @change="change">
+                <option v-for="horse in horses" :value="horse._id" :key="horse._id">{{horse.name}}</option>
+            </select>
+        </div>
 
         <div class="notes">
+
             <div class="row" v-for="(note,index) in actualhorse.result.notes" :key="note._id">
                 <input v-bind:id="note._id" @change="change" name="htype" v-model="note.htype">
 
@@ -21,13 +29,7 @@
                 <input v-bind:id="note._id" @change="change" name="move" v-model="note.move">
                 <div class="judge" @click="goJudge(judges[index]._id)">{{judges[index].judge}}</div>
             </div>
-            <div class="noteinfo">
-                <div>T</div>
-                <div>G</div>
-                <div>K</div>
-                <div>N</div>
-                <div>M</div>
-            </div>
+
             <div class="result">{{result}}</div>
         </div>
     </div>
