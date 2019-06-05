@@ -9,6 +9,7 @@ const serveStatic = require("serve-static");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+let socketio = require("socket.io");
 
 app.use(bodyParser.json({ limit: "10mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
@@ -32,8 +33,14 @@ app.use(passport.initialize());
 
 app.use(passport.session());
 
+const server = app.listen(port, () => {
+    console.log(`Express działa na porcie ${port}`);
+});
+
+const io = require("socket.io")(server);
+
 const userRouter = require("./routes/user");
-const horseRouter = require("./routes/horse");
+const horseRouter = require("./routes/horse")(io);
 const judgeRouter = require("./routes/judge");
 const classRouter = require("./routes/class");
 
@@ -61,10 +68,3 @@ app.use("/judge", judgeRouter);
 app.use("/class", classRouter);
 
 app.use(serveStatic("public"));
-
-const server = app.listen(port, () => {
-    console.log(`Express działa na porcie ${port}`);
-});
-
-const io = require("socket.io")(server);
-require("./socket.js")(io);
