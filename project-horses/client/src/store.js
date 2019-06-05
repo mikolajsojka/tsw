@@ -152,7 +152,6 @@ export default new Vuex.Store({
         },
         AFTER_DELETE_CLASS (state, payload) {
             state.horses[payload.indexhorses].class = -1;
-            state.horses[payload.indexhorses].result.notes = [];
         },
         FRESH_NOTES_HORSES (state, payload) {
             state.actualhorses = payload.response;

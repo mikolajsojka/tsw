@@ -27,7 +27,26 @@ document.onreadystatechange = () => {
             document.getElementById(data).remove();
         };
 
+        editClass = (data) => {
+            document.getElementById(data._id).innerHTML = `<div class="element" id="${data._id}">${data.category}</div>`;
+        };
+
         socket.on("connect", () => {
+            socket.on("editclass", (data) => {
+                let index = classes.findIndex(item => item._id === data._id);
+                classes[index] = data;
+                horses.forEach((horse) => {
+                    if (horse.class === data.number) {
+                        horse.result.notes.forEach((note) => {
+                            if (note.htype === null || note.head === null || note.barell === null || note.legs === null || note.move === null) {
+                                classes[index].status = true;
+                            }
+                        });
+                    }
+                });
+                editClass(classes[index]);
+            });
+
             socket.on("addclass", (data) => {
                 data.status = false;
                 classes.push(data);

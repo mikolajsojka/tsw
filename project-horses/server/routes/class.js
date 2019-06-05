@@ -64,6 +64,18 @@ module.exports = (io) => {
                     }
                     else {
                         res.status(200).send("OK");
+                        socket.emit("editclass", {
+                            _id: item._id,
+                            committee: item.committee,
+                            number: item.number,
+                            category: item.category
+                        });
+                        socket.broadcast.emit("editclass", {
+                            _id: item._id,
+                            committee: item.committee,
+                            number: item.number,
+                            category: item.category
+                        });
                     }
                 }
             );
