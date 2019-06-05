@@ -75,11 +75,11 @@ router.post("/add", (req, res) => {
         Class.findOne({ number: item.class }, (err, item2) => {
             item2.committee.forEach((element) => {
                 newnotes.push({
-                    htype: 0,
-                    head: 0,
-                    barrel: 0,
-                    legs: 0,
-                    move: 0
+                    htype: "",
+                    head: "",
+                    barrel: "",
+                    legs: "",
+                    move: ""
                 });
             });
 
@@ -185,11 +185,11 @@ router.post("/addnote", (req, res) => {
         horses.forEach((horse) => {
             let newnotes = horse.result.notes;
             newnotes.push({
-                htype: 0,
-                head: 0,
-                barrel: 0,
-                legs: 0,
-                move: 0
+                htype: "",
+                head: "",
+                barrel: "",
+                legs: "",
+                move: ""
             });
 
             Horse.updateOne(
@@ -266,11 +266,11 @@ router.post("/edit", (req, res) => {
             else {
                 item2.committee.forEach((element) => {
                     newnotes.push({
-                        htype: 0,
-                        head: 0,
-                        barrel: 0,
-                        legs: 0,
-                        move: 0
+                        htype: "",
+                        head: "",
+                        barrel: "",
+                        legs: "",
+                        move: ""
                     });
                 });
             }

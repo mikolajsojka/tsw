@@ -59,7 +59,12 @@
             results () {
                 this.result = 0;
                 this.actualhorse.result.notes.forEach(note => {
-                    this.result += parseInt(note.htype) + parseInt(note.move);
+                    if (note.htype !== null) {
+                        this.result += parseInt(note.htype);
+                    }
+                    if (note.move !== null) {
+                        this.result += parseInt(note.move);
+                    }
                 });
             },
             goJudge (id) {
