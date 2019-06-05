@@ -52,12 +52,12 @@ document.onreadystatechange = () => {
             socket.on("getclasses", (data) => {
                 classes = data;
                 classes.forEach((element, index) => {
-                    classes[index].status = true;
+                    classes[index].status = false;
                     horses.forEach((horse) => {
                         if (horse.class === element.number) {
                             horse.result.notes.forEach((note) => {
                                 if (note.htype === null || note.head === null || note.barell === null || note.legs === null || note.move === null) {
-                                    classes[index].status = false;
+                                    classes[index].status = true;
                                 }
                             });
                         }
