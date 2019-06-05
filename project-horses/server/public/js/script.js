@@ -3,12 +3,11 @@
 
 document.onreadystatechange = () => {
     if (document.readyState === "interactive") {
-        const socket = io.connect("http://localhost:3000");
+        const socket = io.connect("http://localhost:3001");
 
         socket.on("connect", () => {
-            socket.on("after-connect", (text) => {
-                document.getElementById("socket").innerHTML = text;
-            });
+            socket.emit("write", "Witam w świecie socketów");
+            // socket.broadcast("write", "Witam w świecie socketów");
         });
     }
 };
