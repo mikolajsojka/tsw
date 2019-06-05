@@ -279,11 +279,7 @@ export default new Vuex.Store({
             commit("DELETE_CLASS", payload);
 
             axios
-                .post(`http://localhost:3001/class/delete/${payload}`)
-                .then(response => {})
-                .catch(errors => {
-                    alert("Wystąpił problem z usuwaniem klasy");
-                });
+                .post(`http://localhost:3001/class/delete/${payload}`);
         },
         LOGIN ({ commit }, payload) {
             axios

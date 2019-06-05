@@ -112,7 +112,6 @@
                     this.$store.commit("FILL_COUNTER_CLASSES");
                     router.push("/classes");
                 }
-                this.deletecheck = 1;
             },
             deletejudge (id) {
                 if (confirm("Czy na pewno chcesz usunąć?")) {
