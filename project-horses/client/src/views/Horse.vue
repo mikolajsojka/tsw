@@ -110,7 +110,10 @@
                 check: 0,
                 horse: {},
                 classes: [],
-                actualclass: {}
+                actualclass: {
+                    number: "",
+                    category: ""
+                }
             };
         },
         created () {
@@ -123,13 +126,20 @@
                 item => item.number === this.horse.class
             );
 
-            this.actualclass = this.$store.state.classes[index2];
+            try {
+                this.actualclass = this.$store.state.classes[index2];
 
-            this.$store.state.classes.forEach(element => {
-                if (element._id !== this.actualclass._id) {
+                this.$store.state.classes.forEach(element => {
+                    if (element._id !== this.actualclass._id) {
+                        this.classes.push(element);
+                    }
+                });
+            } catch (err) {
+                this.$store.state.classes.forEach(element => {
                     this.classes.push(element);
-                }
-            });
+                });
+                this.actualclass = { number: -1, category: "brak klasy" };
+            }
         },
         methods: {
             change ({ target }) {

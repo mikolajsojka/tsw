@@ -204,7 +204,6 @@
 
                 if (target.name === "classes") {
                     this.horse.class = target.value;
-                    console.log(this.horse);
                 }
             }
         }
