@@ -111,8 +111,7 @@
                 horse: {},
                 classes: [],
                 actualclass: {
-                    number: "",
-                    category: ""
+
                 }
             };
         },
