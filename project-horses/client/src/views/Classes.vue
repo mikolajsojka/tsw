@@ -34,9 +34,7 @@
         created () {
             this.$store.commit("FILL_COUNTER_CLASSES");
             this.limit = this.$store.state.counters.classes.limit;
-            this.classes = this.$store.state.counters.classes.classes.sort(function (a, b) {
-                return a.number - b.number;
-            });
+            this.classes = this.$store.state.counters.classes.classes;
         },
         methods: {
             addclass () {
@@ -53,7 +51,7 @@
                 let allclasses = this.$store.state.classes.sort(function (a, b) {
                     return a.number - b.number;
                 });
-                return Array.from(allclasses).slice(this.counter, this.counter + 8);
+                return allclasses.slice(this.counter, this.counter + 8);
             },
 
             increment () {

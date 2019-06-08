@@ -36,7 +36,7 @@ export default new Vuex.Store({
     mutations: {
         FILL_COUNTER_HORSES: state => {
             state.counters.horses.limit = Math.ceil(state.horses.length / 8) * 8;
-            state.counters.horses.horses = Array.from(state.horses).slice(
+            state.counters.horses.horses = state.horses.slice(
                 state.counters.horses.counter,
                 state.counters.horses.counter + 8
             );
@@ -51,7 +51,7 @@ export default new Vuex.Store({
         },
         FILL_COUNTER_CLASSES: state => {
             state.counters.classes.limit = Math.ceil(state.classes.length / 8) * 8;
-            state.counters.classes.classes = Array.from(state.classes).slice(
+            state.counters.classes.classes = state.classes.slice(
                 state.counters.classes.counter,
                 state.counters.classes.counter + 8
             );
@@ -66,7 +66,7 @@ export default new Vuex.Store({
         },
         FILL_COUNTER_JUDGES: state => {
             state.counters.judges.limit = Math.ceil(state.judges.length / 8) * 8;
-            state.counters.judges.judges = Array.from(state.judges).slice(
+            state.counters.judges.judges = state.judges.slice(
                 state.counters.judges.counter,
                 state.counters.judges.counter + 8
             );
@@ -133,15 +133,21 @@ export default new Vuex.Store({
             state.user = user;
         },
         FETCH_HORSES (state, horses) {
-            state.horses = horses;
+            state.horses = horses.sort(function (a, b) {
+                return a.id - b.id;
+            });
             console.log("Załadowano kolekcję: konie");
         },
         FETCH_JUDGES (state, judges) {
-            state.judges = judges;
+            state.judges = judges.sort(function (a, b) {
+                return a.id - b.id;
+            });
             console.log("Załadowano kolekcję: sędziowie");
         },
         FETCH_CLASSES (state, classes) {
-            state.classes = classes;
+            state.classes = classes.sort(function (a, b) {
+                return a.number - b.number;
+            });
             console.log("Załadowano kolekcję: klasy");
         },
         AFTER_DELETE_JUDGE (state, payload) {

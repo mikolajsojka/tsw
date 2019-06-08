@@ -28,12 +28,15 @@
                 horses: 0
             };
         },
-        created () {
-            this.$store.commit("FILL_COUNTER_HORSES");
-            this.limit = this.$store.state.counters.horses.limit;
+        beforeMount () {
             this.horses = this.$store.state.counters.horses.horses.sort(function (a, b) {
                 return a.id - b.id;
             });
+        },
+        created () {
+            this.$store.commit("FILL_COUNTER_HORSES");
+            this.limit = this.$store.state.counters.horses.limit;
+            this.horses = this.$store.state.counters.horses.horses;
         },
         methods: {
             addhorse () {

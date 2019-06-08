@@ -31,9 +31,7 @@
         created () {
             this.$store.commit("FILL_COUNTER_JUDGES");
             this.limit = this.$store.state.counters.judges.limit;
-            this.judges = this.$store.state.counters.judges.judges.sort(function (a, b) {
-                return a.id - b.id;
-            });
+            this.judges = this.$store.state.counters.judges.judges;
         },
         methods: {
             addjudge () {
