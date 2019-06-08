@@ -6,7 +6,10 @@
                 <div class="info">
                     <div class="first">
                         <label>Nazwa klasy</label>
-                        <input name="name" v-model="item.category" @change="change">
+                        <div class="classname">
+                            <div class="number"> Nr {{item.number}}.</div>
+                            <input name="name" v-model="item.category" @change="change">
+                        </div>
                         <label>Sędziowie</label>
                         <div class="judge-pagination">
                             <div @click="decrement">-</div>
