@@ -32,7 +32,7 @@
 </template>
 
 <script>
-// import router from "../router";
+
     export default {
         name: "AddClass",
         data () {
@@ -56,11 +56,11 @@
         },
         methods: {
             render () {
-                Array.from(this.$store.state.judges).forEach(judge => {
+                this.$store.state.judges.forEach(judge => {
                     this.judgesall.push({ id: judge.id, name: judge.judge });
                 });
                 this.limit = Math.ceil(this.judges.length / 2) * 2;
-                this.judgespagination = Array.from(this.judges).slice(0, 2);
+                this.judgespagination = this.judges.slice(0, 2);
             },
             change ({ target }) {
                 if (target.name === "name") {
@@ -68,7 +68,7 @@
                 }
                 if (target.name === "judges") {
                     this.item.committee.push(parseInt(target.value));
-                    Array.from(this.judgesall).forEach(element => {
+                    this.judgesall.forEach(element => {
                         if (parseInt(target.value) === element.id) {
                             this.judges.push(element);
                         }
@@ -106,7 +106,7 @@
                 });
             },
             renderjudges () {
-                return Array.from(this.judges).slice(this.counter, this.counter + 2);
+                return this.judges.slice(this.counter, this.counter + 2);
             },
             increment () {
                 if (this.counter + 2 < this.limit) {

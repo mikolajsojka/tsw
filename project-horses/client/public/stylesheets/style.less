@@ -19,6 +19,38 @@ body {
   #app {
     height: 100%;
 
+    #routes{
+      display:flex;
+      width:100%;
+
+      .route{
+        cursor:pointer;
+        width:100%/3;
+        color:white;
+        display:flex;
+        justify-content: center;
+        &:nth-child(1){
+          background-color: red;
+        }
+
+        &:nth-child(2){
+          background-color: red;
+        }
+
+        &:nth-child(3){
+          background-color: red;
+        }
+
+        &:hover{
+          color:black;
+          background-color: white;
+          transition-duration: 2s;
+        }
+      }
+
+      
+    }
+
     #user{
       color:white;
       float:right;

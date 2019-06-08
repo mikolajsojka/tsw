@@ -134,15 +134,15 @@ export default new Vuex.Store({
         },
         FETCH_HORSES (state, horses) {
             state.horses = horses;
-            alert("Załadowano kolekcję: konie");
+            console.log("Załadowano kolekcję: konie");
         },
         FETCH_JUDGES (state, judges) {
             state.judges = judges;
-            alert("Załadowano kolekcję: sędziowie");
+            console.log("Załadowano kolekcję: sędziowie");
         },
         FETCH_CLASSES (state, classes) {
             state.classes = classes;
-            alert("Załadowano kolekcję: klasy");
+            console.log("Załadowano kolekcję: klasy");
         },
         AFTER_DELETE_JUDGE (state, payload) {
             state.classes[payload.indexclasses].committee.splice(

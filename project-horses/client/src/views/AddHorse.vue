@@ -20,8 +20,8 @@
                         <input name="sex" v-model="horse.sex" @change="change">
                         <label>Klasa startowa</label>
                         <select name="classes" @change="change">
-                            <option v-for="item in classes" :value="item.number" :key="item._id">{{item.category}}</option>
-                            <option :value="actualclass.id" selected>{{actualclass.name}}</option>
+                            <option v-for="item in classes" :value="item.number" :key="item._id">Nr {{item.number}}. {{item.category}}</option>
+                            <option :value="actualclass.id" selected>Nr {{actualclass.number}}. {{actualclass.name}}</option>
                         </select>
                     </div>
 

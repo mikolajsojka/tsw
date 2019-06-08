@@ -61,11 +61,15 @@ document.onreadystatechange = () => {
             socket.on("gethorses", (data) => {
                 horses = data;
                 console.log(`Konie:${horses}`);
+                document.getElementById("actual").innerHTML = "";
+                document.getElementById("end").innerHTML = "";
             });
 
             socket.on("getjudges", (data) => {
                 judges = data;
                 console.log(data);
+                document.getElementById("actual").innerHTML = "";
+                document.getElementById("end").innerHTML = "";
             });
 
             socket.on("getclasses", (data) => {
@@ -82,6 +86,8 @@ document.onreadystatechange = () => {
                         }
                     });
                 });
+                document.getElementById("actual").innerHTML = "";
+                document.getElementById("end").innerHTML = "";
                 renderClasses();
             });
         });

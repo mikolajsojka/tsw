@@ -11,7 +11,7 @@
             <div>N</div>
             <div>M</div>
             <select name="choosehorse" class="choosehorse size" @change="change">
-                <option v-for="horse in horses" :value="horse._id" :key="horse._id">{{horse.name}}</option>
+                <option v-for="horse in horses" :value="horse._id" :key="horse._id">Nr {{horse.number}}. {{horse.name}}</option>
             </select>
         </div>
 
@@ -79,7 +79,9 @@
                 this.actualclass = this.$store.state.classes[index];
                 this.actualclass.position = index;
 
-                this.horses = this.$store.state.actualhorses;
+                this.horses = this.$store.state.actualhorses.sort(function (a, b) {
+                    return a.number - b.number;
+                });
                 this.actualhorse = this.horses[0];
 
                 this.actualclass.committee.forEach(element => {

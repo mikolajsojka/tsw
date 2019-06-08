@@ -10,7 +10,7 @@
             <ul>
                 <div class="add" @click="addclass">Dodaj klasę</div>
                 <li v-for="item in classes" :key="item._id" >
-                    <div class="calculator" @click="tocalc(item)">{{ item.category }}</div>
+                    <div class="calculator" @click="tocalc(item)">Nr {{item.number}}. {{item.category }}</div>
                     <div class="edit" @click="renderclass(item)">E</div>
                 </li>
             </ul>
@@ -34,7 +34,9 @@
         created () {
             this.$store.commit("FILL_COUNTER_CLASSES");
             this.limit = this.$store.state.counters.classes.limit;
-            this.classes = this.$store.state.counters.classes.classes;
+            this.classes = this.$store.state.counters.classes.classes.sort(function (a, b) {
+                return a.number - b.number;
+            });
         },
         methods: {
             addclass () {
@@ -48,7 +50,9 @@
                 this.$store.dispatch("FRESH_NOTES_HORSES", { number: this.$store.state.classes[index].number, id: item._id });
             },
             renderclasses () {
-                let allclasses = this.$store.state.classes;
+                let allclasses = this.$store.state.classes.sort(function (a, b) {
+                    return a.number - b.number;
+                });
                 return Array.from(allclasses).slice(this.counter, this.counter + 8);
             },
 

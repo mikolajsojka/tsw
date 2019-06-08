@@ -9,7 +9,7 @@
         <div id="collection">
             <ul>
                 <div class="add" @click="addjudge">Dodaj sędziego</div>
-                <li v-for="judge in judges" :key="judge._id" @click="renderjudge(judge)">{{ judge.judge }}</li>
+                <li v-for="judge in judges" :key="judge._id" @click="renderjudge(judge)">Nr {{judge.id}}. {{ judge.judge }}</li>
             </ul>
         </div>
     </div>
@@ -31,7 +31,9 @@
         created () {
             this.$store.commit("FILL_COUNTER_JUDGES");
             this.limit = this.$store.state.counters.judges.limit;
-            this.judges = this.$store.state.counters.judges.judges;
+            this.judges = this.$store.state.counters.judges.judges.sort(function (a, b) {
+                return a.id - b.id;
+            });
         },
         methods: {
             addjudge () {
@@ -41,8 +43,10 @@
                 router.push(`/judge/${judge._id}`);
             },
             renderjudges () {
-                let alljudges = this.$store.state.judges;
-                return Array.from(alljudges).slice(this.counter, this.counter + 8);
+                let alljudges = this.$store.state.judges.sort(function (a, b) {
+                    return a.id - b.id;
+                });
+                return alljudges.slice(this.counter, this.counter + 8);
             },
 
             increment () {
