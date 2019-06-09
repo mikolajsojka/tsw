@@ -10,11 +10,15 @@ const mongoose = require("mongoose");
 
 module.exports = (io) => {
     io.on("connect", (socket) => {
+        socket.on("getclassesinit", () => {
+            Class.find({}, (_err, classes) => {
+                socket.emit("getclasses", classes);
+            });
+        });
+
         router.get("/getclasses", (_req, res) => {
             Class.find({}, (_err, classes) => {
                 res.status(200).json(classes);
-                socket.emit("getclasses", classes);
-                socket.broadcast.emit("getclasses", classes);
             });
         });
 

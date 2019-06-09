@@ -10,6 +10,11 @@ const mongoose = require("mongoose");
 
 module.exports = (io) => {
     io.on("connect", (socket) => {
+        socket.on("gethorsesinit", () => {
+            Horse.find({}, (_err, horses) => {
+                socket.emit("gethorses", horses);
+            });
+        });
         router.get("/gethorses", (_req, res) => {
             Horse.find({}, (_err, horses) => {
                 let response = [];
@@ -31,8 +36,6 @@ module.exports = (io) => {
                 });
                 if (response.length === horses.length) {
                     res.status(200).json(response);
-                    socket.emit("gethorses", horses);
-                    socket.broadcast.emit("gethorses", horses);
                 }
             });
         });

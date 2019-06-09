@@ -10,11 +10,14 @@ const mongoose = require("mongoose");
 
 module.exports = (io) => {
     io.on("connect", (socket) => {
+        socket.on("getjudgesinit", () => {
+            Judge.find({}, (_err, judges) => {
+                socket.emit("getjudges", judges);
+            });
+        });
         router.get("/getjudges", (_req, res) => {
             Judge.find({}, (_err, judges) => {
                 res.status(200).json(judges);
-                socket.emit("getjudges", judges);
-                socket.broadcast.emit("getjudges", judges);
             });
         });
 
