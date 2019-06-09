@@ -43,8 +43,13 @@ module.exports = (io) => {
                     if (err) throw err;
 
                     res.status(200).json(newClass);
-                    socket.emit("addclass", newClass);
-                    socket.broadcast.emit("addclass", newClass);
+
+                    socket.emit("addclass", {
+                        number, _id: newClass._id, category: newClass.category, committee: newClass.committee, status: false
+                    });
+                    socket.broadcast.emit("addclass", {
+                        number, _id: newClass._id, category: newClass.category, committee: newClass.committee, status: false
+                    });
                 });
             });
         });

@@ -25,14 +25,6 @@ document.onreadystatechange = () => {
             }
         };
 
-        addClass = (data) => {
-            document.getElementById(
-                "actual"
-            ).innerHTML += `<div class="element" id="${data._id}">${
-                data.category
-            }</div>`;
-        };
-
         removeClass = (data) => {
             document.getElementById(data).remove();
         };
@@ -45,12 +37,12 @@ document.onreadystatechange = () => {
 
         checkClasses = () => {
             classes.forEach((element, index) => {
+                classes[index].status = false;
                 checkClass(element, index);
             });
         };
 
         checkClass = (element, index) => {
-            classes[index].status = false;
             horses.forEach((horse) => {
                 if (horse.class === element.number) {
                     horse.result.notes.forEach((note) => {
@@ -74,9 +66,10 @@ document.onreadystatechange = () => {
             await socket.emit("getclassesinit");
 
             socket.on("addclass", (data) => {
-                data.status = false;
                 classes.push(data);
-                addClass(data);
+
+                let index = classes.findIndex(item => item._id === data);
+                checkClass(data, index);
             });
 
             socket.on("deleteClass", (data) => {
