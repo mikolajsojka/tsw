@@ -177,6 +177,9 @@ module.exports = (io) => {
                             if (err) {
                                 res.status(400).send("Błąd przy usuwaniu not");
                             }
+                            else {
+                                socket.emit("edithorse", horse);
+                            }
                         }
                     );
                 });
@@ -210,6 +213,9 @@ module.exports = (io) => {
                         (err) => {
                             if (err) {
                                 res.status(400).send("Błąd przy dodawaniu not");
+                            }
+                            else {
+                                socket.emit("edithorse", horse);
                             }
                         }
                     );

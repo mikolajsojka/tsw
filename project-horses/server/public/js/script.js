@@ -8,23 +8,21 @@ document.onreadystatechange = () => {
             judges,
             classes;
 
-        renderClasses = () => {
-            classes.forEach((element) => {
-                if (element.status) {
-                    document.getElementById(
-                        "actual"
-                    ).innerHTML += `<div class="element" id="${element._id}">${
-                        element.category
-                    }</div>`;
-                }
-                else {
-                    document.getElementById(
-                        "end"
-                    ).innerHTML += `<div class="element" id="${element._id}">${
-                        element.category
-                    }</div>`;
-                }
-            });
+        renderClass = (data) => {
+            if (data.status) {
+                document.getElementById(
+                    "actual"
+                ).innerHTML += `<div class="element" id="${data._id}">${
+                    data.category
+                }</div>`;
+            }
+            else {
+                document.getElementById(
+                    "end"
+                ).innerHTML += `<div class="element" id="${data._id}">${
+                    data.category
+                }</div>`;
+            }
         };
 
         addClass = (data) => {
@@ -45,29 +43,35 @@ document.onreadystatechange = () => {
             }">${data.category}</div>`;
         };
 
+        checkClasses = () => {
+            classes.forEach((element, index) => {
+                checkClass(element, index);
+            });
+        };
+
+        checkClass = (element, index) => {
+            classes[index].status = false;
+            horses.forEach((horse) => {
+                if (horse.class === element.number) {
+                    horse.result.notes.forEach((note) => {
+                        if (
+                            note.htype === null
+          || note.head === null
+          || note.barell === null
+          || note.legs === null
+          || note.move === null
+                        ) {
+                            classes[index].status = true;
+                        }
+                    });
+                }
+            });
+
+            renderClass(element);
+        };
+
         socket.on("connect", async () => {
             await socket.emit("getclassesinit");
-
-            socket.on("editclass", (data) => {
-                let index = classes.findIndex(item => item._id === data._id);
-                classes[index] = data;
-                horses.forEach((horse) => {
-                    if (horse.class === data.number) {
-                        horse.result.notes.forEach((note) => {
-                            if (
-                                note.htype === null
-                || note.head === null
-                || note.barell === null
-                || note.legs === null
-                || note.move === null
-                            ) {
-                                classes[index].status = true;
-                            }
-                        });
-                    }
-                });
-                editClass(classes[index]);
-            });
 
             socket.on("addclass", (data) => {
                 data.status = false;
@@ -82,42 +86,22 @@ document.onreadystatechange = () => {
             });
             socket.on("gethorses", (data) => {
                 horses = data;
-
-                document.getElementById("actual").innerHTML = "";
-                document.getElementById("end").innerHTML = "";
             });
 
             socket.on("getjudges", (data) => {
                 judges = data;
 
-                classes.forEach((element, index) => {
-                    classes[index].status = false;
-                    horses.forEach((horse) => {
-                        if (horse.class === element.number) {
-                            horse.result.notes.forEach((note) => {
-                                if (
-                                    note.htype === null
-                  || note.head === null
-                  || note.barell === null
-                  || note.legs === null
-                  || note.move === null
-                                ) {
-                                    classes[index].status = true;
-                                }
-                            });
-                        }
-                    });
-                });
                 document.getElementById("actual").innerHTML = "";
                 document.getElementById("end").innerHTML = "";
-                renderClasses();
+
+                checkClasses();
             });
 
             socket.on("getclasses", async (data) => {
                 classes = data;
 
                 await socket.emit("gethorsesinit");
-                await socket.emit("getjudgesinit");
+                socket.emit("getjudgesinit");
             });
         });
     }
