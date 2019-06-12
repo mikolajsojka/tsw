@@ -10,6 +10,7 @@ document.onreadystatechange = () => {
 
         onClick = (data) => {
             document.getElementById(data._id).addEventListener("click", () => {
+                console.log("jetsem");
                 let classhorses = horses.map((horse) => {
                     if (horse.class === data.number) {
                         return horse;
@@ -22,6 +23,7 @@ document.onreadystatechange = () => {
                 alert(`${JSON.stringify(classhorses)}`);
             });
         };
+
 
         renderClass = (data) => {
             if (data.status) {
@@ -37,9 +39,9 @@ document.onreadystatechange = () => {
                 ).innerHTML += `<div class="element" id="${data._id}">${
                     data.category
                 }</div>`;
-            }
 
-            onClick(data);
+                onClick(data);
+            }
         };
 
         removeClass = (data) => {
@@ -50,8 +52,6 @@ document.onreadystatechange = () => {
             document.getElementById(data._id).innerHTML = `<div class="element" id="${
                 data._id
             }">${data.category}</div>`;
-
-            onClick(data);
         };
 
         checkClasses = () => {
@@ -98,6 +98,7 @@ document.onreadystatechange = () => {
             });
             socket.on("gethorses", (data) => {
                 horses = data;
+                console.log("Załadowano kolekcję: konie");
             });
 
             socket.on("editclass", (data) => {
@@ -111,13 +112,17 @@ document.onreadystatechange = () => {
                 document.getElementById("end").innerHTML = "";
 
                 checkClasses();
+
+                console.log("Załadowano kolekcję: sędziowie");
             });
 
-            socket.on("getclasses", async (data) => {
+            socket.on("getclasses", (data) => {
                 classes = data;
 
-                await socket.emit("gethorsesinit");
+                socket.emit("gethorsesinit");
                 socket.emit("getjudgesinit");
+
+                console.log("Załadowano kolekcję: klasy");
             });
         });
     }

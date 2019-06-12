@@ -42,7 +42,6 @@ module.exports = (io) => {
 
         router.post("/add", (req, res) => {
             let { item } = req.body;
-            console.log(item);
 
             let id = 0;
 
@@ -112,6 +111,7 @@ module.exports = (io) => {
                         if (err) throw err;
                     });
 
+
                     res.status(200).json({
                         _id: newHorse._id,
                         id: newHorse.id,
@@ -126,6 +126,8 @@ module.exports = (io) => {
                         owner: newHorse.owner,
                         bloodline: newHorse.bloodline
                     });
+
+                    socket.emit("addhorse", newHorse);
                 });
             });
         });
