@@ -34,7 +34,8 @@ module.exports = {
     "no-underscore-dangle":"off",
     "radix":"off",
     "max-len":"off",
-    "no-undef":"off"
+    "no-undef":"off",
+    "no-alert":"off"
   },
   parserOptions: {
     parser: "babel-eslint"

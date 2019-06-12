@@ -8,6 +8,21 @@ document.onreadystatechange = () => {
             judges,
             classes;
 
+        onClick = (data) => {
+            document.getElementById(data._id).addEventListener("click", () => {
+                let classhorses = horses.map((horse) => {
+                    if (horse.class === data.number) {
+                        return horse;
+                    }
+                    return 0;
+                });
+
+                classhorses = classhorses.filter(el => el !== 0);
+
+                alert(`${JSON.stringify(classhorses)}`);
+            });
+        };
+
         renderClass = (data) => {
             if (data.status) {
                 document.getElementById(
@@ -23,6 +38,8 @@ document.onreadystatechange = () => {
                     data.category
                 }</div>`;
             }
+
+            onClick(data);
         };
 
         removeClass = (data) => {
@@ -33,12 +50,15 @@ document.onreadystatechange = () => {
             document.getElementById(data._id).innerHTML = `<div class="element" id="${
                 data._id
             }">${data.category}</div>`;
+
+            onClick(data);
         };
 
         checkClasses = () => {
             classes.forEach((element, index) => {
                 classes[index].status = false;
                 checkClass(element, index);
+                renderClass(element);
             });
         };
 
@@ -58,18 +78,17 @@ document.onreadystatechange = () => {
                     });
                 }
             });
-
-            renderClass(element);
         };
 
-        socket.on("connect", async () => {
-            await socket.emit("getclassesinit");
+        socket.on("connect", () => {
+            socket.emit("getclassesinit");
 
             socket.on("addclass", (data) => {
                 classes.push(data);
 
                 let index = classes.findIndex(item => item._id === data);
                 checkClass(data, index);
+                renderClass(data, index);
             });
 
             socket.on("deleteClass", (data) => {
@@ -79,6 +98,10 @@ document.onreadystatechange = () => {
             });
             socket.on("gethorses", (data) => {
                 horses = data;
+            });
+
+            socket.on("editclass", (data) => {
+                editClass(data);
             });
 
             socket.on("getjudges", (data) => {
