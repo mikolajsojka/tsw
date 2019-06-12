@@ -179,14 +179,15 @@ document.onreadystatechange = () => {
             socket.on("addclass", (data) => {
                 classes.push(data);
 
-                let index = classes.findIndex(item => item._id === data);
-                checkClass(data, index);
-                if (element.status) {
-                    renderClassTrue(element);
+                let index = classes.findIndex(item => item._id === data._id);
+                checkClass(classes[index], index);
+                if (classes[index].status) {
+                    renderClassTrue(classes[index]);
                 }
                 else {
-                    renderClassFalse(element);
+                    renderClassFalse(classes[index]);
                 }
+                clickEvents();
             });
 
             socket.on("deleteClass", (data) => {
