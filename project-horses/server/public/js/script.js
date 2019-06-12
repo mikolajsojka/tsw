@@ -113,6 +113,7 @@ document.onreadystatechange = () => {
                     else {
                         renderClassTrue(classes[index1]);
                     }
+                    clickEvents();
                 }
             });
 
@@ -128,23 +129,29 @@ document.onreadystatechange = () => {
                 if (actualclass !== data.class) {
                     let index1 = classes.findIndex(item => item.number === actualclass);
                     let index2 = classes.findIndex(item => item.number === data.class);
+                    let oldstatus = classes[index2].status;
+                    let oldstatus1 = classes[index1].status;
                     checkClass(classes[index1], index1);
-                    document.getElementById(classes[index1]._id).remove();
                     checkClass(classes[index2], index2);
-                    document.getElementById(classes[index2]._id).remove();
 
-                    if (!classes[index2].status) {
-                        renderClassFalse(classes[index2]);
-                    }
-                    else {
-                        renderClassTrue(classes[index2]);
+                    if (oldstatus !== classes[index2].status) {
+                        document.getElementById(classes[index2]._id).remove();
+                        if (!classes[index2].status) {
+                            renderClassFalse(classes[index2]);
+                        }
+                        else {
+                            renderClassTrue(classes[index2]);
+                        }
                     }
 
-                    if (!classes[index1].status) {
-                        renderClassFalse(classes[index1]);
-                    }
-                    else {
-                        renderClassTrue(classes[index1]);
+                    if (oldstatus1 !== classes[index1].status) {
+                        document.getElementById(classes[index1]._id).remove();
+                        if (!classes[index1].status) {
+                            renderClassFalse(classes[index1]);
+                        }
+                        else {
+                            renderClassTrue(classes[index1]);
+                        }
                     }
 
                     clickEvents();
