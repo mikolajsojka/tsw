@@ -32,19 +32,7 @@ document.onreadystatechange = () => {
             }">${data.category}</div>`;
         };
 
-        checkClasses = () => {
-            classes.forEach((element, index) => {
-                classes[index].status = false;
-                checkClass(element, index);
-
-                if (element.status) {
-                    renderClassTrue(element);
-                }
-                else {
-                    renderClassFalse(element);
-                }
-            });
-
+        clickEvents = () => {
             let classeshtml = document.getElementsByClassName("element");
 
             Array.from(classeshtml).forEach((elem) => {
@@ -69,6 +57,22 @@ document.onreadystatechange = () => {
                     alert(`${JSON.stringify(information)}`);
                 });
             });
+        };
+
+        checkClasses = () => {
+            classes.forEach((element, index) => {
+                classes[index].status = false;
+                checkClass(element, index);
+
+                if (element.status) {
+                    renderClassTrue(element);
+                }
+                else {
+                    renderClassFalse(element);
+                }
+            });
+
+            clickEvents();
         };
 
         checkClass = (element, index) => {
@@ -123,6 +127,8 @@ document.onreadystatechange = () => {
                     else {
                         renderClassTrue(classes[index1]);
                     }
+
+                    clickEvents();
                 }
 
                 console.log("edytowanie konia");
@@ -138,6 +144,8 @@ document.onreadystatechange = () => {
                 if (!classes[index1].status) {
                     document.getElementById(classes[index1]._id).remove();
                     renderClassFalse(classes[index1]);
+
+                    clickEvents();
                 }
                 console.log("usuwanie konia");
             });
