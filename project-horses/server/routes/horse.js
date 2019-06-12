@@ -109,25 +109,26 @@ module.exports = (io) => {
 
                     Horse.createHorse(newHorse, (err, _horse) => {
                         if (err) throw err;
+                        else {
+                            res.status(200).json({
+                                _id: newHorse._id,
+                                id: newHorse.id,
+                                number: newHorse.number,
+                                class: newHorse.class,
+                                name: newHorse.name,
+                                country: newHorse.country,
+                                yob: newHorse.yob,
+                                hair: newHorse.hair,
+                                sex: newHorse.sex,
+                                breeder: newHorse.breeder,
+                                owner: newHorse.owner,
+                                bloodline: newHorse.bloodline
+                            });
+
+                            socket.emit("addhorse", newHorse);
+                            socket.broadcast.emit("addhorse", newHorse);
+                        }
                     });
-
-
-                    res.status(200).json({
-                        _id: newHorse._id,
-                        id: newHorse.id,
-                        number: newHorse.number,
-                        class: newHorse.class,
-                        name: newHorse.name,
-                        country: newHorse.country,
-                        yob: newHorse.yob,
-                        hair: newHorse.hair,
-                        sex: newHorse.sex,
-                        breeder: newHorse.breeder,
-                        owner: newHorse.owner,
-                        bloodline: newHorse.bloodline
-                    });
-
-                    socket.emit("addhorse", newHorse);
                 });
             });
         });
@@ -331,6 +332,9 @@ module.exports = (io) => {
                                         owner: horse1.owner,
                                         bloodline: horse1.bloodline
                                     });
+
+                                    socket.emit("edithorse", horse1);
+                                    socket.broadcast.emit("edithorse", horse1);
                                 });
                             }
                         }
@@ -348,6 +352,8 @@ module.exports = (io) => {
                 }
                 else {
                     res.status(200).send("OK");
+                    socket.emit("deletehorse", id);
+                    socket.broadcast.emit("deletehorse", id);
                 }
             });
         });
