@@ -97,6 +97,25 @@ document.onreadystatechange = () => {
         socket.on("connect", () => {
             socket.emit("getclassesinit");
 
+            socket.on("editnotes", (data) => {
+                let index = horses.findIndex(item => item._id === data._id);
+                let index1 = classes.findIndex(item => item.number === data.class);
+                horses[index] = data;
+                let oldstatus = classes[index1].status;
+                checkClass(classes[index1], index1);
+
+                if (oldstatus !== classes[index1].status) {
+                    document.getElementById(classes[index1]._id).remove();
+
+                    if (!classes[index1].status) {
+                        renderClassFalse(classes[index1]);
+                    }
+                    else {
+                        renderClassTrue(classes[index1]);
+                    }
+                }
+            });
+
             socket.on("addhorse", (data) => {
                 horses.push(data);
             });

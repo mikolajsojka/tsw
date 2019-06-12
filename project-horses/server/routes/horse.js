@@ -243,6 +243,13 @@ module.exports = (io) => {
                     }
                     else {
                         res.status(200).send("Noty zmienione");
+
+                        Horse.findOne({ _id: ObjectId(horse._id) }, (err, horse) => {
+                            if (horse) {
+                                socket.emit("editnotes", horse);
+                                socket.broadcast.emit("editnotes", horse);
+                            }
+                        });
                     }
                 }
             );
