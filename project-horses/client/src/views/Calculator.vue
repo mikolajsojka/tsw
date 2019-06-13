@@ -1,9 +1,10 @@
 <template>
     <div id="calculator">
+
         <div class="category">
             <div class="name">{{actualclass.position+1}}/{{classesamount}}. {{actualclass.category}}</div>
         </div>
-
+        <Podium v-if="renderComponent" :parenthorses="horses"/>
         <div class="noteinfo">
             <div>T</div>
             <div>G</div>
@@ -37,6 +38,7 @@
 
 <script>
     import router from "../router";
+    import Podium from "../components/Podium";
     export default {
         name: "Calculator",
         data () {
@@ -46,8 +48,15 @@
                 classesamount: 0,
                 horses: [],
                 judges: [],
-                result: 0
+                result: 0,
+                renderComponent: true
             };
+        },
+        updated () {
+            console.log("Test");
+        },
+        components: {
+            Podium
         },
         created () {
             if (this.$store.state.actualhorses.length !== 0) {
@@ -79,10 +88,9 @@
                 this.actualclass = this.$store.state.classes[index];
                 this.actualclass.position = index;
 
-                this.horses = this.$store.state.actualhorses.sort(function (a, b) {
-                    return a.number - b.number;
-                });
+                this.horses = this.$store.state.actualhorses;
                 this.actualhorse = this.horses[0];
+                console.log(this.horses);
 
                 this.actualclass.committee.forEach(element => {
                     let index = this.$store.state.judges.findIndex(
@@ -135,6 +143,12 @@
 
                 this.results();
                 this.$store.dispatch("EDIT_HORSE_NOTES", this.actualhorse);
+
+                this.renderComponent = false;
+
+                this.$nextTick(() => {
+                    this.renderComponent = true;
+                });
             }
         }
     };
