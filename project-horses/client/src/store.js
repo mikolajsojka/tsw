@@ -163,6 +163,7 @@ export default new Vuex.Store({
             state.actualhorses = payload.response.sort(function (a, b) {
                 return a.number - b.number;
             });
+
             router.push(`/calculator/${payload.id}`);
         },
         EDIT_HORSE_NOTES (state, payload) {

@@ -4,7 +4,7 @@
         <div class="category">
             <div class="name">{{actualclass.position+1}}/{{classesamount}}. {{actualclass.category}}</div>
         </div>
-        <Podium v-if="renderComponent" :parenthorses="horses"/>
+        <Podium v-if="renderComponent"/>
         <div class="noteinfo">
             <div>T</div>
             <div>G</div>
@@ -52,9 +52,6 @@
                 renderComponent: true
             };
         },
-        updated () {
-            console.log("Test");
-        },
         components: {
             Podium
         },
@@ -62,6 +59,7 @@
             if (this.$store.state.actualhorses.length !== 0) {
                 this.fill();
                 this.results();
+                console.log(this.horses);
             }
         },
         methods: {
@@ -90,7 +88,6 @@
 
                 this.horses = this.$store.state.actualhorses;
                 this.actualhorse = this.horses[0];
-                console.log(this.horses);
 
                 this.actualclass.committee.forEach(element => {
                     let index = this.$store.state.judges.findIndex(

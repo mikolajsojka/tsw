@@ -8,6 +8,7 @@ module.exports = {
     "vue/no-side-effects-in-computed-properties":"off",
     "no-console": process.env.NODE_ENV === "production" ? "error" : "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
+    "no-unused-expressions":"off",
     indent: ["error", 4],
     semi: ["error", "always"],
     quotes: ["error", "double"]

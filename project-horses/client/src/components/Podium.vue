@@ -1,21 +1,18 @@
 <template>
     <div class="podium">
         <div v-for="(horse,index) in podium" :key="horse._id">Miejsce {{++index}}. {{horse.name}}</div>
+
     </div>
+
 </template>
 
 <script>
     export default {
         name: "Podium",
-        props: ["parenthorses"],
-        data () {
-            return {
-                horses: this.$props.parenthorses
-            };
-        },
+
         computed: {
             podium: function () {
-                return this.horses.sort(function (a, b) {
+                return this.$store.state.actualhorses.sort(function (a, b) {
                     let aresult = 0;
                     let bresult = 0;
 
