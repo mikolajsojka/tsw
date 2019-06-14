@@ -4,15 +4,24 @@
   align-items: center;
   margin-top: 30px;
   flex-direction: column;
+  flex: 1;
 
-  .podium{
-    flex:1;
-    overflow:auto;
-    border:1px solid black;
-    height:100px;
-    width:400px;
-    margin-bottom:10px;
-  
+  .podium {
+    overflow: auto;
+
+    border: 1px solid black;
+    height: 100px;
+    width: 390px;
+    margin-bottom: 10px;
+    padding: 5px 5px 0 5px;
+    cursor:pointer;
+
+    div {
+      background-color: black;
+      color: white;
+      margin-bottom: 5px;
+      padding: 5px;
+    }
   }
 
   .category {
@@ -34,28 +43,26 @@
     }
   }
 
-  
+  .noteinfo {
+    margin: 0;
+    display: flex;
+    height: auto;
+    width: 400px;
+    height: 40px;
 
-  .noteinfo{
-    margin:0;
-    display:flex;
-    height:auto;
-    width:400px;
-    height:40px;
-    
     .choosehorse {
-      width:50%;
+      width: 50%;
     }
 
-    div{
-      width:10%;
+    div {
+      width: 10%;
       padding: 0 5px;
-      border:2px solid black;
+      border: 2px solid black;
 
       background-color: rgb(153, 146, 146);
-      display:flex;
+      display: flex;
       justify-content: center;
-      align-items:center;
+      align-items: center;
     }
   }
 
@@ -63,9 +70,8 @@
     width: 400px;
     height: 40px;
 
-    
     .result {
-      cursor:pointer;
+      cursor: pointer;
       width: 100%;
       background-color: rgb(212, 211, 211);
       height: 40px;
@@ -107,9 +113,8 @@
 
 @media (max-width: 400px) {
   #calculator {
-
-    .podium{
-      width:100%;
+    .podium {
+      width: 100%;
     }
 
     .category {
@@ -126,8 +131,8 @@
       width: 100%;
     }
 
-    .noteinfo{
-      width:100%;
+    .noteinfo {
+      width: 100%;
     }
 
     .notes {
