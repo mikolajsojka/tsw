@@ -12,7 +12,7 @@
 
         computed: {
             podium: function () {
-                return this.$store.state.actualhorses.sort(function (a, b) {
+                return Array.prototype.slice.call(this.$store.state.actualhorses).sort(function (a, b) {
                     let aresult = 0;
                     let bresult = 0;
 
