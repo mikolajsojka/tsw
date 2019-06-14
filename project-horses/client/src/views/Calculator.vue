@@ -38,7 +38,7 @@
 
 <script>
     import router from "../router";
-    import Podium from "../components/Podium";
+    import Podium from "../components/Calculator/Podium";
     export default {
         name: "Calculator",
         data () {
