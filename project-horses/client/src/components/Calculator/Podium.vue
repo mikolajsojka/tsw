@@ -48,7 +48,7 @@
                     if (aresult === bresult) {
                         if (ahtype === bhtype) {
                             if (amresult === bmresult) {
-                                return null;
+                                return a.result.arbitrator - b.result.arbitrator;
                             } else {
                                 return bmresult - amresult;
                             }

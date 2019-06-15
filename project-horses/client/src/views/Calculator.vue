@@ -32,7 +32,9 @@
                 <input v-bind:id="note._id" @change="change" name="move" v-model="note.move">
                 <div class="judge" @click="goJudge(judges[index]._id)">{{judges[index].judge}}</div>
             </div>
-            <div class="arbitrator" v-if="checkarbitrator">Rozjemca</div>
+            <div class="arbitrator" v-if="checkarbitrator">
+                <input name="arbitrator" @change="change" v-model="actualhorse.result.arbitrator">
+                <div>Rozjemca</div></div>
             <div class="result">{{result}}</div>
         </div>
     </div>
@@ -147,9 +149,10 @@
                     this.actualhorse = this.horses[index];
                     this.checkarbitrator = false;
                     this.checkArbitrator();
+                }
 
-                    console.log("test");
-                    // zrobić sortowanie - szukanie rozjemcy, update baza
+                if (target.name === "arbitrator") {
+                    this.actualhorse.result.arbitrator = target.value;
                 }
 
                 if (target.name === "barrel") {
