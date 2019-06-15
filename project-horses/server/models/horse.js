@@ -49,6 +49,7 @@ const HorseSchema = mongoose.Schema({
         }
     },
     result: {
+        arbitrator: Number,
         notes: [
             {
                 htype: Number,

@@ -103,6 +103,7 @@ module.exports = (io) => {
                         owner,
                         bloodline,
                         result: {
+                            arbitrator: 0,
                             notes: newnotes
                         }
                     });
@@ -234,7 +235,10 @@ module.exports = (io) => {
                 { _id: ObjectId(horse._id) },
                 {
                     $set: {
-                        result: horse.result
+                        result: {
+                            arbitrator: horse.result.arbitrator,
+                            notes: horse.result.notes
+                        }
                     }
                 },
                 (err) => {
@@ -285,11 +289,14 @@ module.exports = (io) => {
 
             Class.findOne({ number: item.class }, (err, item2) => {
                 Horse.findOne({ _id: ObjectId(item._id) }, (err, horse) => {
+                    let arbitrator;
                     if (horse.class === item.class) {
                         newnotes = horse.result.notes;
+                        arbitrator = horse.result.arbitrator;
                     }
                     else {
-                        item2.committee.forEach((element) => {
+                        item2.committee.forEach(() => {
+                            arbitrator = 0;
                             newnotes.push({
                                 htype: "",
                                 head: "",
@@ -315,6 +322,7 @@ module.exports = (io) => {
                                 owner,
                                 bloodline,
                                 result: {
+                                    arbitrator,
                                     notes: newnotes
                                 }
                             }
@@ -428,6 +436,7 @@ module.exports = (io) => {
                                     }
                                 },
                                 result: {
+                                    arbitrator: 0,
                                     notes
                                 }
                             });

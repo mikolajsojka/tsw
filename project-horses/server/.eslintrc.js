@@ -35,7 +35,8 @@ module.exports = {
     "radix":"off",
     "max-len":"off",
     "no-undef":"off",
-    "no-alert":"off"
+    "no-alert":"off",
+    "prefer-destructuring":"off"
   },
   parserOptions: {
     parser: "babel-eslint"
