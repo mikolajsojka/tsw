@@ -302,6 +302,7 @@ module.exports = (io) => {
                         }
                         savenotes.push({ class: horse.class, result: horse.result });
 
+
                         item2.committee.forEach(() => {
                             arbitrator = 0;
                             newnotes.push({
@@ -317,6 +318,19 @@ module.exports = (io) => {
 
                         if (index !== -1) {
                             newnotes = savenotes[index].result.notes;
+                        }
+
+                        let length = savenotes.length;
+
+                        while (item2.committee > length) {
+                            newnotes.push({
+                                htype: "",
+                                head: "",
+                                barrel: "",
+                                legs: "",
+                                move: ""
+                            });
+                            length += 1;
                         }
                     }
 

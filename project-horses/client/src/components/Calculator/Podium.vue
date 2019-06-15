@@ -1,8 +1,9 @@
 <template>
-    <div class="podium">
-        <div v-for="(horse,index) in podium" :key="horse._id" >Miejsce {{++index}}. {{horse.name}}</div>
+    <div>
+        <div class="podium">
+            <div v-for="(horse,index) in podium()" :key="horse._id" >Miejsce {{++index}}. {{horse.name}}</div>
+        </div>
     </div>
-
 </template>
 
 <script>
@@ -10,9 +11,10 @@
     export default {
         name: "Podium",
 
-        computed: {
-            podium: function () {
-                return Array.prototype.slice.call(this.$store.state.actualhorses).sort(function (a, b) {
+        methods: {
+
+            podium () {
+                let sorted = Array.prototype.slice.call(this.$store.state.actualhorses).sort(function (a, b) {
                     let aresult = 0;
                     let bresult = 0;
 
@@ -46,7 +48,7 @@
                     if (aresult === bresult) {
                         if (ahtype === bhtype) {
                             if (amresult === bmresult) {
-                                // rozjemca
+                                return null;
                             } else {
                                 return bmresult - amresult;
                             }
@@ -57,6 +59,8 @@
                         return bresult - aresult;
                     }
                 });
+
+                return sorted;
             }
         }
     };

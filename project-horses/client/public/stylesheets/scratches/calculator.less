@@ -6,22 +6,26 @@
   flex-direction: column;
   flex: 1;
 
-  .podium {
-    overflow: auto;
+  div {
+    .podium {
+      overflow: auto;
 
-    border: 1px solid black;
-    height: 100px;
-    width: 390px;
-    margin-bottom: 10px;
-    padding: 5px 5px 0 5px;
-    cursor:pointer;
+      border: 1px solid black;
+      height: 100px;
+      width: 390px;
+      margin-bottom: 10px;
+      padding: 5px 5px 0 5px;
+      cursor: pointer;
 
-    div {
-      background-color: black;
-      color: white;
-      margin-bottom: 5px;
-      padding: 5px;
+      div {
+        background-color: black;
+        color: white;
+        margin-bottom: 5px;
+        padding: 5px;
+      }
     }
+
+    
   }
 
   .category {
@@ -69,6 +73,14 @@
   .notes {
     width: 400px;
     height: 40px;
+
+    .arbitrator{
+      width:390px;
+      padding: 5px 5px 0 5px;
+      height:40px;
+      background-color:rgb(235, 15, 15);
+      color:white;
+    }
 
     .result {
       cursor: pointer;

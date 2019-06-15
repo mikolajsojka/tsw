@@ -30,7 +30,7 @@
                 <input v-bind:id="note._id" @change="change" name="move" v-model="note.move">
                 <div class="judge" @click="goJudge(judges[index]._id)">{{judges[index].judge}}</div>
             </div>
-
+            <div class="arbitrator">Rozjemca</div>
             <div class="result">{{result}}</div>
         </div>
     </div>
@@ -59,7 +59,6 @@
             if (this.$store.state.actualhorses.length !== 0) {
                 this.fill();
                 this.results();
-                console.log(this.horses);
             }
         },
         methods: {
@@ -101,6 +100,9 @@
                 if (target.name === "choosehorse") {
                     let index = this.horses.findIndex(item => item._id === target.value);
                     this.actualhorse = this.horses[index];
+
+                    console.log("test");
+                    // zrobić sortowanie - szukanie rozjemcy, update baza
                 }
 
                 if (target.name === "barrel") {
