@@ -59,7 +59,24 @@ const HorseSchema = mongoose.Schema({
                 move: Number
             }
         ]
-    }
+    },
+    resulthistory: [
+        {
+            class: Number,
+            result: {
+                arbitrator: Number,
+                notes: [
+                    {
+                        htype: Number,
+                        head: Number,
+                        barrel: Number,
+                        legs: Number,
+                        move: Number
+                    }
+                ]
+            }
+        }
+    ]
 });
 
 const Horse = (module.exports = mongoose.model("Horse", HorseSchema));

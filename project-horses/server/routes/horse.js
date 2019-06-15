@@ -290,11 +290,18 @@ module.exports = (io) => {
             Class.findOne({ number: item.class }, (err, item2) => {
                 Horse.findOne({ _id: ObjectId(item._id) }, (err, horse) => {
                     let arbitrator;
+                    let savenotes = horse.resulthistory;
                     if (horse.class === item.class) {
                         newnotes = horse.result.notes;
                         arbitrator = horse.result.arbitrator;
                     }
                     else {
+                        let index = savenotes.findIndex(history => parseInt(history.class) === parseInt(horse.class));
+                        if (index > -1) {
+                            savenotes.splice(index, 1);
+                        }
+                        savenotes.push({ class: horse.class, result: horse.result });
+
                         item2.committee.forEach(() => {
                             arbitrator = 0;
                             newnotes.push({
@@ -305,6 +312,12 @@ module.exports = (io) => {
                                 move: ""
                             });
                         });
+
+                        index = savenotes.findIndex(history => parseInt(history.class) === parseInt(item.class));
+
+                        if (index !== -1) {
+                            newnotes = savenotes[index].result.notes;
+                        }
                     }
 
                     Horse.updateOne(
@@ -324,7 +337,8 @@ module.exports = (io) => {
                                 result: {
                                     arbitrator,
                                     notes: newnotes
-                                }
+                                },
+                                resulthistory: savenotes
                             }
                         },
                         (err) => {
