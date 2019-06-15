@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="podium">
-            <div v-for="(horse,index) in podium()" :key="horse._id" >Miejsce {{++index}}. {{horse.name}}</div>
+            <div v-for="(horse,index) in podium()" :id="horse._id" :key="horse._id" >Miejsce {{++index}}. {{horse.name}}</div>
         </div>
     </div>
 </template>

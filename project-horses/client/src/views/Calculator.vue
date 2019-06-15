@@ -1,6 +1,5 @@
 <template>
     <div id="calculator">
-
         <div class="category">
             <div class="name">{{actualclass.position+1}}/{{classesamount}}. {{actualclass.category}}</div>
         </div>
@@ -12,12 +11,15 @@
             <div>N</div>
             <div>M</div>
             <select name="choosehorse" class="choosehorse size" @change="change">
-                <option v-for="horse in horses" :value="horse._id" :key="horse._id">Nr {{horse.number}}. {{horse.name}}</option>
+                <option
+                    v-for="horse in horses"
+                    :value="horse._id"
+                    :key="horse._id"
+                >Nr {{horse.number}}. {{horse.name}}</option>
             </select>
         </div>
 
         <div class="notes">
-
             <div class="row" v-for="(note,index) in actualhorse.result.notes" :key="note._id">
                 <input v-bind:id="note._id" @change="change" name="htype" v-model="note.htype">
 
@@ -30,7 +32,7 @@
                 <input v-bind:id="note._id" @change="change" name="move" v-model="note.move">
                 <div class="judge" @click="goJudge(judges[index]._id)">{{judges[index].judge}}</div>
             </div>
-            <div class="arbitrator">Rozjemca</div>
+            <div class="arbitrator" v-if="checkarbitrator">Rozjemca</div>
             <div class="result">{{result}}</div>
         </div>
     </div>
@@ -49,6 +51,7 @@
                 horses: [],
                 judges: [],
                 result: 0,
+                checkarbitrator: false,
                 renderComponent: true
             };
         },
@@ -59,9 +62,51 @@
             if (this.$store.state.actualhorses.length !== 0) {
                 this.fill();
                 this.results();
+                this.checkArbitrator();
             }
         },
         methods: {
+            checkArbitrator () {
+                let aresult = 0;
+                let ahtype = 0;
+                let amresult = 0;
+
+                this.actualhorse.result.notes.forEach(note => {
+                    if (note.htype !== null) {
+                        aresult += parseInt(note.htype);
+                        ahtype += parseInt(note.htype);
+                    }
+                    if (note.move !== null) {
+                        aresult += parseInt(note.move);
+                        amresult += parseInt(note.move);
+                    }
+                });
+
+                this.horses.forEach(actualhorse => {
+                    let bresult = 0;
+                    let bhtype = 0;
+                    let bmresult = 0;
+                    if (actualhorse._id !== this.actualhorse._id) {
+                        actualhorse.result.notes.forEach(note => {
+                            if (note.htype !== null) {
+                                bresult += parseInt(note.htype);
+                                bhtype += parseInt(note.htype);
+                            }
+                            if (note.move !== null) {
+                                bresult += parseInt(note.move);
+                                bmresult += parseInt(note.move);
+                            }
+                        });
+                        if (aresult === bresult) {
+                            if (ahtype === bhtype) {
+                                if (amresult === bmresult) {
+                                    this.checkarbitrator = true;
+                                }
+                            }
+                        }
+                    }
+                });
+            },
             results () {
                 this.result = 0;
                 this.actualhorse.result.notes.forEach(note => {
@@ -100,6 +145,8 @@
                 if (target.name === "choosehorse") {
                     let index = this.horses.findIndex(item => item._id === target.value);
                     this.actualhorse = this.horses[index];
+                    this.checkarbitrator = false;
+                    this.checkArbitrator();
 
                     console.log("test");
                     // zrobić sortowanie - szukanie rozjemcy, update baza
