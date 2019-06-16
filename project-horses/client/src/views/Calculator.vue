@@ -65,6 +65,7 @@
                 this.fill();
                 this.results();
                 this.checkArbitrator();
+                console.log(this.judges);
             }
         },
         methods: {

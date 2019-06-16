@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="podium" >
-            <div v-for="(horse,index) in sorted" :id="horse._id" :key="horse._id" >Miejsce {{++index}}. {{horse.name}}</div>
+            <div v-for="(horse,index) in sorted" :id="horse._id" :key="horse._id" >Miejsce {{++index}}. {{horse.name}} - {{points(horse)}} pkt</div>
         </div>
     </div>
 </template>
@@ -52,8 +52,12 @@
                 if (aresult === bresult) {
                     if (ahtype === bhtype) {
                         if (amresult === bmresult) {
-                            this.arbitrator.push(b._id);
-                            this.arbitrator.push(a._id);
+                            if (bresult !== 0) {
+                                this.arbitrator.push(b._id);
+                            }
+                            if (aresult !== 0) {
+                                this.arbitrator.push(a._id);
+                            }
                             return a.result.arbitrator - b.result.arbitrator;
                         } else {
                             return bmresult - amresult;
@@ -70,6 +74,22 @@
             this.arbitrator.forEach(element => {
                 document.getElementById(element).style.backgroundColor = "red";
             });
+        },
+        methods: {
+            points (horse) {
+                let index = this.$store.state.actualhorses.findIndex(element => element._id === horse._id);
+                let result = 0;
+                this.$store.state.actualhorses[index].result.notes.forEach(note => {
+                    if (note.htype !== null) {
+                        result += parseInt(note.htype);
+                    }
+                    if (note.move !== null) {
+                        result += parseInt(note.move);
+                    }
+                });
+
+                return result;
+            }
         }
     };
 </script>

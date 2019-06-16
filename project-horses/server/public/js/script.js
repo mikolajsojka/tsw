@@ -55,6 +55,17 @@ document.onreadystatechange = () => {
                     });
 
                     alert(`${JSON.stringify(information)}`);
+
+                    document.getElementById("classes").style.display = "none";
+
+
+                    // odwołanie do funkcji, która ustawia podium
+                    let podium = "";
+                    classhorses.forEach((element) => {
+                        podium += `<div id=${element._id}>${element.name}</div>`;
+                    });
+
+                    document.getElementById("podium").innerHTML = podium;
                 });
             });
         };
