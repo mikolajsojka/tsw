@@ -147,8 +147,6 @@
                 if (target.name === "choosehorse") {
                     let index = this.horses.findIndex(item => item._id === target.value);
                     this.actualhorse = this.horses[index];
-                    this.checkarbitrator = false;
-                    this.checkArbitrator();
                 }
 
                 if (target.name === "arbitrator") {
@@ -192,6 +190,9 @@
 
                 this.results();
                 this.$store.dispatch("EDIT_HORSE_NOTES", this.actualhorse);
+
+                this.checkarbitrator = false;
+                this.checkArbitrator();
 
                 this.renderComponent = false;
 
