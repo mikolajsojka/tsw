@@ -102,10 +102,12 @@ document.onreadystatechange = () => {
         };
 
         podium = () => {
+            let index = classes.findIndex(item => item.number === clickedClass);
             let podium = "";
             classhorses.forEach((element) => {
-                podium += `<div id=${element._id}>${element.name} - ${points(element)} pkt.</div>`;
+                podium += `<div class="item" id=${element._id}>${element.name} - ${points(element)} pkt.</div>`;
             });
+            document.getElementById("classname").innerHTML = `${index + 1}/${classes.length}. ${classes[index].category}`;
             document.getElementById("podium").innerHTML = podium;
         };
 
@@ -126,7 +128,8 @@ document.onreadystatechange = () => {
                     classhorses = classhorses.filter(el => el !== 0);
 
                     document.getElementById("classes").style.display = "none";
-                    document.getElementById("podium").style.display = "flex";
+                    document.getElementById("selected").style.display = "flex";
+                    document.getElementById("classname").style.display = "flex";
                     clickedClass = classes[index].number;
                     sorting();
                 });
@@ -175,6 +178,9 @@ document.onreadystatechange = () => {
                 let index = horses.findIndex(item => item._id === data._id);
                 let index1 = classes.findIndex(item => item.number === data.class);
                 horses[index] = data;
+                let index2 = classhorses.findIndex(item => item._id === data._id);
+                classhorses[index2] = data;
+                sorting();
                 let oldstatus = classes[index1].status;
                 checkClass(classes[index1], index1);
 
@@ -193,6 +199,13 @@ document.onreadystatechange = () => {
 
             socket.on("addhorse", (data) => {
                 horses.push(data);
+                if (clickedClass === data.class) {
+                    try {
+                        classhorses.push(data);
+                        sorting();
+                    }
+                    catch (e) {}
+                }
             });
 
             socket.on("edithorse", (data) => {
@@ -252,6 +265,15 @@ document.onreadystatechange = () => {
                 let index1 = classes.findIndex(
                     item => item.number === horses[index].class
                 );
+
+                if (horses[index].class === clickedClass) {
+                    try {
+                        let index2 = classhorses.findIndex(item => item._id === data);
+                        classhorses.splice(index2, 1);
+                        sorting();
+                    }
+                    catch (e) {}
+                }
                 horses.splice(index, 1);
 
                 checkClass(classes[index1], index1);
@@ -283,6 +305,8 @@ document.onreadystatechange = () => {
                 let index = classes.findIndex(item => item._id === data);
                 classes.slice(index, 1);
                 removeClass(data);
+
+                // aktualną zamknąć
             });
             socket.on("gethorses", (data) => {
                 horses = data;
