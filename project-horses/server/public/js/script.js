@@ -9,7 +9,8 @@ document.onreadystatechange = () => {
             classes,
             classhorses,
             clickedClass,
-            actualhorse;
+            actualhorse,
+            startindex = 0;
 
         renderClassTrue = (data) => {
             document.getElementById(
@@ -111,18 +112,21 @@ document.onreadystatechange = () => {
         podium = () => {
             let index = classes.findIndex(item => item.number === clickedClass);
             let podium = "";
-            classhorses.forEach((element) => {
-                podium += `<div class="item" id=${element._id}>${
+            classhorses.forEach((element, index) => {
+                podium += `<div class="item" id=${element._id}>${index + 1}. ${
                     element.name
                 } - ${points(element)} pkt.</div>`;
             });
 
             document.getElementById("classname").innerHTML = `${index + 1}/${
                 classes.length
-            }. ${classes[index].category}`;
+            }. ${classes[index].category} (Nr ${classes[index].number}. )`;
             document.getElementById("podium").innerHTML = podium;
 
-            actualhorse = classhorses[0];
+            if (startindex === 0) {
+                actualhorse = classhorses[0];
+                startindex = 1;
+            }
 
             notes();
 
@@ -148,6 +152,14 @@ document.onreadystatechange = () => {
 
                 document.getElementById("notes").innerHTML += `<div class="row">${fill}</div>`;
             });
+
+            if (horse.result.arbitrator !== 0) {
+                document.getElementById("notes").innerHTML += `<div class="row">
+                    <div id="arbitrator">
+                    <div id="name">Rozjemca</div>
+                    <div id="result">${horse.result.arbitrator}</div>
+                </div>`;
+            }
         };
 
         clickEvents = () => {
@@ -252,7 +264,7 @@ document.onreadystatechange = () => {
                 let actualclass = horses[index].class;
                 horses[index] = data;
 
-                if (clickedClass === horses[index].class) {
+                if (clickedClass !== horses[index].class) {
                     try {
                         classhorses.push(horses[index]);
                         sorting();
@@ -262,7 +274,7 @@ document.onreadystatechange = () => {
                 else {
                     try {
                         let index2 = classhorses.findIndex(item => item._id === data._id);
-                        classhorses.splice(index2, 1);
+                        classhorses[index2] = data;
                         sorting();
                     }
                     catch (e) {}
