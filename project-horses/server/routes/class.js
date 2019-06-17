@@ -79,6 +79,12 @@ module.exports = (io) => {
                             number: item.number,
                             category: item.category
                         });
+                        socket.broadcast.emit("editclass", {
+                            _id: item._id,
+                            committee: item.committee,
+                            number: item.number,
+                            category: item.category
+                        });
                     }
                 }
             );

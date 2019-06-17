@@ -17,6 +17,7 @@ body {
    width:100%;
    display:none;
    flex: 1;
+
     #podium{
       resize: both;
       display:flex;
@@ -45,6 +46,38 @@ body {
     #information{
       width:75%;
       min-height:100%;
+      background-color: pink;
+
+      #horsename{
+        color:white;
+        padding:10px;
+        text-align:center;
+        background-color: rgb(190, 95, 95);
+      }
+
+      #notes{
+        display:flex;
+        flex-direction: column;
+        
+
+        .row{
+          display:flex;
+          background-color: aqua;
+          justify-content: center;
+
+          .note{
+            background-color: white;
+            width:50px;
+            height:50px;
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            margin:5px;
+            cursor:pointer;
+          }
+        }
+      }
+    
     }
   }
   #classes {
@@ -119,3 +152,5 @@ body {
     }
   }
 }
+
+

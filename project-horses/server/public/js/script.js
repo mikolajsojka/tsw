@@ -8,7 +8,8 @@ document.onreadystatechange = () => {
             judges,
             classes,
             classhorses,
-            clickedClass;
+            clickedClass,
+            actualhorse;
 
         renderClassTrue = (data) => {
             document.getElementById(
@@ -31,7 +32,14 @@ document.onreadystatechange = () => {
         editClass = (data) => {
             document.getElementById(data._id).innerHTML = `<div class="element" id="${
                 data._id
-            }">${data.category}</div>`;
+            }">Nr ${data.number}. ${data.category}</div>`;
+
+            if (clickedClass === data.number) {
+                let index = classes.findIndex(item => item._id === data._id);
+                document.getElementById("classname").innerHTML = `${index + 1}/${
+                    classes.length
+                }. ${data.category}`;
+            }
         };
 
         points = (horse) => {
@@ -47,7 +55,6 @@ document.onreadystatechange = () => {
 
             return aresult;
         };
-
 
         sorting = () => {
             classhorses.sort((a, b) => {
@@ -84,12 +91,6 @@ document.onreadystatechange = () => {
                 if (aresult === bresult) {
                     if (ahtype === bhtype) {
                         if (amresult === bmresult) {
-                            if (bresult !== 0) {
-                                this.arbitrator.push(b._id);
-                            }
-                            if (aresult !== 0) {
-                                this.arbitrator.push(a._id);
-                            }
                             return a.result.arbitrator - b.result.arbitrator;
                         }
                         return bmresult - amresult;
@@ -101,14 +102,52 @@ document.onreadystatechange = () => {
             podium();
         };
 
+        notes = () => {
+            let index = classhorses.findIndex(horse => horse._id === actualhorse._id);
+
+            horseInfo(classhorses[index]);
+        };
+
         podium = () => {
             let index = classes.findIndex(item => item.number === clickedClass);
             let podium = "";
             classhorses.forEach((element) => {
-                podium += `<div class="item" id=${element._id}>${element.name} - ${points(element)} pkt.</div>`;
+                podium += `<div class="item" id=${element._id}>${
+                    element.name
+                } - ${points(element)} pkt.</div>`;
             });
-            document.getElementById("classname").innerHTML = `${index + 1}/${classes.length}. ${classes[index].category}`;
+
+            document.getElementById("classname").innerHTML = `${index + 1}/${
+                classes.length
+            }. ${classes[index].category}`;
             document.getElementById("podium").innerHTML = podium;
+
+            actualhorse = classhorses[0];
+
+            notes();
+
+            Array.from(document.getElementsByClassName("item")).forEach((item) => {
+                item.addEventListener("click", () => {
+                    let index1 = classhorses.findIndex(horse => horse._id === item.id);
+                    actualhorse = classhorses[index1];
+                    horseInfo(classhorses[index1]);
+                });
+            });
+        };
+
+        horseInfo = (horse) => {
+            document.getElementById("horsename").innerHTML = `Nr ${horse.number}. ${horse.name}`;
+            document.getElementById("notes").innerHTML = "";
+            horse.result.notes.forEach((note) => {
+                let fill = `<div class="${note._id} note">${note.htype}</div>
+                <div class="${note._id} note">${note.head}</div>
+                <div class="${note._id} note">${note.barrel}</div>
+                <div class="${note._id} note">${note.legs}</div>
+                <div class="${note._id} note">${note.move}</div>
+                `;
+
+                document.getElementById("notes").innerHTML += `<div class="row">${fill}</div>`;
+            });
         };
 
         clickEvents = () => {
