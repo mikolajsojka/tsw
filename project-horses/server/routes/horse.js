@@ -183,6 +183,7 @@ module.exports = (io) => {
                             }
                             else {
                                 socket.emit("edithorse", horse);
+                                socket.broadcast.emit("edithorse", horse);
                             }
                         }
                     );
@@ -220,6 +221,7 @@ module.exports = (io) => {
                             }
                             else {
                                 socket.emit("edithorse", horse);
+                                socket.broadcast.emit("edithorse", horse);
                             }
                         }
                     );

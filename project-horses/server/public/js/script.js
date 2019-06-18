@@ -242,8 +242,8 @@ document.onreadystatechange = () => {
             });
             clickedClass = 0;
             startindex = 0;
-            actualJudges = 0;
-            actualhorse = 0;
+
+            clickEvents();
         };
 
         socket.on("connect", () => {
