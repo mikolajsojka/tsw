@@ -104,12 +104,6 @@ document.onreadystatechange = () => {
             podium();
         };
 
-        notes = () => {
-            let index = classhorses.findIndex(horse => horse._id === actualhorse._id);
-
-            console.log(classhorses[index]);
-            horseInfo(classhorses[index]);
-        };
 
         podium = () => {
             let index = classes.findIndex(item => item.number === clickedClass);
@@ -125,13 +119,12 @@ document.onreadystatechange = () => {
             }. ${classes[index].category} (Nr ${classes[index].number}. )`;
             document.getElementById("podium").innerHTML = podium;
 
+
             if (startindex === 0) {
                 actualhorse = classhorses[0];
                 startindex = 1;
-                notes();
             }
-
-
+            notes();
             Array.from(document.getElementsByClassName("item")).forEach((item) => {
                 item.addEventListener("click", () => {
                     let index1 = classhorses.findIndex(horse => horse._id === item.id);
@@ -142,17 +135,19 @@ document.onreadystatechange = () => {
         };
 
         horseInfo = (horse) => {
-            console.log(horse);
+            let index = classhorses.findIndex(item => item._id === actualhorse._id);
+            horse = classhorses[index];
             document.getElementById("horsename").innerHTML = `Nr ${horse.number}. ${horse.name}`;
-            document.getElementById("notes").innerHTML = "";
-
-            let index = classes.findIndex(item => item.number === clickedClass);
+            document.getElementById("notes").innerHTML = "dupa";
+            index = classes.findIndex(item => item.number === clickedClass);
 
             actualJudges = [];
             classes[index].committee.forEach((element) => {
                 let index2 = judges.findIndex(judge => judge.id === element);
                 actualJudges.push(judges[index2]);
             });
+
+            let fillall = "";
             horse.result.notes.forEach((note, index) => {
                 let fill = `<div class="${note._id} note">${note.htype}</div>
                 <div class="${note._id} note">${note.head}</div>
@@ -162,8 +157,10 @@ document.onreadystatechange = () => {
                 <div class="judge">${actualJudges[index].judge}</div>
                 `;
 
-                document.getElementById("notes").innerHTML += `<div class="row">${fill}</div>`;
+                fillall += `<div class="row">${fill}</div>`;
             });
+
+            document.getElementById("notes").innerHTML = fillall;
 
             if (horse.result.arbitrator !== 0) {
                 document.getElementById("notes").innerHTML += `<div class="row">
@@ -215,6 +212,10 @@ document.onreadystatechange = () => {
             clickEvents();
         };
 
+        notes = () => {
+            horseInfo(actualhorse);
+        };
+
         checkClass = (element, index) => {
             classes[index].status = false;
             horses.forEach((horse) => {
@@ -234,17 +235,19 @@ document.onreadystatechange = () => {
             });
         };
 
+
         backClick = () => {
             document.getElementById("backbutton").addEventListener("click", () => {
                 document.getElementById("classes").style.display = "flex";
                 document.getElementById("selected").style.display = "none";
                 document.getElementById("classname").style.display = "none";
-            });
-            clickedClass = 0;
-            startindex = 0;
 
-            clickEvents();
+                startindex = 0;
+                clickedClass = 0;
+                clickEvents();
+            });
         };
+
 
         socket.on("connect", () => {
             socket.emit("getclassesinit");
@@ -258,6 +261,7 @@ document.onreadystatechange = () => {
                 let index2 = classhorses.findIndex(item => item._id === data._id);
                 classhorses[index2] = data;
                 sorting();
+
                 let oldstatus = classes[index1].status;
                 checkClass(classes[index1], index1);
 
