@@ -352,6 +352,9 @@ document.onreadystatechange = () => {
                 if (horses[index].class === clickedClass) {
                     try {
                         let index2 = classhorses.findIndex(item => item._id === data);
+                        if (actualhorse._id === classhorses[index2]._id) {
+                            startindex = 0;
+                        }
                         classhorses.splice(index2, 1);
                         sorting();
                     }
