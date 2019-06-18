@@ -8,9 +8,10 @@ document.onreadystatechange = () => {
             judges,
             classes,
             classhorses,
-            clickedClass,
-            actualhorse,
-            startindex = 0;
+            clickedClass = 0,
+            actualhorse = 0,
+            startindex = 0,
+            actualJudges = 0;
 
         renderClassTrue = (data) => {
             document.getElementById(
@@ -106,6 +107,7 @@ document.onreadystatechange = () => {
         notes = () => {
             let index = classhorses.findIndex(horse => horse._id === actualhorse._id);
 
+            console.log(classhorses[index]);
             horseInfo(classhorses[index]);
         };
 
@@ -126,9 +128,9 @@ document.onreadystatechange = () => {
             if (startindex === 0) {
                 actualhorse = classhorses[0];
                 startindex = 1;
+                notes();
             }
 
-            notes();
 
             Array.from(document.getElementsByClassName("item")).forEach((item) => {
                 item.addEventListener("click", () => {
@@ -140,14 +142,24 @@ document.onreadystatechange = () => {
         };
 
         horseInfo = (horse) => {
+            console.log(horse);
             document.getElementById("horsename").innerHTML = `Nr ${horse.number}. ${horse.name}`;
             document.getElementById("notes").innerHTML = "";
-            horse.result.notes.forEach((note) => {
+
+            let index = classes.findIndex(item => item.number === clickedClass);
+
+            actualJudges = [];
+            classes[index].committee.forEach((element) => {
+                let index2 = judges.findIndex(judge => judge.id === element);
+                actualJudges.push(judges[index2]);
+            });
+            horse.result.notes.forEach((note, index) => {
                 let fill = `<div class="${note._id} note">${note.htype}</div>
                 <div class="${note._id} note">${note.head}</div>
                 <div class="${note._id} note">${note.barrel}</div>
                 <div class="${note._id} note">${note.legs}</div>
                 <div class="${note._id} note">${note.move}</div>
+                <div class="judge">${actualJudges[index].judge}</div>
                 `;
 
                 document.getElementById("notes").innerHTML += `<div class="row">${fill}</div>`;
@@ -222,8 +234,22 @@ document.onreadystatechange = () => {
             });
         };
 
+        backClick = () => {
+            document.getElementById("backbutton").addEventListener("click", () => {
+                document.getElementById("classes").style.display = "flex";
+                document.getElementById("selected").style.display = "none";
+                document.getElementById("classname").style.display = "none";
+            });
+            clickedClass = 0;
+            startindex = 0;
+            actualJudges = 0;
+            actualhorse = 0;
+        };
+
         socket.on("connect", () => {
             socket.emit("getclassesinit");
+            backClick();
+
 
             socket.on("editnotes", (data) => {
                 let index = horses.findIndex(item => item._id === data._id);
@@ -359,8 +385,13 @@ document.onreadystatechange = () => {
 
                 // aktualną zamknąć
             });
-            socket.on("gethorses", (data) => {
-                horses = data;
+            socket.on("gethorses", async (data) => {
+                horses = await data;
+
+                document.getElementById("actual").innerHTML = "";
+                document.getElementById("end").innerHTML = "";
+
+                checkClasses();
                 console.log("Załadowano kolekcję: konie");
             });
 
@@ -368,13 +399,8 @@ document.onreadystatechange = () => {
                 editClass(data);
             });
 
-            socket.on("getjudges", (data) => {
+            socket.on("getjudges", async (data) => {
                 judges = data;
-
-                document.getElementById("actual").innerHTML = "";
-                document.getElementById("end").innerHTML = "";
-
-                checkClasses();
 
                 console.log("Załadowano kolekcję: sędziowie");
             });
