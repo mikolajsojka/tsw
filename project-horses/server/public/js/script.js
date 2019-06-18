@@ -138,7 +138,7 @@ document.onreadystatechange = () => {
             let index = classhorses.findIndex(item => item._id === actualhorse._id);
             horse = classhorses[index];
             document.getElementById("horsename").innerHTML = `Nr ${horse.number}. ${horse.name}`;
-            document.getElementById("notes").innerHTML = "dupa";
+            document.getElementById("notes").innerHTML = "";
             index = classes.findIndex(item => item.number === clickedClass);
 
             actualJudges = [];
@@ -189,6 +189,7 @@ document.onreadystatechange = () => {
 
                     document.getElementById("classes").style.display = "none";
                     document.getElementById("selected").style.display = "flex";
+                    document.getElementById("backbutton").style.display = "flex";
                     document.getElementById("classname").style.display = "flex";
                     clickedClass = classes[index].number;
                     sorting();
@@ -241,6 +242,7 @@ document.onreadystatechange = () => {
                 document.getElementById("classes").style.display = "flex";
                 document.getElementById("selected").style.display = "none";
                 document.getElementById("classname").style.display = "none";
+                document.getElementById("backbutton").style.display = "none";
 
                 startindex = 0;
                 clickedClass = 0;
@@ -387,6 +389,12 @@ document.onreadystatechange = () => {
                 classes.slice(index, 1);
                 removeClass(data);
 
+                document.getElementById("classes").style.display = "flex";
+                document.getElementById("selected").style.display = "none";
+                document.getElementById("classname").style.display = "none";
+
+                alert("Przepraszamy, klasa została usunięta");
+
                 // aktualną zamknąć
             });
             socket.on("gethorses", async (data) => {
@@ -411,6 +419,7 @@ document.onreadystatechange = () => {
 
             socket.on("getclasses", (data) => {
                 classes = data;
+                // data.sort((a, b) => a.number - b.number);
 
                 socket.emit("gethorsesinit");
                 socket.emit("getjudgesinit");
