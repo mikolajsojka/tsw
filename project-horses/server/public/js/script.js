@@ -104,7 +104,6 @@ document.onreadystatechange = () => {
             podium();
         };
 
-
         podium = () => {
             let index = classes.findIndex(item => item.number === clickedClass);
             let podium = "";
@@ -118,7 +117,6 @@ document.onreadystatechange = () => {
                 classes.length
             }. ${classes[index].category} (Nr ${classes[index].number}. )`;
             document.getElementById("podium").innerHTML = podium;
-
 
             if (startindex === 0) {
                 actualhorse = classhorses[0];
@@ -137,7 +135,9 @@ document.onreadystatechange = () => {
         horseInfo = (horse) => {
             let index = classhorses.findIndex(item => item._id === actualhorse._id);
             horse = classhorses[index];
-            document.getElementById("horsename").innerHTML = `Nr ${horse.number}. ${horse.name}`;
+            document.getElementById("horsename").innerHTML = `Nr ${horse.number}. ${
+                horse.name
+            }`;
             document.getElementById("notes").innerHTML = "";
             index = classes.findIndex(item => item.number === clickedClass);
 
@@ -154,7 +154,7 @@ document.onreadystatechange = () => {
                 <div class="${note._id} note">${note.barrel}</div>
                 <div class="${note._id} note">${note.legs}</div>
                 <div class="${note._id} note">${note.move}</div>
-                <div class="judge">${actualJudges[index].judge}</div>
+                <div class="judge">${actualJudges[index].judge} (${actualJudges[index].country})</div>
                 `;
 
                 fillall += `<div class="row">${fill}</div>`;
@@ -236,7 +236,6 @@ document.onreadystatechange = () => {
             });
         };
 
-
         backClick = () => {
             document.getElementById("backbutton").addEventListener("click", () => {
                 document.getElementById("classes").style.display = "flex";
@@ -250,11 +249,9 @@ document.onreadystatechange = () => {
             });
         };
 
-
         socket.on("connect", () => {
             socket.emit("getclassesinit");
             backClick();
-
 
             socket.on("editnotes", (data) => {
                 let index = horses.findIndex(item => item._id === data._id);
@@ -307,10 +304,7 @@ document.onreadystatechange = () => {
                     index = classhorses.findIndex(item => item._id === data._id);
                     classhorses.splice(index, 1);
                     sorting();
-                    console.log("weszło ?");
-                    // przeszukać classhorses, jak znajdzie to wywalić
                 }
-
 
                 if (actualclass !== data.class) {
                     let index1 = classes.findIndex(item => item.number === actualclass);
@@ -319,7 +313,6 @@ document.onreadystatechange = () => {
                     let oldstatus1 = classes[index1].status;
                     checkClass(classes[index1], index1);
                     checkClass(classes[index2], index2);
-
 
                     if (oldstatus !== classes[index2].status) {
                         document.getElementById(classes[index2]._id).remove();
@@ -390,7 +383,7 @@ document.onreadystatechange = () => {
 
             socket.on("deleteClass", (data) => {
                 let index = classes.findIndex(item => item._id === data);
-                classes.slice(index, 1);
+                classes.splice(index, 1);
                 removeClass(data);
 
                 document.getElementById("classes").style.display = "flex";
@@ -398,8 +391,6 @@ document.onreadystatechange = () => {
                 document.getElementById("classname").style.display = "none";
 
                 alert("Przepraszamy, klasa została usunięta");
-
-                // aktualną zamknąć
             });
             socket.on("gethorses", async (data) => {
                 horses = await data;
@@ -413,6 +404,16 @@ document.onreadystatechange = () => {
 
             socket.on("editclass", (data) => {
                 editClass(data);
+            });
+
+            socket.on("editjudge", (data) => {
+                let index = judges.findIndex(judge => judge._id === data._id);
+                judges[index] = data;
+
+                let index2 = actualJudges.findIndex(judge => judge._id === data._id);
+                actualJudges[index2] = data;
+
+                sorting();
             });
 
             socket.on("getjudges", async (data) => {

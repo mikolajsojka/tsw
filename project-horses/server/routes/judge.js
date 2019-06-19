@@ -63,6 +63,8 @@ module.exports = (io) => {
                     }
                     else {
                         res.status(200).send("OK");
+                        socket.emit("editjudge", item);
+                        socket.broadcast.emit("editjudge", item);
                     }
                 }
             );
