@@ -296,7 +296,7 @@ document.onreadystatechange = () => {
                 let actualclass = horses[index].class;
                 horses[index] = data;
 
-                if (clickedClass !== horses[index].class) {
+                if (clickedClass === horses[index].class) {
                     try {
                         classhorses.push(horses[index]);
                         sorting();
@@ -304,13 +304,13 @@ document.onreadystatechange = () => {
                     catch (e) {}
                 }
                 else {
-                    try {
-                        let index2 = classhorses.findIndex(item => item._id === data._id);
-                        classhorses[index2] = data;
-                        sorting();
-                    }
-                    catch (e) {}
+                    index = classhorses.findIndex(item => item._id === data._id);
+                    classhorses.splice(index, 1);
+                    sorting();
+                    console.log("weszło ?");
+                    // przeszukać classhorses, jak znajdzie to wywalić
                 }
+
 
                 if (actualclass !== data.class) {
                     let index1 = classes.findIndex(item => item.number === actualclass);
@@ -319,6 +319,7 @@ document.onreadystatechange = () => {
                     let oldstatus1 = classes[index1].status;
                     checkClass(classes[index1], index1);
                     checkClass(classes[index2], index2);
+
 
                     if (oldstatus !== classes[index2].status) {
                         document.getElementById(classes[index2]._id).remove();
