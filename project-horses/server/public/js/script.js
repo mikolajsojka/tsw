@@ -153,9 +153,11 @@ document.onreadystatechange = () => {
                 <div class="${note._id} note">${note.head}</div>
                 <div class="${note._id} note">${note.barrel}</div>
                 <div class="${note._id} note">${note.legs}</div>
-                <div class="${note._id} note">${note.move}</div>
-                <div class="judge">${actualJudges[index].judge} (${actualJudges[index].country})</div>
-                `;
+                <div class="${note._id} note">${note.move}</div>`;
+                try {
+                    fill += `<div class="judge">${actualJudges[index].judge} (${actualJudges[index].country})</div>`;
+                }
+                catch (e) {}
 
                 fillall += `<div class="row">${fill}</div>`;
             });
@@ -404,6 +406,30 @@ document.onreadystatechange = () => {
 
             socket.on("editclass", (data) => {
                 editClass(data);
+            });
+
+            socket.on("deletejudge", (data) => {
+                let index = judges.findIndex(judge => judge._id === data);
+                let index2 = actualJudges.findIndex(judge => judge._id === data);
+
+                classes.forEach((item, indx) => {
+                    let index3 = item.committee.findIndex(elem => elem === judges[index].id);
+
+                    horses.forEach((horse, index2) => {
+                        if (horse.class === item.number) {
+                            horses[index2].result.notes.splice(index3, 1);
+                            let index4 = classhorses.findIndex(hor => hor._id === horse._id);
+                            try {
+                                classhorses[index4].result.notes.splice(index3, 1);
+                            }
+                            catch (e) {}
+                        }
+                    });
+                    classes[index].committee.splice(index3, 1);
+                });
+                actualJudges.splice(index2, 1);
+                judges.splice(index, 1);
+                sorting();
             });
 
             socket.on("editjudge", (data) => {

@@ -137,6 +137,8 @@ module.exports = (io) => {
                 }
                 else {
                     res.status(200).send("OK");
+                    socket.emit("deletejudge", id);
+                    socket.broadcast.emit("deletejudge", id);
                 }
             });
         });
