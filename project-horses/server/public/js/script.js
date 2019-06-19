@@ -425,7 +425,7 @@ document.onreadystatechange = () => {
                             catch (e) {}
                         }
                     });
-                    classes[index].committee.splice(index3, 1);
+                    classes[indx].committee.splice(index3, 1);
                 });
                 actualJudges.splice(index2, 1);
                 judges.splice(index, 1);
