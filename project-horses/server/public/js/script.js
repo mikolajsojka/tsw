@@ -116,31 +116,34 @@ document.onreadystatechange = () => {
         };
 
         podium = () => {
-            let index = classes.findIndex(item => item.number === clickedClass);
-            let podium = "";
-            classhorses.forEach((element, index) => {
-                podium += `<div class="item" id=${element._id}>${index + 1}. ${
-                    element.name
-                } - ${points(element)} pkt.</div>`;
-            });
-
-            document.getElementById("classname").innerHTML = `${index + 1}/${
-                classes.length
-            }. ${classes[index].category} (Nr ${classes[index].number}. )`;
-            document.getElementById("podium").innerHTML = podium;
-
-            if (startindex === 0) {
-                actualhorse = classhorses[0];
-                startindex = 1;
-            }
-            notes();
-            Array.from(document.getElementsByClassName("item")).forEach((item) => {
-                item.addEventListener("click", () => {
-                    let index1 = classhorses.findIndex(horse => horse._id === item.id);
-                    actualhorse = classhorses[index1];
-                    horseInfo(classhorses[index1]);
+            try {
+                let index = classes.findIndex(item => item.number === clickedClass);
+                let podium = "";
+                classhorses.forEach((element, index) => {
+                    podium += `<div class="item" id=${element._id}>${index + 1}. ${
+                        element.name
+                    } - ${points(element)} pkt.</div>`;
                 });
-            });
+
+                document.getElementById("classname").innerHTML = `${index + 1}/${
+                    classes.length
+                }. ${classes[index].category} (Nr ${classes[index].number}. )`;
+                document.getElementById("podium").innerHTML = podium;
+
+                if (startindex === 0) {
+                    actualhorse = classhorses[0];
+                    startindex = 1;
+                }
+                notes();
+                Array.from(document.getElementsByClassName("item")).forEach((item) => {
+                    item.addEventListener("click", () => {
+                        let index1 = classhorses.findIndex(horse => horse._id === item.id);
+                        actualhorse = classhorses[index1];
+                        horseInfo(classhorses[index1]);
+                    });
+                });
+            }
+            catch (e) {}
         };
 
         horseInfo = (horse) => {
@@ -174,8 +177,10 @@ document.onreadystatechange = () => {
                 }
                 catch (e) {}
             });
+            fillall += `<div id="points">${points(actualhorse)} pkt. </div>`;
 
             document.getElementById("notes").innerHTML = fillall;
+
 
             if (horse.result.arbitrator !== 0) {
                 document.getElementById("notes").innerHTML += `<div class="row">
@@ -274,6 +279,18 @@ document.onreadystatechange = () => {
                 let temp = classes[index];
                 classes[index] = data;
 
+                document.getElementById(classes[index]._id).remove();
+
+                classes.sort((a, b) => a.number - b.number);
+
+                checkClass(classes[index], index);
+                if (classes[index].status) {
+                    renderClassTrue(classes[index]);
+                }
+                else {
+                    renderClassFalse(classes[index]);
+                }
+                clickEvents();
 
                 if (data.committee.length > temp.committee.length) {
                     horses.forEach((horse, indx) => {
@@ -353,52 +370,52 @@ document.onreadystatechange = () => {
             });
 
             socket.on("edithorse", (data) => {
-                let index = horses.findIndex(item => item._id === data._id);
-                let actualclass = horses[index].class;
-                horses[index] = data;
+                try {
+                    let index = horses.findIndex(item => item._id === data._id);
+                    let actualclass = horses[index].class;
+                    horses[index] = data;
 
-                if (clickedClass === horses[index].class) {
-                    try {
+                    if (clickedClass === horses[index].class) {
                         classhorses.push(horses[index]);
                         sorting();
                     }
-                    catch (e) {}
-                }
-                else {
-                    index = classhorses.findIndex(item => item._id === data._id);
-                    classhorses.splice(index, 1);
-                    sorting();
-                }
-
-                if (actualclass !== data.class) {
-                    let index1 = classes.findIndex(item => item.number === actualclass);
-                    let index2 = classes.findIndex(item => item.number === data.class);
-                    let oldstatus = classes[index2].status;
-                    let oldstatus1 = classes[index1].status;
-                    checkClass(classes[index1], index1);
-                    checkClass(classes[index2], index2);
-
-                    if (oldstatus !== classes[index2].status) {
-                        document.getElementById(classes[index2]._id).remove();
-                        if (!classes[index2].status) {
-                            renderClassFalse(classes[index2]);
-                        }
-                        else {
-                            renderClassTrue(classes[index2]);
-                        }
+                    else {
+                        index = classhorses.findIndex(item => item._id === data._id);
+                        classhorses.splice(index, 1);
+                        sorting();
                     }
 
-                    if (oldstatus1 !== classes[index1].status) {
-                        document.getElementById(classes[index1]._id).remove();
-                        if (!classes[index1].status) {
-                            renderClassFalse(classes[index1]);
+                    if (actualclass !== data.class) {
+                        let index1 = classes.findIndex(item => item.number === actualclass);
+                        let index2 = classes.findIndex(item => item.number === data.class);
+                        let oldstatus = classes[index2].status;
+                        let oldstatus1 = classes[index1].status;
+                        checkClass(classes[index1], index1);
+                        checkClass(classes[index2], index2);
+
+                        if (oldstatus !== classes[index2].status) {
+                            document.getElementById(classes[index2]._id).remove();
+                            if (!classes[index2].status) {
+                                renderClassFalse(classes[index2]);
+                            }
+                            else {
+                                renderClassTrue(classes[index2]);
+                            }
                         }
-                        else {
-                            renderClassTrue(classes[index1]);
+
+                        if (oldstatus1 !== classes[index1].status) {
+                            document.getElementById(classes[index1]._id).remove();
+                            if (!classes[index1].status) {
+                                renderClassFalse(classes[index1]);
+                            }
+                            else {
+                                renderClassTrue(classes[index1]);
+                            }
                         }
                     }
+                    clickEvents();
                 }
-                clickEvents();
+                catch (e) {}
             });
 
             socket.on("deletehorse", (data) => {
@@ -432,6 +449,7 @@ document.onreadystatechange = () => {
 
             socket.on("addclass", (data) => {
                 classes.push(data);
+                classes.sort((a, b) => a.number - b.number);
 
                 let index = classes.findIndex(item => item._id === data._id);
                 checkClass(classes[index], index);
@@ -447,6 +465,7 @@ document.onreadystatechange = () => {
             socket.on("deleteClass", (data) => {
                 let index = classes.findIndex(item => item._id === data);
                 classes.splice(index, 1);
+                classes.sort((a, b) => a.number - b.number);
                 removeClass(data);
 
                 document.getElementById("classes").style.display = "flex";
@@ -514,7 +533,7 @@ document.onreadystatechange = () => {
 
             socket.on("getclasses", (data) => {
                 classes = data;
-                // data.sort((a, b) => a.number - b.number);
+                classes.sort((a, b) => a.number - b.number);
 
                 socket.emit("gethorsesinit");
                 socket.emit("getjudgesinit");
