@@ -42,6 +42,8 @@ module.exports = (io) => {
                     if (err) throw err;
 
                     res.status(200).json(newJudge);
+                    socket.emit("addjudge", newJudge);
+                    socket.broadcast.emit("addjudge", newJudge);
                 });
             });
         });

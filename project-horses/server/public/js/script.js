@@ -101,6 +101,15 @@ document.onreadystatechange = () => {
                 }
                 return bresult - aresult;
             });
+            let temp = [];
+
+            classhorses.forEach((element) => {
+                let index = temp.findIndex(el => el._id === element._id);
+                if (index === -1) {
+                    temp.push(element);
+                }
+            });
+            classhorses = temp;
             podium();
         };
 
@@ -154,12 +163,15 @@ document.onreadystatechange = () => {
                 <div class="${note._id} note">${note.barrel}</div>
                 <div class="${note._id} note">${note.legs}</div>
                 <div class="${note._id} note">${note.move}</div>`;
+
                 try {
-                    fill += `<div class="judge">${actualJudges[index].judge} (${actualJudges[index].country})</div>`;
+                    fill += `<div class="judge">${actualJudges[index].judge} (${
+                        actualJudges[index].country
+                    })</div>`;
+
+                    fillall += `<div class="row">${fill}</div>`;
                 }
                 catch (e) {}
-
-                fillall += `<div class="row">${fill}</div>`;
             });
 
             document.getElementById("notes").innerHTML = fillall;
@@ -194,6 +206,7 @@ document.onreadystatechange = () => {
                     document.getElementById("backbutton").style.display = "flex";
                     document.getElementById("classname").style.display = "flex";
                     clickedClass = classes[index].number;
+                    console.log(classhorses);
                     sorting();
                 });
             });
@@ -254,6 +267,13 @@ document.onreadystatechange = () => {
         socket.on("connect", () => {
             socket.emit("getclassesinit");
             backClick();
+
+            socket.on("editclass", (data) => {
+                let index = classes.findIndex(item => item._id === data._id);
+                classes[index] = data;
+                editClass(data);
+                sorting();
+            });
 
             socket.on("editnotes", (data) => {
                 let index = horses.findIndex(item => item._id === data._id);
@@ -404,16 +424,15 @@ document.onreadystatechange = () => {
                 console.log("Załadowano kolekcję: konie");
             });
 
-            socket.on("editclass", (data) => {
-                editClass(data);
-            });
 
             socket.on("deletejudge", (data) => {
                 let index = judges.findIndex(judge => judge._id === data);
                 let index2 = actualJudges.findIndex(judge => judge._id === data);
 
                 classes.forEach((item, indx) => {
-                    let index3 = item.committee.findIndex(elem => elem === judges[index].id);
+                    let index3 = item.committee.findIndex(
+                        elem => elem === judges[index].id
+                    );
 
                     horses.forEach((horse, index2) => {
                         if (horse.class === item.number) {
@@ -430,6 +449,10 @@ document.onreadystatechange = () => {
                 actualJudges.splice(index2, 1);
                 judges.splice(index, 1);
                 sorting();
+            });
+
+            socket.on("addjudge", (data) => {
+                judges.push(data);
             });
 
             socket.on("editjudge", (data) => {
