@@ -270,11 +270,33 @@ document.onreadystatechange = () => {
 
             socket.on("editclass", (data) => {
                 let index = classes.findIndex(item => item._id === data._id);
+
+                let temp = classes[index];
                 classes[index] = data;
+
+                horses.forEach((horse, indx) => {
+                    if (horse.class === data.number) {
+                        if (data.committee.length < horse.result.notes.length) {
+                            temp.committee.forEach((element, index) => {
+                                if (element !== data.committee[index]) {
+                                    horses[indx].result.notes.splice(index, 1);
+                                }
+                            });
+                        }
+                        if (data.committee.length > horse.result.notes.length) {
+                            horses[indx].result.notes.push({
+                                htype: null,
+                                head: null,
+                                barrel: null,
+                                legs: null,
+                                move: null
+                            });
+                        }
+                    }
+                });
+
                 editClass(data);
                 sorting();
-
-                // dodanie lub usunięcie not koniom
             });
 
             socket.on("editnotes", (data) => {
