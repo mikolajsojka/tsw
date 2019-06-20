@@ -101,6 +101,7 @@ document.onreadystatechange = () => {
                 }
                 return bresult - aresult;
             });
+
             let temp = [];
 
             classhorses.forEach((element) => {
@@ -110,6 +111,7 @@ document.onreadystatechange = () => {
                 }
             });
             classhorses = temp;
+
             podium();
         };
 
@@ -168,12 +170,9 @@ document.onreadystatechange = () => {
                     fill += `<div class="judge">${actualJudges[index].judge} (${
                         actualJudges[index].country
                     })</div>`;
+                    fillall += `<div class="row">${fill}</div>`;
                 }
-
-                catch (e) {
-
-                }
-                fillall += `<div class="row">${fill}</div>`;
+                catch (e) {}
             });
 
             document.getElementById("notes").innerHTML = fillall;
@@ -275,16 +274,10 @@ document.onreadystatechange = () => {
                 let temp = classes[index];
                 classes[index] = data;
 
-                horses.forEach((horse, indx) => {
-                    if (horse.class === data.number) {
-                        if (data.committee.length < horse.result.notes.length) {
-                            temp.committee.forEach((element, index) => {
-                                if (element !== data.committee[index]) {
-                                    horses[indx].result.notes.splice(index, 1);
-                                }
-                            });
-                        }
-                        if (data.committee.length > horse.result.notes.length) {
+
+                if (data.committee.length > temp.committee.length) {
+                    horses.forEach((horse, indx) => {
+                        if (horse.class === data.number) {
                             horses[indx].result.notes.push({
                                 htype: null,
                                 head: null,
@@ -293,11 +286,35 @@ document.onreadystatechange = () => {
                                 move: null
                             });
                         }
+                    });
+                }
+
+                if (data.committee.length < temp.committee.length) {
+                    temp.committee.forEach((element, index) => {
+                        if (element !== data.committee[index]) {
+                            horses.forEach((horse, indx) => {
+                                if (horse.class === data.number) {
+                                    horses[indx].result.notes.splice(index, 1);
+                                }
+                            });
+                        }
+                    });
+                }
+
+
+                classhorses = horses.map((horse) => {
+                    if (horse.class === classes[index].number) {
+                        return horse;
                     }
+                    return 0;
                 });
 
-                editClass(data);
+                classhorses = classhorses.filter(el => el !== 0);
+
                 sorting();
+
+
+                editClass(data);
             });
 
             socket.on("editnotes", (data) => {
