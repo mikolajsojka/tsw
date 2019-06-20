@@ -177,7 +177,7 @@ document.onreadystatechange = () => {
                 }
                 catch (e) {}
             });
-            fillall += `<div id="points">${points(actualhorse)} pkt. </div>`;
+            fillall += `<div class="row"><div id="points">${points(actualhorse)} pkt. </div></div>`;
 
             document.getElementById("notes").innerHTML = fillall;
 
@@ -505,6 +505,8 @@ document.onreadystatechange = () => {
                         }
                     });
                     classes[indx].committee.splice(index3, 1);
+                    document.getElementById(classes[indx]._id);
+                    checkClass(classes[indx], indx);
                 });
                 actualJudges.splice(index2, 1);
                 judges.splice(index, 1);
