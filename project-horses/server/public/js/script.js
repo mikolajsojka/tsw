@@ -168,10 +168,12 @@ document.onreadystatechange = () => {
                     fill += `<div class="judge">${actualJudges[index].judge} (${
                         actualJudges[index].country
                     })</div>`;
-
-                    fillall += `<div class="row">${fill}</div>`;
                 }
-                catch (e) {}
+
+                catch (e) {
+
+                }
+                fillall += `<div class="row">${fill}</div>`;
             });
 
             document.getElementById("notes").innerHTML = fillall;
@@ -206,7 +208,6 @@ document.onreadystatechange = () => {
                     document.getElementById("backbutton").style.display = "flex";
                     document.getElementById("classname").style.display = "flex";
                     clickedClass = classes[index].number;
-                    console.log(classhorses);
                     sorting();
                 });
             });
@@ -410,7 +411,6 @@ document.onreadystatechange = () => {
 
                     clickEvents();
                 }
-                console.log("usuwanie konia");
             });
 
             socket.on("addclass", (data) => {
