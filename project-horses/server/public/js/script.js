@@ -273,6 +273,8 @@ document.onreadystatechange = () => {
                 classes[index] = data;
                 editClass(data);
                 sorting();
+
+                // dodanie lub usunięcie not koniom
             });
 
             socket.on("editnotes", (data) => {
