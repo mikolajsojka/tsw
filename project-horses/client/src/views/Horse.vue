@@ -155,8 +155,13 @@
                 if (target.name === "number") {
                     if (target.value !== "") {
                         this.horse.number = target.value;
-                    } else {
+                    }
+                    if (target.value === "") {
                         errors.push("Numer konia nie może być pusty!");
+                    }
+
+                    if (isNaN(parseInt(target.value))) {
+                        errors.push("Numer startowy konia musi być liczbą całkowitą!");
                     }
                 }
 
@@ -171,7 +176,13 @@
                 if (target.name === "yob") {
                     if (target.value !== "") {
                         this.horse.yob = target.value;
-                    } else {
+                    }
+
+                    if (isNaN(Date.parse(new Date(target.value)))) {
+                        errors.push("Zły format daty!");
+                    }
+
+                    if (target.value === "") {
                         errors.push("Data urodzenia konia nie może być pusta!");
                     }
                 }

@@ -48,7 +48,12 @@
         data () {
             return {
                 actualclass: {},
-                actualhorse: {},
+                actualhorse: {
+                    test: 1,
+                    result: {
+                        notes: []
+                    }
+                },
                 classesamount: 0,
                 horses: [],
                 judges: [],
@@ -65,7 +70,12 @@
                 this.fill();
                 this.results();
                 this.checkArbitrator();
-                console.log(this.judges);
+            }
+        },
+        async mounted () {
+            if (!this.horses.length) {
+                await router.push("/classes");
+                alert("Nie przydzielono żadnego konia!");
             }
         },
         methods: {

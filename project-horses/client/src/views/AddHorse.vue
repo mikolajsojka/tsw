@@ -225,6 +225,10 @@
                     errors.push("Numer startowy konia musi być liczbą całkowitą!");
                 }
 
+                if (isNaN(Date.parse(new Date(this.horse.yob)))) {
+                    errors.push("Zły format daty!");
+                }
+
                 if (errors.length) {
                     errors.forEach(element => {
                         alert(element);
