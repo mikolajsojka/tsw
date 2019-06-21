@@ -51,14 +51,10 @@
             },
             change ({ target }) {
                 if (target.name === "name") {
-                    if (target.value !== "") {
-                        this.judge.judge = target.value;
-                    }
+                    this.judge.judge = target.value;
                 }
                 if (target.name === "country") {
-                    if (target.value !== "") {
-                        this.judge.country = target.value;
-                    }
+                    this.judge.country = target.value;
                 }
             }
         }

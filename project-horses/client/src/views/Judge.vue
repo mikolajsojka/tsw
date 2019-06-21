@@ -6,9 +6,9 @@
                 <div class="info">
                     <div class="first">
                         <label>Imię</label>
-                        <input name="name" v-model="judge.judge" @change="change">
+                        <input name="name" v-bind:value="judge.judge" @change="change">
                         <label>Kraj</label>
-                        <input name="country" v-model="judge.country" @change="change">
+                        <input name="country" v-bind:value="judge.country" @change="change">
                     </div>
                 </div>
             </div>
@@ -33,13 +33,29 @@
         },
         methods: {
             change ({ target }) {
+                let errors = [];
                 if (target.name === "name") {
-                    this.judge.judge = target.value;
+                    if (target.value !== "") {
+                        this.judge.judge = target.value;
+                    } else {
+                        errors.push("Godność sędziego nie może być pusta!");
+                    }
                 }
                 if (target.name === "country") {
-                    this.judge.country = target.value;
+                    if (target.value !== "") {
+                        this.judge.country = target.value;
+                    } else {
+                        errors.push("Kraj pochodzenia sędziego nie może być pusty!");
+                    }
                 }
-                this.$store.dispatch("EDIT_JUDGE", this.judge);
+
+                if (errors.length) {
+                    errors.forEach(element => {
+                        alert(element);
+                    });
+                } else {
+                    this.$store.dispatch("EDIT_JUDGE", this.judge);
+                }
             },
             deletejudge () {
                 if (confirm("Czy na pewno chcesz usunąć?")) {

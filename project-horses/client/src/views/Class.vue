@@ -8,7 +8,7 @@
                         <label>Nazwa klasy</label>
                         <div class="classname">
                             <div class="number"> Nr {{item.number}}.</div>
-                            <input name="name" v-model="item.category" @change="change">
+                            <input name="name" v-bind:value="item.category" @change="change">
                         </div>
                         <label>Sędziowie</label>
                         <div class="judge-pagination">
@@ -81,8 +81,13 @@
                 this.judgespagination = Array.from(this.judges).slice(0, 2);
             },
             change ({ target }) {
+                let errors = [];
                 if (target.name === "name") {
-                    this.item.category = target.value;
+                    if (target.value !== "") {
+                        this.item.category = target.value;
+                    } else {
+                        errors.push("Nazwa klasy nie może być pusta!");
+                    }
                 }
                 if (target.name === "judges") {
                     this.item.committee.push(parseInt(target.value));
@@ -98,8 +103,15 @@
                     this.judgespagination = this.renderjudges();
                     this.limit = Math.ceil(this.judges.length / 2) * 2;
                 }
-                document.getElementById("select").value = "";
-                this.$store.dispatch("EDIT_CLASS", this.item);
+
+                if (errors.length) {
+                    errors.forEach(element => {
+                        alert(element);
+                    });
+                } else {
+                    document.getElementById("select").value = "";
+                    this.$store.dispatch("EDIT_CLASS", this.item);
+                }
             },
             deleteclass () {
                 if (confirm("Czy na pewno chcesz usunąć?")) {

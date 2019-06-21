@@ -64,9 +64,7 @@
             },
             change ({ target }) {
                 if (target.name === "name") {
-                    if (target.value !== "") {
-                        this.item.category = target.value;
-                    }
+                    this.item.category = target.value;
                 }
                 if (target.name === "judges") {
                     this.item.committee.push(parseInt(target.value));

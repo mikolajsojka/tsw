@@ -201,8 +201,12 @@
                     errors.push("Nie podano kraju pochodzenia ojca matki konia!");
                 }
 
-                if (this.horse.classes === "") {
+                if (this.horse.class === "") {
                     errors.push("Nie dodano konia do żadnej klasy!");
+                }
+
+                if (isNaN(parseInt(this.horse.number))) {
+                    errors.push("Numer startowy konia musi być liczbą całkowitą!");
                 }
 
                 if (errors.length) {
@@ -215,81 +219,55 @@
             },
             change ({ target }) {
                 if (target.name === "name") {
-                    if (target.value !== "") {
-                        this.horse.name = target.value;
-                    }
+                    this.horse.name = target.value;
                 }
 
                 if (target.name === "number") {
-                    if (target.value !== "") {
-                        this.horse.number = target.value;
-                    }
+                    this.horse.number = target.value;
                 }
 
                 if (target.name === "country") {
-                    if (target.value !== "") {
-                        this.horse.country = target.value;
-                    }
+                    this.horse.country = target.value;
                 }
 
                 if (target.name === "yob") {
-                    if (target.value !== "") {
-                        this.horse.yob = target.value;
-                    }
+                    this.horse.yob = target.value;
                 }
 
                 if (target.name === "hair") {
-                    if (target.value !== "") {
-                        this.horse.hair = target.value;
-                    }
+                    this.horse.hair = target.value;
                 }
 
                 if (target.name === "sex") {
-                    if (target.value !== "") {
-                        this.horse.sex = target.value;
-                    }
+                    this.horse.sex = target.value;
                 }
 
                 if (target.name === "bloodline-father") {
-                    if (target.value !== "") {
-                        this.horse.bloodline.father.name = target.value;
-                    }
+                    this.horse.bloodline.father.name = target.value;
                 }
 
                 if (target.name === "bloodline-father-country") {
-                    if (target.value !== "") {
-                        this.horse.bloodline.father.country = target.value;
-                    }
+                    this.horse.bloodline.father.country = target.value;
                 }
 
                 if (target.name === "bloodline-mother") {
-                    if (target.value !== "") {
-                        this.horse.bloodline.mother.name = target.value;
-                    }
+                    this.horse.bloodline.mother.name = target.value;
                 }
 
                 if (target.name === "bloodline-mother-country") {
-                    if (target.value !== "") {
-                        this.horse.bloodline.mother.country = target.value;
-                    }
+                    this.horse.bloodline.mother.country = target.value;
                 }
 
                 if (target.name === "bloodline-father-mother") {
-                    if (target.value !== "") {
-                        this.horse.bloodline.fathermother.name = target.value;
-                    }
+                    this.horse.bloodline.fathermother.name = target.value;
                 }
 
                 if (target.name === "bloodline-father-mother-country") {
-                    if (target.value !== "") {
-                        this.horse.bloodline.fathermother.country = target.value;
-                    }
+                    this.horse.bloodline.fathermother.country = target.value;
                 }
 
                 if (target.name === "classes") {
-                    if (target.value !== "") {
-                        this.horse.class = target.value;
-                    }
+                    this.horse.class = target.value;
                 }
             }
         }
