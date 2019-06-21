@@ -205,6 +205,22 @@
                     errors.push("Nie dodano konia do żadnej klasy!");
                 }
 
+                if (this.horse.breeder.name === "") {
+                    errors.push("Nie podano godności hodowcy konia!");
+                }
+
+                if (this.horse.breeder.country === "") {
+                    errors.push("Nie podano kraju pochodzenia hodowcy konia!");
+                }
+
+                if (this.horse.owner.name === "") {
+                    errors.push("Nie podano godności właściciela konia!");
+                }
+
+                if (this.horse.owner.country === "") {
+                    errors.push("Nie podano kraju pochodzenia właściciela konia!");
+                }
+
                 if (isNaN(parseInt(this.horse.number))) {
                     errors.push("Numer startowy konia musi być liczbą całkowitą!");
                 }
@@ -264,6 +280,22 @@
 
                 if (target.name === "bloodline-father-mother-country") {
                     this.horse.bloodline.fathermother.country = target.value;
+                }
+
+                if (target.name === "breeder-name") {
+                    this.horse.breeder.name = target.value;
+                }
+
+                if (target.name === "breeder-country") {
+                    this.horse.breeder.country = target.value;
+                }
+
+                if (target.name === "owner-name") {
+                    this.horse.owner.name = target.value;
+                }
+
+                if (target.name === "owner-country") {
+                    this.horse.owner.country = target.value;
                 }
 
                 if (target.name === "classes") {

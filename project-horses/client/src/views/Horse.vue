@@ -7,17 +7,17 @@
                 <div class="info">
                     <div class="first">
                         <label>Imię</label>
-                        <input name="name" v-model="horse.name" @change="change">
+                        <input name="name" v-bind:value="horse.name" @change="change">
                         <label>Numer startowy</label>
-                        <input name="number" v-model="horse.number" @change="change">
+                        <input name="number" v-bind:value="horse.number" @change="change">
                         <label>Kraj Pochodzenia</label>
-                        <input name="country" v-model="horse.country" @change="change">
+                        <input name="country" v-bind:value="horse.country" @change="change">
                         <label>Data urodzenia</label>
-                        <input name="yob" v-model="horse.yob" @change="change">
+                        <input name="yob" v-bind:value="horse.yob" @change="change">
                         <label>Sierść</label>
-                        <input name="hair" v-model="horse.hair" @change="change">
+                        <input name="hair" v-bind:value="horse.hair" @change="change">
                         <label>Płeć</label>
-                        <input name="sex" v-model="horse.sex" @change="change">
+                        <input name="sex" v-bind:value="horse.sex" @change="change">
                         <label>Klasa startowa</label>
                         <select name="classes" @change="change">
                             <option v-for="item in classes" :value="item.number" :key="item._id">Nr {{item.number}}. {{item.category}}</option>
@@ -29,67 +29,67 @@
                         <label>Rodowód - Ojciec</label>
                         <input
                             name="bloodline-father"
-                            v-model="
+                            v-bind:value="
                                 horse.bloodline.father.name
                             "
                             @change="change"
                         >
                         <input
                             name="bloodline-father-country"
-                            v-model="horse.bloodline.father.country
+                            v-bind:value="horse.bloodline.father.country
                             "
                             @change="change"
                         >
                         <label>Rodowód - Matka</label>
                         <input
                             name="bloodline-mother"
-                            v-model="horse.bloodline.mother.name
+                            v-bind:value="horse.bloodline.mother.name
                             "
                             @change="change"
                         >
                         <input
                             name="bloodline-mother-country"
-                            v-model="horse.bloodline.mother.country
+                            v-bind:value="horse.bloodline.mother.country
                             "
                             @change="change"
                         >
                         <label>Rodowód - Ojciec Matki</label>
                         <input
                             name="bloodline-father-mother"
-                            v-model="horse.bloodline.fathermother.name
+                            v-bind:value="horse.bloodline.fathermother.name
                             "
                             @change="change"
                         >
                         <input
                             name="bloodline-father-mother-country"
-                            v-model="horse.bloodline.fathermother.country
+                            v-bind:value="horse.bloodline.fathermother.country
                             "
                             @change="change"
                         >
                         <label>Hodowca</label>
                         <input
                             name="breeder-name"
-                            v-model="
+                            v-bind:value="
                                 horse.breeder.name
                             "
                             @change="change"
                         >
                         <input
                             name="breeder-country"
-                            v-model="horse.breeder.country
+                            v-bind:value="horse.breeder.country
                             "
                             @change="change"
                         >
                         <label>Właściciel</label>
                         <input
                             name="owner-name"
-                            v-model="horse.owner.name
+                            v-bind:value="horse.owner.name
                             "
                             @change="change"
                         >
                         <input
                             name="owner-country"
-                            v-model="
+                            v-bind:value="
                                 horse.owner.country
                             "
                             @change="change"
@@ -142,59 +142,151 @@
         },
         methods: {
             change ({ target }) {
+                let errors = [];
+
                 if (target.name === "name") {
-                    this.horse.name = target.value;
+                    if (target.value !== "") {
+                        this.horse.name = target.value;
+                    } else {
+                        errors.push("Imię konia nie może być puste!");
+                    }
                 }
 
                 if (target.name === "number") {
-                    this.horse.number = target.value;
+                    if (target.value !== "") {
+                        this.horse.number = target.value;
+                    } else {
+                        errors.push("Numer konia nie może być pusty!");
+                    }
                 }
 
                 if (target.name === "country") {
-                    this.horse.country = target.value;
+                    if (target.value !== "") {
+                        this.horse.country = target.value;
+                    } else {
+                        errors.push("Kraj pochodzenia konia nie może być pusty!");
+                    }
                 }
 
                 if (target.name === "yob") {
-                    this.horse.yob = target.value;
+                    if (target.value !== "") {
+                        this.horse.yob = target.value;
+                    } else {
+                        errors.push("Data urodzenia konia nie może być pusta!");
+                    }
                 }
 
                 if (target.name === "hair") {
-                    this.horse.hair = target.value;
+                    if (target.value !== "") {
+                        this.horse.hair = target.value;
+                    } else {
+                        errors.push("Sierść konia nie może być pusta!");
+                    }
                 }
 
                 if (target.name === "sex") {
-                    this.horse.sex = target.value;
+                    if (target.value !== "") {
+                        this.horse.sex = target.value;
+                    } else {
+                        errors.push("Płeć konia nie może być pusta!");
+                    }
                 }
 
                 if (target.name === "bloodline-father") {
-                    this.horse.bloodline.father.name = target.value;
+                    if (target.value !== "") {
+                        this.horse.bloodline.father.name = target.value;
+                    } else {
+                        errors.push("Ojciec konia nie może być pusty!");
+                    }
                 }
 
                 if (target.name === "bloodline-father-country") {
-                    this.horse.bloodline.father.country = target.value;
+                    if (target.value !== "") {
+                        this.horse.bloodline.father.country = target.value;
+                    } else {
+                        errors.push("Kraj ojca konia nie może być pusty!");
+                    }
                 }
 
                 if (target.name === "bloodline-mother") {
-                    this.horse.bloodline.mother.name = target.value;
+                    if (target.value !== "") {
+                        this.horse.bloodline.mother.name = target.value;
+                    } else {
+                        errors.push("Matka konia nie może być pusta!");
+                    }
                 }
 
                 if (target.name === "bloodline-mother-country") {
-                    this.horse.bloodline.mother.country = target.value;
+                    if (target.value !== "") {
+                        this.horse.bloodline.mother.country = target.value;
+                    } else {
+                        errors.push("Kraj matki konia nie może być pusty!");
+                    }
                 }
 
                 if (target.name === "bloodline-father-mother") {
-                    this.horse.bloodline.fathermother.name = target.value;
+                    if (target.value !== "") {
+                        this.horse.bloodline.fathermother.name = target.value;
+                    } else {
+                        errors.push("Ojciec matki konia nie może być pusty!");
+                    }
                 }
 
                 if (target.name === "bloodline-father-mother-country") {
-                    this.horse.bloodline.fathermother.country = target.value;
+                    if (target.value !== "") {
+                        this.horse.bloodline.fathermother.country = target.value;
+                    } else {
+                        errors.push("Kraj ojca matki konia nie może być pusty!");
+                    }
                 }
 
                 if (target.name === "classes") {
-                    this.horse.class = target.value;
+                    if (target.value !== "") {
+                        this.horse.class = target.value;
+                    } else {
+                        errors.push("Koń musi być przydzielony do jakiejś klasy!");
+                    }
                 }
 
-                this.$store.dispatch("EDIT_HORSE", this.horse);
+                if (target.name === "breeder-name") {
+                    if (target.value !== "") {
+                        this.horse.breeder.name = target.value;
+                    } else {
+                        errors.push("Godność hodowcy konia nie może być pusta!");
+                    }
+                }
+
+                if (target.name === "breeder-country") {
+                    if (target.value !== "") {
+                        this.horse.breeder.country = target.value;
+                    } else {
+                        errors.push("Kraj pochodzenia hodowcy konia nie może być pusty!");
+                    }
+                }
+
+                if (target.name === "owner-name") {
+                    if (target.value !== "") {
+                        this.horse.owner.name = target.value;
+                    } else {
+                        errors.push("Godność właściciela konia nie może być pusta!");
+                    }
+                }
+
+                if (target.name === "owner-country") {
+                    if (target.value !== "") {
+                        this.horse.owner.country = target.value;
+                    } else {
+                        errors.push("Kraj pochodzenia właściciela konia nie może być pusty!");
+                    }
+                }
+
+                if (errors.length) {
+                    errors.forEach(element => {
+                        alert(element);
+                    });
+                } else {
+                    this.$store.dispatch("EDIT_HORSE", this.horse);
+                }
             },
             deletehorse () {
                 if (confirm("Czy na pewno chcesz usunąć?")) {
