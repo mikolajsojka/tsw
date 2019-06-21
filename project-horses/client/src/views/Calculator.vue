@@ -21,15 +21,15 @@
 
         <div class="notes">
             <div class="row" v-for="(note,index) in actualhorse.result.notes" :key="note._id">
-                <input v-bind:id="note._id" @change="change" name="htype" v-model="note.htype">
+                <input v-bind:id="note._id" @change="change" name="htype" v-bind:value="note.htype">
 
-                <input v-bind:id="note._id" @change="change" name="head" v-model="note.head">
+                <input v-bind:id="note._id" @change="change" name="head" v-bind:value="note.head">
 
-                <input v-bind:id="note._id" @change="change" name="barrel" v-model="note.barrel">
+                <input v-bind:id="note._id" @change="change" name="barrel" v-bind:value="note.barrel">
 
-                <input v-bind:id="note._id" @change="change" name="legs" v-model="note.legs">
+                <input v-bind:id="note._id" @change="change" name="legs" v-bind:value="note.legs">
 
-                <input v-bind:id="note._id" @change="change" name="move" v-model="note.move">
+                <input v-bind:id="note._id" @change="change" name="move" v-bind:value="note.move">
                 <div class="judge" @click="goJudge(judges[index]._id)">{{judges[index].judge}}</div>
             </div>
             <div class="arbitrator" v-if="checkarbitrator">
@@ -154,7 +154,22 @@
                     this.judges.push(this.$store.state.judges[index]);
                 });
             },
+            checknote (x) {
+                let note = x;
+
+                while (note >= 0) {
+                    if (note === 0.5) {
+                        return true;
+                    }
+
+                    if (note < 0.5) {
+                        return false;
+                    }
+                    note -= 0.5;
+                }
+            },
             change ({ target }) {
+                let errors = [];
                 if (target.name === "choosehorse") {
                     let index = this.horses.findIndex(item => item._id === target.value);
                     this.actualhorse = this.horses[index];
@@ -165,42 +180,89 @@
                 }
 
                 if (target.name === "barrel") {
-                    let index = this.actualhorse.result.notes.findIndex(
-                        item => item._id === target.id
-                    );
-                    this.actualhorse.result.notes[index].barrel = target.value;
+                    if (parseInt(target.value) >= 0 && parseInt(target.value) <= 20) {
+                        if (this.checknote(parseFloat(target.value))) {
+                            let index = this.actualhorse.result.notes.findIndex(
+                                item => item._id === target.id
+                            );
+                            this.actualhorse.result.notes[index].barrel = target.value;
+                        } else {
+                            errors.push("Nota, kłoda - stopniowanie co 0.5");
+                        }
+                    } else {
+                        errors.push("Nota, kłoda - przedział not to [0,20]");
+                    }
                 }
 
                 if (target.name === "head") {
-                    let index = this.actualhorse.result.notes.findIndex(
-                        item => item._id === target.id
-                    );
-                    this.actualhorse.result.notes[index].head = target.value;
+                    if (parseInt(target.value) >= 0 && parseInt(target.value) <= 20) {
+                        if (this.checknote(parseFloat(target.value))) {
+                            let index = this.actualhorse.result.notes.findIndex(
+                                item => item._id === target.id
+                            );
+                            this.actualhorse.result.notes[index].head = target.value;
+                        } else {
+                            errors.push("Nota, głowa - stopniowanie co 0.5");
+                        }
+                    } else {
+                        errors.push("Nota, głowa - przedział not to [0,20]");
+                    }
                 }
 
                 if (target.name === "htype") {
-                    let index = this.actualhorse.result.notes.findIndex(
-                        item => item._id === target.id
-                    );
-                    this.actualhorse.result.notes[index].htype = target.value;
+                    if (parseInt(target.value) >= 0 && parseInt(target.value) <= 20) {
+                        if (this.checknote(parseFloat(target.value))) {
+                            let index = this.actualhorse.result.notes.findIndex(
+                                item => item._id === target.id
+                            );
+                            this.actualhorse.result.notes[index].htype = target.value;
+                        } else {
+                            errors.push("Nota, sierść - stopniowanie co 0.5");
+                        }
+                    } else {
+                        errors.push("Nota, sierść - przedział not to [0,20]");
+                    }
                 }
 
                 if (target.name === "legs") {
-                    let index = this.actualhorse.result.notes.findIndex(
-                        item => item._id === target.id
-                    );
-                    this.actualhorse.result.notes[index].legs = target.value;
+                    if (parseInt(target.value) >= 0 && parseInt(target.value) <= 20) {
+                        if (this.checknote(parseFloat(target.value))) {
+                            let index = this.actualhorse.result.notes.findIndex(
+                                item => item._id === target.id
+                            );
+                            this.actualhorse.result.notes[index].legs = target.value;
+                        } else {
+                            errors.push("Nota, nogi - stopniowanie co 0.5");
+                        }
+                    } else {
+                        errors.push("Nota, nogi - przedział not to [0,20]");
+                    }
                 }
 
                 if (target.name === "move") {
-                    let index = this.actualhorse.result.notes.findIndex(
-                        item => item._id === target.id
-                    );
-                    this.actualhorse.result.notes[index].move = target.value;
+                    if (parseInt(target.value) >= 0 && parseInt(target.value) <= 20) {
+                        if (this.checknote(parseFloat(target.value))) {
+                            let index = this.actualhorse.result.notes.findIndex(
+                                item => item._id === target.id
+                            );
+                            this.actualhorse.result.notes[index].move = target.value;
+                        } else {
+                            errors.push("Nota, ruch - stopniowanie co 0.5");
+                        }
+                    } else {
+                        errors.push("Nota, ruch - przedział not to [0,20]");
+                    }
                 }
 
                 this.results();
-                this.$store.dispatch("EDIT_HORSE_NOTES", this.actualhorse);
+
+                if (errors.length) {
+                    errors.forEach(element => {
+                        alert(element);
+                    });
+                } else {
+                    this.$store.dispatch("EDIT_HORSE_NOTES", this.actualhorse);
+                }
 
                 this.checkarbitrator = false;
                 this.checkArbitrator();
