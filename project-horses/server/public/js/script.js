@@ -312,6 +312,9 @@ document.onreadystatechange = () => {
                             horses.forEach((horse, indx) => {
                                 if (horse.class === data.number) {
                                     horses[indx].result.notes.splice(index, 1);
+                                    document.getElementById("actual").innerHTML = "";
+                                    document.getElementById("end").innerHTML = "";
+                                    checkClasses();
                                 }
                             });
                         }

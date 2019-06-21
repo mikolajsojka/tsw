@@ -64,7 +64,9 @@
             },
             change ({ target }) {
                 if (target.name === "name") {
-                    this.item.category = target.value;
+                    if (target.value !== "") {
+                        this.item.category = target.value;
+                    }
                 }
                 if (target.name === "judges") {
                     this.item.committee.push(parseInt(target.value));
@@ -83,7 +85,11 @@
                 document.getElementById("select").value = "";
             },
             saveclass () {
-                this.$store.dispatch("ADD_CLASS", this.item);
+                if (this.item.category !== "") {
+                    this.$store.dispatch("ADD_CLASS", this.item);
+                } else {
+                    alert("Nie podano nazwy klasy!");
+                }
             },
             deletejudge (id) {
                 this.item.committee.forEach((element, index) => {

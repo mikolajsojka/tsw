@@ -151,59 +151,145 @@
         },
         methods: {
             savehorse () {
-                this.$store.dispatch("ADD_HORSE", this.horse);
+                let errors = [];
+
+                if (this.horse.name === "") {
+                    errors.push("Nie podano nazwy konia!");
+                }
+
+                if (this.horse.number === "") {
+                    errors.push("Nie podano numeru startowego konia!");
+                }
+
+                if (this.horse.country === "") {
+                    errors.push("Nie podano kraju pochodzenia konia!");
+                }
+
+                if (this.horse.yob === "") {
+                    errors.push("Nie podano daty urodzenia konia!");
+                }
+
+                if (this.horse.hair === "") {
+                    errors.push("Nie podano sierści konia!");
+                }
+
+                if (this.horse.sex === "") {
+                    errors.push("Nie podano płci konia!");
+                }
+
+                if (this.horse.bloodline.father.name === "") {
+                    errors.push("Nie podano nazwy ojca konia!");
+                }
+
+                if (this.horse.bloodline.father.country === "") {
+                    errors.push("Nie podano kraju pochodzenia ojca konia!");
+                }
+
+                if (this.horse.bloodline.mother.name === "") {
+                    errors.push("Nie podano nazwy matki konia!");
+                }
+
+                if (this.horse.bloodline.mother.country === "") {
+                    errors.push("Nie podano kraju pochodzenia matki konia!");
+                }
+
+                if (this.horse.bloodline.fathermother.name === "") {
+                    errors.push("Nie podano nazwy ojca matki konia!");
+                }
+
+                if (this.horse.bloodline.fathermother.country === "") {
+                    errors.push("Nie podano kraju pochodzenia ojca matki konia!");
+                }
+
+                if (this.horse.classes === "") {
+                    errors.push("Nie dodano konia do żadnej klasy!");
+                }
+
+                if (errors.length) {
+                    errors.forEach(element => {
+                        alert(element);
+                    });
+                } else {
+                    this.$store.dispatch("ADD_HORSE", this.horse);
+                }
             },
             change ({ target }) {
                 if (target.name === "name") {
-                    this.horse.name = target.value;
+                    if (target.value !== "") {
+                        this.horse.name = target.value;
+                    }
                 }
 
                 if (target.name === "number") {
-                    this.horse.number = target.value;
+                    if (target.value !== "") {
+                        this.horse.number = target.value;
+                    }
                 }
 
                 if (target.name === "country") {
-                    this.horse.country = target.value;
+                    if (target.value !== "") {
+                        this.horse.country = target.value;
+                    }
                 }
 
                 if (target.name === "yob") {
-                    this.horse.yob = target.value;
+                    if (target.value !== "") {
+                        this.horse.yob = target.value;
+                    }
                 }
 
                 if (target.name === "hair") {
-                    this.horse.hair = target.value;
+                    if (target.value !== "") {
+                        this.horse.hair = target.value;
+                    }
                 }
 
                 if (target.name === "sex") {
-                    this.horse.sex = target.value;
+                    if (target.value !== "") {
+                        this.horse.sex = target.value;
+                    }
                 }
 
                 if (target.name === "bloodline-father") {
-                    this.horse.bloodline.father.name = target.value;
+                    if (target.value !== "") {
+                        this.horse.bloodline.father.name = target.value;
+                    }
                 }
 
                 if (target.name === "bloodline-father-country") {
-                    this.horse.bloodline.father.country = target.value;
+                    if (target.value !== "") {
+                        this.horse.bloodline.father.country = target.value;
+                    }
                 }
 
                 if (target.name === "bloodline-mother") {
-                    this.horse.bloodline.mother.name = target.value;
+                    if (target.value !== "") {
+                        this.horse.bloodline.mother.name = target.value;
+                    }
                 }
 
                 if (target.name === "bloodline-mother-country") {
-                    this.horse.bloodline.mother.country = target.value;
+                    if (target.value !== "") {
+                        this.horse.bloodline.mother.country = target.value;
+                    }
                 }
 
                 if (target.name === "bloodline-father-mother") {
-                    this.horse.bloodline.fathermother.name = target.value;
+                    if (target.value !== "") {
+                        this.horse.bloodline.fathermother.name = target.value;
+                    }
                 }
 
                 if (target.name === "bloodline-father-mother-country") {
-                    this.horse.bloodline.fathermother.country = target.value;
+                    if (target.value !== "") {
+                        this.horse.bloodline.fathermother.country = target.value;
+                    }
                 }
 
                 if (target.name === "classes") {
-                    this.horse.class = target.value;
+                    if (target.value !== "") {
+                        this.horse.class = target.value;
+                    }
                 }
             }
         }

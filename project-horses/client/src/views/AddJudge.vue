@@ -31,14 +31,34 @@
         },
         methods: {
             savejudge () {
-                this.$store.dispatch("ADD_JUDGE", this.judge);
+                let errors = [];
+
+                if (this.judge.judge === "") {
+                    errors.push("Nie podano godności sędziego!");
+                }
+
+                if (this.judge.country === "") {
+                    errors.push("Nie podano kraju pochodzenia sędziego!");
+                }
+
+                if (errors.length) {
+                    errors.forEach(element => {
+                        alert(element);
+                    });
+                } else {
+                    this.$store.dispatch("ADD_JUDGE", this.judge);
+                }
             },
             change ({ target }) {
                 if (target.name === "name") {
-                    this.judge.judge = target.value;
+                    if (target.value !== "") {
+                        this.judge.judge = target.value;
+                    }
                 }
                 if (target.name === "country") {
-                    this.judge.country = target.value;
+                    if (target.value !== "") {
+                        this.judge.country = target.value;
+                    }
                 }
             }
         }
