@@ -16,6 +16,21 @@ function isValidDate(value) {
     return true;
 }
 
+function checknote(x) {
+    let note = x;
+
+    while (note >= 0) {
+        if (note === 0.5) {
+            return true;
+        }
+
+        if (note < 0.5) {
+            return false;
+        }
+        note -= 0.5;
+    }
+}
+
 router.use(expressValidator(
     {
         customValidators: {
@@ -281,32 +296,57 @@ module.exports = (io) => {
 
         router.post("/editnotes", (req, res) => {
             let { horse } = req.body;
-            Horse.updateOne(
-                { _id: ObjectId(horse._id) },
-                {
-                    $set: {
-                        result: {
-                            arbitrator: horse.result.arbitrator,
-                            notes: horse.result.notes
+
+            let errors = [];
+            horse.result.notes.forEach((note) => {
+                if (!parseFloat(note.htype)) {
+                    errors.push("Nota, sierść nie spełnia wymagań!");
+                }
+                if (!parseFloat(note.head)) {
+                    errors.push("Nota, głowa nie spełnia wymagań!");
+                }
+                if (!parseFloat(note.barrel)) {
+                    errors.push("Nota, kłoda nie spełnia wymagań!");
+                }
+                if (!parseFloat(note.legs)) {
+                    errors.push("Nota, nogi nie spełnia wymagań!");
+                }
+                if (!parseFloat(note.move)) {
+                    errors.push("Nota, ruch nie spełnia wymagań!");
+                }
+            });
+
+            if (errors.length) {
+                res.status(400).json(errors);
+            }
+            else {
+                Horse.updateOne(
+                    { _id: ObjectId(horse._id) },
+                    {
+                        $set: {
+                            result: {
+                                arbitrator: horse.result.arbitrator,
+                                notes: horse.result.notes
+                            }
+                        }
+                    },
+                    (err) => {
+                        if (err) {
+                            res.status(400).send("Problem przy zmianie not");
+                        }
+                        else {
+                            res.status(200).send("Noty zmienione");
+
+                            Horse.findOne({ _id: ObjectId(horse._id) }, (err, horse) => {
+                                if (horse) {
+                                    socket.emit("editnotes", horse);
+                                    socket.broadcast.emit("editnotes", horse);
+                                }
+                            });
                         }
                     }
-                },
-                (err) => {
-                    if (err) {
-                        res.status(400).send("Problem przy zmianie not");
-                    }
-                    else {
-                        res.status(200).send("Noty zmienione");
-
-                        Horse.findOne({ _id: ObjectId(horse._id) }, (err, horse) => {
-                            if (horse) {
-                                socket.emit("editnotes", horse);
-                                socket.broadcast.emit("editnotes", horse);
-                            }
-                        });
-                    }
-                }
-            );
+                );
+            }
         });
 
         router.post("/edit", (req, res) => {
