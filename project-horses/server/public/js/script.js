@@ -222,11 +222,11 @@ document.onreadystatechange = () => {
                 classes[index].status = false;
                 checkClass(element, index);
 
-                if (element.status) {
-                    renderClassTrue(element);
+                if (classes[index].status) {
+                    renderClassTrue(classes[index]);
                 }
                 else {
-                    renderClassFalse(element);
+                    renderClassFalse(classes[index]);
                 }
             });
 
@@ -276,50 +276,12 @@ document.onreadystatechange = () => {
             socket.on("editclass", (data) => {
                 let index = classes.findIndex(item => item._id === data._id);
 
-                let temp = classes[index];
                 classes[index] = data;
 
-                document.getElementById(classes[index]._id).remove();
-
+                checkClass(classes[index], index);
                 classes.sort((a, b) => a.number - b.number);
 
-                checkClass(classes[index], index);
-                if (classes[index].status) {
-                    renderClassTrue(classes[index]);
-                }
-                else {
-                    renderClassFalse(classes[index]);
-                }
-                clickEvents();
-
-                if (data.committee.length > temp.committee.length) {
-                    horses.forEach((horse, indx) => {
-                        if (horse.class === data.number) {
-                            horses[indx].result.notes.push({
-                                htype: null,
-                                head: null,
-                                barrel: null,
-                                legs: null,
-                                move: null
-                            });
-                        }
-                    });
-                }
-
-                if (data.committee.length < temp.committee.length) {
-                    temp.committee.forEach((element, index) => {
-                        if (element !== data.committee[index]) {
-                            horses.forEach((horse, indx) => {
-                                if (horse.class === data.number) {
-                                    horses[indx].result.notes.splice(index, 1);
-                                    document.getElementById("actual").innerHTML = "";
-                                    document.getElementById("end").innerHTML = "";
-                                    checkClasses();
-                                }
-                            });
-                        }
-                    });
-                }
+                // wykminić dlaczego się status klasy nie chce zmienić
 
 
                 classhorses = horses.map((horse) => {
@@ -333,8 +295,9 @@ document.onreadystatechange = () => {
 
                 sorting();
 
-
-                editClass(data);
+                document.getElementById("actual").innerHTML = "";
+                document.getElementById("end").innerHTML = "";
+                checkClasses();
             });
 
             socket.on("editnotes", (data) => {

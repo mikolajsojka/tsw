@@ -98,13 +98,15 @@ module.exports = (io) => {
                                 _id: item._id,
                                 committee: item.committee,
                                 number: item.number,
-                                category: item.category
+                                category: item.category,
+                                status: false
                             });
                             socket.broadcast.emit("editclass", {
                                 _id: item._id,
                                 committee: item.committee,
                                 number: item.number,
-                                category: item.category
+                                category: item.category,
+                                status: false
                             });
                         }
                     }
