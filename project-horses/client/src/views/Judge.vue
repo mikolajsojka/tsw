@@ -6,9 +6,9 @@
                 <div class="info">
                     <div class="first">
                         <label>Imię</label>
-                        <input name="name" v-bind:value="judge.judge" @change="change">
+                        <input name="name"  @change="change" v-bind:value="judge.judge">
                         <label>Kraj</label>
-                        <input name="country" v-bind:value="judge.country" @change="change">
+                        <input name="country"  @change="change" v-bind:value="judge.country">
                     </div>
                 </div>
             </div>

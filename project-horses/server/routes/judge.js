@@ -5,6 +5,9 @@ const express = require("express");
 const ObjectId = require("mongodb").ObjectID;
 
 const router = express.Router();
+let expressValidator = require("express-validator");
+
+router.use(expressValidator());
 
 const mongoose = require("mongoose");
 
@@ -25,27 +28,37 @@ module.exports = (io) => {
             let { item } = req.body;
             let id = 0;
 
-            Judge.find({}, (err, items) => {
-                items.forEach((element) => {
-                    if (parseInt(element.id) > id) {
-                        id = parseInt(element.id);
-                    }
-                });
-                id += 1;
-                let newJudge = new Judge({
-                    id,
-                    judge: item.judge,
-                    country: item.country
-                });
+            req.checkBody("item.judge", "Wymagana jest godność sędziego!").notEmpty();
+            req.checkBody("item.country", "Wymagany jest kraj pochodzenia sędziego!").notEmpty();
 
-                Judge.createJudge(newJudge, (err, _judge) => {
-                    if (err) throw err;
+            let errors = req.validationErrors();
 
-                    res.status(200).json(newJudge);
-                    socket.emit("addjudge", newJudge);
-                    socket.broadcast.emit("addjudge", newJudge);
+            if (errors) {
+                res.status(400).json(errors);
+            }
+            else {
+                Judge.find({}, (err, items) => {
+                    items.forEach((element) => {
+                        if (parseInt(element.id) > id) {
+                            id = parseInt(element.id);
+                        }
+                    });
+                    id += 1;
+                    let newJudge = new Judge({
+                        id,
+                        judge: item.judge,
+                        country: item.country
+                    });
+
+                    Judge.createJudge(newJudge, (err, _judge) => {
+                        if (err) throw err;
+
+                        res.status(200).json(newJudge);
+                        socket.emit("addjudge", newJudge);
+                        socket.broadcast.emit("addjudge", newJudge);
+                    });
                 });
-            });
+            }
         });
 
         router.post("/edit", (req, res) => {

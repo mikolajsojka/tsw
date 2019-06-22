@@ -6,6 +6,10 @@ const ObjectId = require("mongodb").ObjectID;
 
 const router = express.Router();
 
+let expressValidator = require("express-validator");
+
+router.use(expressValidator());
+
 const mongoose = require("mongoose");
 
 module.exports = (io) => {
@@ -43,95 +47,120 @@ module.exports = (io) => {
         router.post("/add", (req, res) => {
             let { item } = req.body;
 
-            let id = 0;
+            req.checkBody("item.breeder.name", "Wymagana jest godność hodowcy konia!").notEmpty();
+            req.checkBody("item.breeder.country", "Wymagany jest kraj pochodzenia hodowcy konia!").notEmpty();
+            req.checkBody("item.owner.name", "Wymagana jest godność właściciela konia!").notEmpty();
+            req.checkBody("item.owner.country", "Wymagany jest kraj pochodzenia hodowcy konia!").notEmpty();
 
-            let breeder = {
-                name: item.breeder.name,
-                country: item.breeder.country
-            };
-            let owner = {
-                name: item.owner.name,
-                country: item.owner.country
-            };
+            req.checkBody("item.bloodline.father.name", "Wymagane jest imię ojca konia!").notEmpty();
+            req.checkBody("item.bloodline.father.country", "Wymagany jest kraj pochodzenia ojca konia!").notEmpty();
+            req.checkBody("item.bloodline.mother.name", "Wymagane jest imię matki konia!").notEmpty();
+            req.checkBody("item.bloodline.mother.country", "Wymagany jest kraj pochodzenia matki konia!").notEmpty();
+            req.checkBody("item.bloodline.fathermother.name", "Wymagane jest imię ojca matki konia!").notEmpty();
+            req.checkBody("item.bloodline.fathermother.country", "Wymagany jest kraj pochodzenia ojca matki konia!").notEmpty();
 
-            let newnotes = [];
+            req.checkBody("item.number", "Wymagany jest numer konia!").notEmpty();
+            req.checkBody("item.country", "Wymagany jest kraj pochodzenia konia!").notEmpty();
+            req.checkBody("item.yob", "Wymagana jest data urodzenia konia!").notEmpty();
+            req.checkBody("item.hair", "Wymagana jest sierść konia!").notEmpty();
+            req.checkBody("item.sex", "Wymagana jest płeć konia!").notEmpty();
+            req.checkBody("item.name", "Wymagane jest imię konia!").notEmpty();
+            let errors = req.validationErrors();
 
-            let bloodline = {
-                father: {
-                    name: item.bloodline.father.name,
-                    country: item.bloodline.father.country
-                },
-                mother: {
-                    name: item.bloodline.mother.name,
-                    country: item.bloodline.mother.country
-                },
-                fathermother: {
-                    name: item.bloodline.fathermother.name,
-                    country: item.bloodline.fathermother.country
-                }
-            };
+            if (errors) {
+                res.status(400).json(errors);
+            }
+            else {
+                let id = 0;
 
-            Horse.find({}, (err, items) => {
-                items.forEach((element) => {
-                    if (parseInt(element.id) > id) {
-                        id = parseInt(element.id);
+                let breeder = {
+                    name: item.breeder.name,
+                    country: item.breeder.country
+                };
+                let owner = {
+                    name: item.owner.name,
+                    country: item.owner.country
+                };
+
+                let newnotes = [];
+
+                let bloodline = {
+                    father: {
+                        name: item.bloodline.father.name,
+                        country: item.bloodline.father.country
+                    },
+                    mother: {
+                        name: item.bloodline.mother.name,
+                        country: item.bloodline.mother.country
+                    },
+                    fathermother: {
+                        name: item.bloodline.fathermother.name,
+                        country: item.bloodline.fathermother.country
                     }
-                });
-                id += 1;
+                };
 
-                Class.findOne({ number: item.class }, (err, item2) => {
-                    item2.committee.forEach((element) => {
-                        newnotes.push({
-                            htype: "",
-                            head: "",
-                            barrel: "",
-                            legs: "",
-                            move: ""
+                Horse.find({}, (err, items) => {
+                    items.forEach((element) => {
+                        if (parseInt(element.id) > id) {
+                            id = parseInt(element.id);
+                        }
+                    });
+                    id += 1;
+
+                    Class.findOne({ number: item.class }, (err, item2) => {
+                        item2.committee.forEach((element) => {
+                            newnotes.push({
+                                htype: "",
+                                head: "",
+                                barrel: "",
+                                legs: "",
+                                move: ""
+                            });
+                        });
+
+                        let newHorse = new Horse({
+                            id,
+                            number: item.number,
+                            class: item.class,
+                            name: item.name,
+                            country: item.country,
+                            yob: item.yob,
+                            hair: item.hair,
+                            sex: item.sex,
+                            breeder,
+                            owner,
+                            bloodline,
+                            result: {
+                                arbitrator: 0,
+                                notes: newnotes
+                            }
+                        });
+
+                        Horse.createHorse(newHorse, (err, _horse) => {
+                            if (err) throw err;
+                            else {
+                                res.status(200).json({
+                                    _id: newHorse._id,
+                                    id: newHorse.id,
+                                    number: newHorse.number,
+                                    class: newHorse.class,
+                                    name: newHorse.name,
+                                    country: newHorse.country,
+                                    yob: newHorse.yob,
+                                    hair: newHorse.hair,
+                                    sex: newHorse.sex,
+                                    breeder: newHorse.breeder,
+                                    owner: newHorse.owner,
+                                    bloodline: newHorse.bloodline
+                                });
+
+                                socket.emit("addhorse", newHorse);
+                                socket.broadcast.emit("addhorse", newHorse);
+                            }
                         });
                     });
-
-                    let newHorse = new Horse({
-                        id,
-                        number: item.number,
-                        class: item.class,
-                        name: item.name,
-                        country: item.country,
-                        yob: item.yob,
-                        hair: item.hair,
-                        sex: item.sex,
-                        breeder,
-                        owner,
-                        bloodline,
-                        result: {
-                            arbitrator: 0,
-                            notes: newnotes
-                        }
-                    });
-
-                    Horse.createHorse(newHorse, (err, _horse) => {
-                        if (err) throw err;
-                        else {
-                            res.status(200).json({
-                                _id: newHorse._id,
-                                id: newHorse.id,
-                                number: newHorse.number,
-                                class: newHorse.class,
-                                name: newHorse.name,
-                                country: newHorse.country,
-                                yob: newHorse.yob,
-                                hair: newHorse.hair,
-                                sex: newHorse.sex,
-                                breeder: newHorse.breeder,
-                                owner: newHorse.owner,
-                                bloodline: newHorse.bloodline
-                            });
-
-                            socket.emit("addhorse", newHorse);
-                            socket.broadcast.emit("addhorse", newHorse);
-                        }
-                    });
                 });
-            });
+            }
         });
 
         router.get("/freshnotes/:class", (req, res) => {

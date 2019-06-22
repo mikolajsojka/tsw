@@ -6,6 +6,10 @@ const express = require("express");
 
 const router = express.Router();
 
+let expressValidator = require("express-validator");
+
+router.use(expressValidator());
+
 const mongoose = require("mongoose");
 
 module.exports = (io) => {
@@ -26,32 +30,41 @@ module.exports = (io) => {
             let { item } = req.body;
             let number = 0;
 
-            Class.find({}, (err, items) => {
-                items.forEach((element) => {
-                    if (parseInt(element.number) > number) {
-                        number = parseInt(element.number);
-                    }
-                });
-                number += 1;
-                let newClass = new Class({
-                    number,
-                    category: item.category,
-                    committee: item.committee
-                });
+            req.checkBody("item.category", "Wymagana jest nazwa klasy!").notEmpty();
 
-                Class.createClass(newClass, (err, _class) => {
-                    if (err) throw err;
+            let errors = req.validationErrors();
 
-                    res.status(200).json(newClass);
-
-                    socket.emit("addclass", {
-                        number, _id: newClass._id, category: newClass.category, committee: newClass.committee, status: false
+            if (errors) {
+                res.status(400).json(errors);
+            }
+            else {
+                Class.find({}, (err, items) => {
+                    items.forEach((element) => {
+                        if (parseInt(element.number) > number) {
+                            number = parseInt(element.number);
+                        }
                     });
-                    socket.broadcast.emit("addclass", {
-                        number, _id: newClass._id, category: newClass.category, committee: newClass.committee, status: false
+                    number += 1;
+                    let newClass = new Class({
+                        number,
+                        category: item.category,
+                        committee: item.committee
+                    });
+
+                    Class.createClass(newClass, (err, _class) => {
+                        if (err) throw err;
+
+                        res.status(200).json(newClass);
+
+                        socket.emit("addclass", {
+                            number, _id: newClass._id, category: newClass.category, committee: newClass.committee, status: false
+                        });
+                        socket.broadcast.emit("addclass", {
+                            number, _id: newClass._id, category: newClass.category, committee: newClass.committee, status: false
+                        });
                     });
                 });
-            });
+            }
         });
 
         router.post("/edit", (req, res) => {
