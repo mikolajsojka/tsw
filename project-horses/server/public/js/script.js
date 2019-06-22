@@ -490,7 +490,11 @@ document.onreadystatechange = () => {
 
             socket.on("deletejudge", (data) => {
                 let index = judges.findIndex(judge => judge._id === data);
-                let index2 = actualJudges.findIndex(judge => judge._id === data);
+                let index5;
+                try {
+                    index5 = actualJudges.findIndex(judge => judge._id === data);
+                }
+                catch (e) {}
 
                 classes.forEach((item, indx) => {
                     let index3 = item.committee.findIndex(
@@ -507,13 +511,22 @@ document.onreadystatechange = () => {
                             catch (e) {}
                         }
                     });
+
                     classes[indx].committee.splice(index3, 1);
-                    document.getElementById(classes[indx]._id);
-                    checkClass(classes[indx], indx);
                 });
-                actualJudges.splice(index2, 1);
+
+                try {
+                    actualJudges.splice(index5, 1);
+                }
+                catch (e) {}
                 judges.splice(index, 1);
+
                 sorting();
+
+                document.getElementById("actual").innerHTML = "";
+                document.getElementById("end").innerHTML = "";
+
+                checkClasses();
             });
 
             socket.on("addjudge", (data) => {
