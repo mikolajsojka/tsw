@@ -63,26 +63,37 @@ module.exports = (io) => {
 
         router.post("/edit", (req, res) => {
             let { item } = req.body;
-            Judge.updateOne(
-                { _id: ObjectId(item._id) },
-                {
-                    $set: {
-                        judge: item.judge,
-                        country: item.country,
-                        id: item.id
+
+            req.checkBody("item.judge", "Wymagana jest godność sędziego!").notEmpty();
+            req.checkBody("item.country", "Wymagany jest kraj pochodzenia sędziego!").notEmpty();
+
+            let errors = req.validationErrors();
+
+            if (errors) {
+                res.status(400).json(errors);
+            }
+            else {
+                Judge.updateOne(
+                    { _id: ObjectId(item._id) },
+                    {
+                        $set: {
+                            judge: item.judge,
+                            country: item.country,
+                            id: item.id
+                        }
+                    },
+                    (err) => {
+                        if (err) {
+                            res.status(400).send("Coś poszło nie tak..");
+                        }
+                        else {
+                            res.status(200).send("OK");
+                            socket.emit("editjudge", item);
+                            socket.broadcast.emit("editjudge", item);
+                        }
                     }
-                },
-                (err) => {
-                    if (err) {
-                        res.status(400).send("Coś poszło nie tak..");
-                    }
-                    else {
-                        res.status(200).send("OK");
-                        socket.emit("editjudge", item);
-                        socket.broadcast.emit("editjudge", item);
-                    }
-                }
-            );
+                );
+            }
         });
 
         router.post("/delete/:id", (req, res) => {

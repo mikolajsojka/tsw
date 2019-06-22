@@ -70,37 +70,46 @@ module.exports = (io) => {
         router.post("/edit", (req, res) => {
             let { item } = req.body;
 
-            Class.updateOne(
-                { _id: ObjectId(item._id) },
-                {
-                    $set: {
-                        committee: item.committee,
-                        number: item.number,
-                        category: item.category
+            req.checkBody("item.category", "Wymagana jest nazwa klasy!").notEmpty();
 
-                    }
-                },
-                (err) => {
-                    if (err) {
-                        res.status(400).send("Coś poszło nie tak..");
-                    }
-                    else {
-                        res.status(200).send("OK");
-                        socket.emit("editclass", {
-                            _id: item._id,
+            let errors = req.validationErrors();
+
+            if (errors) {
+                res.status(400).json(errors);
+            }
+            else {
+                Class.updateOne(
+                    { _id: ObjectId(item._id) },
+                    {
+                        $set: {
                             committee: item.committee,
                             number: item.number,
                             category: item.category
-                        });
-                        socket.broadcast.emit("editclass", {
-                            _id: item._id,
-                            committee: item.committee,
-                            number: item.number,
-                            category: item.category
-                        });
+
+                        }
+                    },
+                    (err) => {
+                        if (err) {
+                            res.status(400).send("Coś poszło nie tak..");
+                        }
+                        else {
+                            res.status(200).send("OK");
+                            socket.emit("editclass", {
+                                _id: item._id,
+                                committee: item.committee,
+                                number: item.number,
+                                category: item.category
+                            });
+                            socket.broadcast.emit("editclass", {
+                                _id: item._id,
+                                committee: item.committee,
+                                number: item.number,
+                                category: item.category
+                            });
+                        }
                     }
-                }
-            );
+                );
+            }
         });
 
         router.post("/delete/:id", (req, res) => {
