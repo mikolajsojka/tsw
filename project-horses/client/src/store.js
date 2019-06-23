@@ -7,7 +7,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        user: "",
+        user: false,
         horses: [],
         classes: [],
         actualhorses: [],
@@ -129,7 +129,7 @@ export default new Vuex.Store({
             let index = state.horses.findIndex(horse => horse._id === id);
             state.horses.splice(index, 1);
         },
-        LOGIN (state, user) {
+        USER (state, user) {
             state.user = user;
         },
         FETCH_HORSES (state, horses) {
@@ -293,7 +293,7 @@ export default new Vuex.Store({
             axios
                 .post("http://localhost:3001/user/login", payload)
                 .then(response => {
-                    commit("LOGIN", response.data);
+                    commit("USER", response.data);
 
                     router.push("/main");
                 })

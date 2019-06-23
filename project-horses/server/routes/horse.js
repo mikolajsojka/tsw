@@ -44,6 +44,10 @@ const mongoose = require("mongoose");
 
 module.exports = (io) => {
     io.on("connect", (socket) => {
+        checkAuth = () => {
+            socket.on("checkuser");
+        };
+
         socket.on("gethorsesinit", () => {
             Horse.find({}, (_err, horses) => {
                 socket.emit("gethorses", horses);
@@ -325,7 +329,9 @@ module.exports = (io) => {
             );
         });
 
-        router.post("/edit", (req, res) => {
+
+        router.post("/edit", async (req, res) => {
+            console.log(req.user);
             let { item } = req.body;
 
             req.checkBody("item.breeder.name", "Wymagana jest godność hodowcy konia!").notEmpty();
@@ -480,21 +486,22 @@ module.exports = (io) => {
                 });
             }
         });
+    });
 
-        router.post("/delete/:id", (req, res) => {
-            let { id } = req.params;
+    router.post("/delete/:id", (req, res) => {
+        let { id } = req.params;
 
-            Horse.deleteOne({ _id: ObjectId(id) }, (err, horse) => {
-                if (err) {
-                    res.status(400).send("Coś poszło nie tak..");
-                }
-                else {
-                    res.status(200).send("OK");
-                    socket.emit("deletehorse", id);
-                    socket.broadcast.emit("deletehorse", id);
-                }
-            });
+        Horse.deleteOne({ _id: ObjectId(id) }, (err, horse) => {
+            if (err) {
+                res.status(400).send("Coś poszło nie tak..");
+            }
+            else {
+                res.status(200).send("OK");
+                socket.emit("deletehorse", id);
+                socket.broadcast.emit("deletehorse", id);
+            }
         });
+
 
         router.post("/randomhorses", (req, res) => {
             let { horses } = req.body;

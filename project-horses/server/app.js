@@ -2,6 +2,7 @@ const express = require("express");
 
 const app = express();
 const port = process.env.PORT || 3001;
+
 const session = require("express-session");
 
 const serveStatic = require("serve-static");
@@ -17,8 +18,21 @@ app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
 
 const passport = require("passport");
 
+const mongoose = require("mongoose");
+
+mongoose.connect("mongodb://localhost:27017/project-horses", {
+    useNewUrlParser: true
+});
+
+const db = mongoose.connection;
+
+db.on("error", console.error.bind(console, "connection error:"));
+db.once("open", () => {
+    console.log("connected with mongo");
+});
+
 const store = new MongoStore({
-    url: "mongodb://localhost/projecthorses",
+    url: "mongodb://localhost:27017/project-horses",
     ttl: 600
 });
 
@@ -27,11 +41,10 @@ app.use(cookieParser());
 app.use(
     session({
         key: "express.sid",
-        store,
+
         secret: "keyboard cat",
-        saveUninitialized: false,
-        resave: true,
-        cookie: { secure: true }
+        saveUninitialized: true,
+        resave: true
     })
 );
 
@@ -41,9 +54,7 @@ app.use(passport.initialize());
 
 app.use(passport.session());
 
-const server = app.listen(port, () => {
-    console.log(`Express działa na porcie ${port}`);
-});
+const server = app.listen(port);
 
 const io = require("socket.io")(server);
 
@@ -57,24 +68,12 @@ io.use(passportSocketIo.authorize({
     store
 }));
 */
+// app.io = io;
 
 const userRouter = require("./routes/user")(io);
 const horseRouter = require("./routes/horse")(io);
 const judgeRouter = require("./routes/judge")(io);
 const classRouter = require("./routes/class")(io);
-
-const mongoose = require("mongoose");
-
-mongoose.connect("mongodb://localhost:27017/project-horses", {
-    useNewUrlParser: true
-});
-
-const db = mongoose.connection;
-
-db.on("error", console.error.bind(console, "connection error:"));
-db.once("open", () => {
-    console.log("connected with mongo");
-});
 
 app.use(
     cors({

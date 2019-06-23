@@ -13,11 +13,6 @@
         },
         data () {
             return { msg: "cyk" };
-        },
-        sockets: {
-            "after-connect" (data) {
-                this.msg = data;
-            }
         }
     };
 </script>

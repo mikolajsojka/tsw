@@ -6,7 +6,6 @@
             <div class="route" @click="judges">Sędziowie</div>
             <div class="route" @click="classes">Klasy</div>
         </div>
-        <div id="user">{{this.$store.state.user._id}}</div>
         <router-view/>
     </div>
 </template>
@@ -20,8 +19,8 @@
             Header
         },
         sockets: {
-            connect () {
-                console.log("test");
+            "checkuser" () {
+                this.$socket.emit("checkuser", (this.$store.state.user));
             }
         },
         methods: {
