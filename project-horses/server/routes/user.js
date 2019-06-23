@@ -62,11 +62,13 @@ module.exports = (io) => {
         });
 
 
-        router.post("/login", passport.authenticate("local"),
-            (req, res) => {
-                console.log(req.user);
-                res.send(req.user);
-            });
+        router.post("/login", (req, res, next) => {
+            passport.authenticate("local", (err, user, info) => {
+                req.logIn(user, (err) => {
+                    res.send(user);
+                });
+            })(req, res, next);
+        });
 
 
         router.get("/logout", (req, res) => {
@@ -79,6 +81,7 @@ module.exports = (io) => {
             res.status(200).json(req.user);
         });
     });
+
 
     return router;
 };
