@@ -19,7 +19,6 @@
     import router from "../router";
     export default {
         name: "Horses",
-
         data () {
             return {
                 counter: this.$store.state.counters.horses.counter,

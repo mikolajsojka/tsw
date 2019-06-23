@@ -19,8 +19,15 @@
         components: {
             Header
         },
+        sockets: {
+            connect () {
+                console.log("test");
+            }
+        },
         methods: {
             horses () {
+                console.log("click");
+                this.$socket.emit("test", {});
                 router.push("/horses");
             },
             judges () {

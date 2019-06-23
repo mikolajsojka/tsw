@@ -3,6 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import VueSocketIO from "vue-socket.io";
+import SOCKETIO from "socket.io-client";
 
 store.dispatch("FETCH_HORSES");
 store.dispatch("FETCH_JUDGES");
@@ -11,13 +12,13 @@ store.dispatch("FETCH_CLASSES");
 Vue.use(
     new VueSocketIO({
         debug: true,
-        connection: "http://localhost:3001",
+        connection: SOCKETIO("http://localhost:3001/"),
         vuex: {
             store,
             actionPrefix: "SOCKET_",
             mutationPrefix: "SOCKET_"
         }
-    // options: { path: "/my-app/" } // Optional options
+
     })
 );
 

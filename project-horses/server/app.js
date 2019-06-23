@@ -2,14 +2,14 @@ const express = require("express");
 
 const app = express();
 const port = process.env.PORT || 3001;
-var session = require("express-session");
+const session = require("express-session");
 
 const serveStatic = require("serve-static");
 
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-let socketio = require("socket.io");
+const MongoStore = require("connect-mongo")(session);
 
 app.use(bodyParser.json({ limit: "10mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
@@ -17,11 +17,18 @@ app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
 
 const passport = require("passport");
 
+const store = new MongoStore({
+    url: "mongodb://localhost/projecthorses",
+    ttl: 600
+});
+
 app.use(cookieParser());
 
 app.use(
     session({
-        secret: "horses",
+        key: "express.sid",
+        store,
+        secret: "keyboard cat",
         saveUninitialized: false,
         resave: true,
         cookie: { secure: true }
@@ -40,7 +47,18 @@ const server = app.listen(port, () => {
 
 const io = require("socket.io")(server);
 
-const userRouter = require("./routes/user");
+const passportSocketIo = require("passport.socketio");
+
+/*
+io.use(passportSocketIo.authorize({
+    cookieParser,
+    key: "express.sid",
+    secret: "keyboard cat",
+    store
+}));
+*/
+
+const userRouter = require("./routes/user")(io);
 const horseRouter = require("./routes/horse")(io);
 const judgeRouter = require("./routes/judge")(io);
 const classRouter = require("./routes/class")(io);

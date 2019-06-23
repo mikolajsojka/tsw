@@ -38,7 +38,8 @@ module.exports = {
     "no-alert":"off",
     "prefer-destructuring":"off",
     "no-empty":"off",
-    "no-restricted-globals":"off"
+    "no-restricted-globals":"off",
+    "new-cap":"off"
   },
   parserOptions: {
     parser: "babel-eslint"
