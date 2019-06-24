@@ -5,6 +5,8 @@ import router from "./router";
 
 Vue.use(Vuex);
 
+const hostname = `http://${window.location.hostname}:3001`;
+
 export default new Vuex.Store({
     state: {
         user: false,
@@ -183,29 +185,29 @@ export default new Vuex.Store({
         EDIT_HORSE_NOTES ({ commit }, payload) {
             commit("EDIT_HORSE_NOTES", payload);
             axios
-                .post("http://localhost:3001/horse/editnotes", { horse: payload });
+                .post(`${hostname}/horse/editnotes`, { horse: payload });
         },
         FRESH_NOTES_HORSES ({ commit }, payload) {
             axios
-                .get(`http://localhost:3001/horse/freshnotes/${payload.number}`).then(response => {
+                .get(`${hostname}/horse/freshnotes/${payload.number}`).then(response => {
                     commit("FRESH_NOTES_HORSES", { response: response.data, id: payload.id });
                 });
         },
         ADD_NOTE_JUDGE_FROM_CLASS ({ commit }, payload) {
             axios
-                .post("http://localhost:3001/horse/addnote", {
+                .post(`${hostname}/horse/addnote`, {
                     cnumber: payload.classNumber
                 });
         },
         DELETE_NOTE_JUDGE_FROM_CLASS ({ commit }, payload) {
-            axios.post("http://localhost:3001/horse/deletenote", {
+            axios.post(`${hostname}/horse/deletenote`, {
                 judge: payload.judge,
                 cnumber: payload.classNumber
             });
         },
         ADD_HORSE ({ commit }, payload) {
             axios
-                .post("http://localhost:3001/horse/add", { item: payload })
+                .post(`${hostname}/horse/add`, { item: payload })
                 .then(response => {
                     commit("ADD_HORSE", response.data);
                 })
@@ -215,7 +217,7 @@ export default new Vuex.Store({
         },
         ADD_CLASS ({ commit }, payload) {
             axios
-                .post("http://localhost:3001/class/add", { item: payload })
+                .post(`${hostname}/class/add`, { item: payload })
                 .then(response => {
                     commit("ADD_CLASS", response.data);
                 })
@@ -225,7 +227,7 @@ export default new Vuex.Store({
         },
         ADD_JUDGE ({ commit }, payload) {
             axios
-                .post("http://localhost:3001/judge/add", { item: payload })
+                .post(`${hostname}/judge/add`, { item: payload })
                 .then(response => {
                     commit("ADD_JUDGE", response.data);
                 })
@@ -235,7 +237,7 @@ export default new Vuex.Store({
         },
         EDIT_CLASS ({ commit }, payload) {
             axios
-                .post("http://localhost:3001/class/edit", { item: payload })
+                .post(`${hostname}/class/edit`, { item: payload })
                 .then(response => {
                     commit("EDIT_CLASS", response.data);
                 })
@@ -245,7 +247,7 @@ export default new Vuex.Store({
         },
         EDIT_HORSE ({ commit }, payload) {
             axios
-                .post("http://localhost:3001/horse/edit", { item: payload })
+                .post(`${hostname}/horse/edit`, { item: payload })
                 .then(response => {
                     commit("EDIT_HORSE", response.data);
                 })
@@ -255,7 +257,7 @@ export default new Vuex.Store({
         },
         EDIT_JUDGE ({ commit }, payload) {
             axios
-                .post("http://localhost:3001/judge/edit", { item: payload })
+                .post(`${hostname}/judge/edit`, { item: payload })
                 .then(response => {
                     commit("EDIT_JUDGE", response.data);
                 })
@@ -267,7 +269,7 @@ export default new Vuex.Store({
             commit("DELETE_HORSE", payload);
 
             axios
-                .post(`http://localhost:3001/horse/delete/${payload}`)
+                .post(`${hostname}/horse/delete/${payload}`)
                 .then(response => {})
                 .catch(errors => {
                     alert("Wystąpił problem z usuwaniem konia");
@@ -277,7 +279,7 @@ export default new Vuex.Store({
             commit("DELETE_JUDGE", payload);
 
             axios
-                .post(`http://localhost:3001/judge/delete/${payload}`)
+                .post(`${hostname}/judge/delete/${payload}`)
                 .then(response => {})
                 .catch(errors => {
                     alert("Wystąpił problem z usuwaniem sędziego");
@@ -287,11 +289,11 @@ export default new Vuex.Store({
             commit("DELETE_CLASS", payload);
 
             axios
-                .post(`http://localhost:3001/class/delete/${payload}`);
+                .post(`${hostname}/class/delete/${payload}`);
         },
         LOGIN ({ commit }, payload) {
             axios
-                .post("http://localhost:3001/user/login", payload)
+                .post(`${hostname}/user/login`, payload)
                 .then(response => {
                     commit("USER", response.data);
 
@@ -303,7 +305,7 @@ export default new Vuex.Store({
         },
         FETCH_HORSES ({ commit }) {
             axios
-                .get("http://localhost:3001/horse/gethorses")
+                .get(`${hostname}/horse/gethorses`)
                 .then(response => {
                     commit("FETCH_HORSES", response.data);
                 })
@@ -313,7 +315,7 @@ export default new Vuex.Store({
         },
         FETCH_CLASSES ({ commit }) {
             axios
-                .get("http://localhost:3001/class/getclasses")
+                .get(`${hostname}/class/getclasses`)
                 .then(response => {
                     commit("FETCH_CLASSES", response.data);
                 })
@@ -323,7 +325,7 @@ export default new Vuex.Store({
         },
         FETCH_JUDGES ({ commit }) {
             axios
-                .get("http://localhost:3001/judge/getjudges")
+                .get(`${hostname}/judge/getjudges`)
                 .then(response => {
                     commit("FETCH_JUDGES", response.data);
                 })
@@ -336,7 +338,7 @@ export default new Vuex.Store({
                 .get("http://localhost:3000/klasy")
                 .then(response => {
                     axios
-                        .post("http://localhost:3001/class/randomclasses", {
+                        .post(`${hostname}/class/randomclasses`, {
                             classes: response.data
                         })
                         .then(response => {
@@ -356,7 +358,7 @@ export default new Vuex.Store({
                 .get("http://localhost:3000/konie")
                 .then(response => {
                     axios
-                        .post("http://localhost:3001/horse/randomhorses", {
+                        .post(`${hostname}/horse/randomhorses`, {
                             horses: response.data
                         })
                         .then(response => {
@@ -375,7 +377,7 @@ export default new Vuex.Store({
                 .get("http://localhost:3000/sedziowie")
                 .then(response => {
                     axios
-                        .post("http://localhost:3001/judge/randomjudges", {
+                        .post(`${hostname}/judge/randomjudges`, {
                             judges: response.data
                         })
                         .then(response => {

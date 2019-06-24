@@ -240,7 +240,6 @@ module.exports = (io) => {
                             }
                         },
                         (err) => {
-                            console.log(newnotes);
                             if (err) {
                                 res.status(400).send("Błąd przy usuwaniu not");
                             }
@@ -327,7 +326,6 @@ module.exports = (io) => {
 
 
         router.post("/edit", async (req, res) => {
-            console.log(req.session);
             let { item } = req.body;
 
             req.checkBody("item.breeder.name", "Wymagana jest godność hodowcy konia!").notEmpty();

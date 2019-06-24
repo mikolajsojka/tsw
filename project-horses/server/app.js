@@ -36,20 +36,13 @@ const store = new MongoStore({
     ttl: 60
 });
 
-app.use(cookieParser("foo"));
+app.use(cookieParser());
 
 let sessionMiddleware = session({
     key: "express.sid",
     store,
-    secret: "keyboard cat",
-    saveUninitialized: false,
-    resave: false,
-    cookie: {
-        domain: "localhost:8080",
-        maxAge: 1000 * 60 * 60 * 24
-    }
+    secret: "session_secret"
 });
-
 
 app.use(express.urlencoded({ extended: true }));
 
@@ -61,30 +54,42 @@ const server = app.listen(port);
 
 const io = require("socket.io")(server);
 
-io.use((socket, next) => {
-    sessionMiddleware(socket.request, socket.request.res, next);
-});
-
 app.use(sessionMiddleware);
-
-io.sockets.on("connection", (socket) => {
-    socket.request.session;
-});
-
 const passportSocketIo = require("passport.socketio");
 
 /*
 io.use(passportSocketIo.authorize({
     cookieParser,
     key: "express.sid",
-    secret: "keyboard cat",
-    store
+    secret: "session_secret",
+    store,
+    success: onAuthorizeSuccess,
+    fail: onAuthorizeFail
 }));
+
+function onAuthorizeSuccess(data, accept) {
+    console.log("successful connection to socket.io");
+
+    accept(null, true);
+
+    accept();
+}
+
+function onAuthorizeFail(data, message, error, accept) {
+    if (error) {
+        throw new Error(message);
+    }
+    console.log("failed connection to socket.io:", message);
+
+    accept(null, false);
+
+    if (error) {
+        accept(new Error(message));
+    }
+}
 */
-// app.io = io;
 
 app.use((req, res, next) => {
-    console.log(req.session);
     next();
 });
 

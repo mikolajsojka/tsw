@@ -124,7 +124,6 @@ module.exports = (io) => {
                                                 }
                                             },
                                             (err) => {
-                                                console.log(`dokonano update: ${horse.name}`);
                                                 if (err) {
                                                     res.status(400).send("Błąd na pozycji: usuwanie not z kolekcji konie");
                                                 }
@@ -201,7 +200,6 @@ module.exports = (io) => {
                                 if (err) throw err;
                             });
                             if (counter === judges.length) {
-                                console.log(responsejudges);
                                 res.status(200).json(responsejudges);
                             }
                         }

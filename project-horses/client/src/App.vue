@@ -19,14 +19,14 @@
             Header
         },
         sockets: {
-            "checkuser" () {
-                this.$socket.emit("checkuser", (this.$store.state.user));
+            connection (data) {
+                console.log(data);
             }
+
         },
         methods: {
             horses () {
                 console.log("click");
-                this.$socket.emit("test", {});
                 router.push("/horses");
             },
             judges () {

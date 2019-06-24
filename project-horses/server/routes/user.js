@@ -53,7 +53,6 @@ module.exports = (io) => {
                         });
                         User.createUser(newUser, (err, user) => {
                             if (err) throw err;
-                            console.log(user);
                         });
                         res.status(200).send("OK");
                     }
