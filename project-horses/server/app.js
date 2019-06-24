@@ -32,7 +32,7 @@ db.once("open", () => {
 });
 
 const store = new MongoStore({
-    url: "mongodb://localhost:27017/project-horses",
+    url: "mongodb://localhost/project-horses",
     ttl: 600
 });
 
@@ -41,7 +41,7 @@ app.use(cookieParser());
 app.use(
     session({
         key: "express.sid",
-
+        store,
         secret: "keyboard cat",
         saveUninitialized: true,
         resave: true
@@ -80,6 +80,7 @@ app.use(
         credentials: true
     })
 );
+
 app.use("/user", userRouter);
 app.use("/horse", horseRouter);
 app.use("/judge", judgeRouter);

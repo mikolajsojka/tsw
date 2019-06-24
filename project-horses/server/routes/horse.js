@@ -331,7 +331,7 @@ module.exports = (io) => {
 
 
         router.post("/edit", async (req, res) => {
-            console.log(req.user);
+            console.log(req.session);
             let { item } = req.body;
 
             req.checkBody("item.breeder.name", "Wymagana jest godność hodowcy konia!").notEmpty();

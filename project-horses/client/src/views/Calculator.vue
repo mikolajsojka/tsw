@@ -59,7 +59,8 @@
                 judges: [],
                 result: 0,
                 checkarbitrator: false,
-                renderComponent: true
+                renderComponent: true,
+                sameresults: []
             };
         },
         components: {
@@ -256,14 +257,6 @@
 
                 this.results();
 
-                if (errors.length) {
-                    errors.forEach(element => {
-                        alert(element);
-                    });
-                } else {
-                    this.$store.dispatch("EDIT_HORSE_NOTES", this.actualhorse);
-                }
-
                 this.checkarbitrator = false;
                 this.checkArbitrator();
 
@@ -272,6 +265,18 @@
                 this.$nextTick(() => {
                     this.renderComponent = true;
                 });
+
+                if (this.checkarbitrator === false) {
+                    this.actualhorse.result.arbitrator = 0;
+                }
+
+                if (errors.length) {
+                    errors.forEach(element => {
+                        alert(element);
+                    });
+                } else {
+                    this.$store.dispatch("EDIT_HORSE_NOTES", this.actualhorse);
+                }
             }
         }
     };
