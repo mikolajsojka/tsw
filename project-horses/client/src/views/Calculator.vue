@@ -21,15 +21,15 @@
 
         <div class="notes">
             <div class="row" v-for="(note,index) in actualhorse.result.notes" :key="note._id">
-                <input v-bind:id="note._id" @change="change" name="htype" v-bind:value="note.htype">
+                <input :tabindex="index+1" v-bind:id="note._id" @change="change" name="htype" v-bind:value="note.htype">
 
-                <input v-bind:id="note._id" @change="change" name="head" v-bind:value="note.head">
+                <input :tabindex="(index+1+notes)" v-bind:id="note._id" @change="change" name="head" v-bind:value="note.head">
 
-                <input v-bind:id="note._id" @change="change" name="barrel" v-bind:value="note.barrel">
+                <input :tabindex="(index+1+notes*2)" v-bind:id="note._id" @change="change" name="barrel" v-bind:value="note.barrel">
 
-                <input v-bind:id="note._id" @change="change" name="legs" v-bind:value="note.legs">
+                <input :tabindex="(index+1+notes*3)" v-bind:id="note._id" @change="change" name="legs" v-bind:value="note.legs">
 
-                <input v-bind:id="note._id" @change="change" name="move" v-bind:value="note.move">
+                <input :tabindex="(index+1+notes*4)" v-bind:id="note._id" @change="change" name="move" v-bind:value="note.move">
                 <div class="judge" @click="goJudge(judges[index]._id)">{{judges[index].judge}}</div>
             </div>
             <div class="arbitrator" v-if="checkarbitrator">
@@ -60,7 +60,7 @@
                 result: 0,
                 checkarbitrator: false,
                 renderComponent: true,
-                sameresults: []
+                notes: 0
             };
         },
         components: {
@@ -78,6 +78,7 @@
                 await router.push("/classes");
                 alert("Nie przydzielono żadnego konia!");
             }
+            console.log(this.notes);
         },
         methods: {
             checkArbitrator () {
@@ -146,6 +147,7 @@
 
                 this.horses = this.$store.state.actualhorses;
                 this.actualhorse = this.horses[0];
+                this.notes = this.actualhorse.result.notes.length;
 
                 this.actualclass.committee.forEach(element => {
                     let index = this.$store.state.judges.findIndex(
@@ -174,6 +176,7 @@
                 if (target.name === "choosehorse") {
                     let index = this.horses.findIndex(item => item._id === target.value);
                     this.actualhorse = this.horses[index];
+                    this.notes = this.actualhorse.result.notes.length;
                 }
 
                 if (target.name === "arbitrator") {

@@ -44,10 +44,6 @@ const mongoose = require("mongoose");
 
 module.exports = (io) => {
     io.on("connect", (socket) => {
-        checkAuth = () => {
-            socket.on("checkuser");
-        };
-
         socket.on("gethorsesinit", () => {
             Horse.find({}, (_err, horses) => {
                 socket.emit("gethorses", horses);

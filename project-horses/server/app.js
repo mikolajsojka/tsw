@@ -36,7 +36,7 @@ const store = new MongoStore({
     ttl: 600
 });
 
-app.use(cookieParser());
+app.use(cookieParser("foo"));
 
 app.use(
     session({
