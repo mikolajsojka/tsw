@@ -128,6 +128,7 @@ document.onreadystatechange = () => {
                 document.getElementById("classname").innerHTML = `${index + 1}/${
                     classes.length
                 }. ${classes[index].category} (Nr ${classes[index].number}. )`;
+
                 document.getElementById("podium").innerHTML = podium;
 
                 if (startindex === 0) {
@@ -149,6 +150,8 @@ document.onreadystatechange = () => {
         horseInfo = (horse) => {
             let index = classhorses.findIndex(item => item._id === actualhorse._id);
             horse = classhorses[index];
+
+            document.getElementById("points").innerHTML = `${points(horse)} pkt.`;
             document.getElementById("horsename").innerHTML = `Nr ${horse.number}. ${
                 horse.name
             }`;
@@ -177,12 +180,10 @@ document.onreadystatechange = () => {
                 }
                 catch (e) {}
             });
-            fillall += `<div class="row"><div id="points">${points(actualhorse)} pkt. </div></div>`;
 
             document.getElementById("notes").innerHTML = fillall;
 
-
-            if (horse.result.arbitrator !== 0) {
+            if (horse.result.arbitrator) {
                 document.getElementById("notes").innerHTML += `<div class="row">
                     <div id="arbitrator">
                     <div id="name">Rozjemca</div>

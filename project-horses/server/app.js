@@ -33,20 +33,23 @@ db.once("open", () => {
 
 const store = new MongoStore({
     url: "mongodb://localhost/project-horses",
-    ttl: 600
+    ttl: 60
 });
 
 app.use(cookieParser("foo"));
 
-app.use(
-    session({
-        key: "express.sid",
-        store,
-        secret: "keyboard cat",
-        saveUninitialized: true,
-        resave: true
-    })
-);
+let sessionMiddleware = session({
+    key: "express.sid",
+    store,
+    secret: "keyboard cat",
+    saveUninitialized: false,
+    resave: false,
+    cookie: {
+        domain: "localhost:8080",
+        maxAge: 1000 * 60 * 60 * 24
+    }
+});
+
 
 app.use(express.urlencoded({ extended: true }));
 
@@ -57,6 +60,16 @@ app.use(passport.session());
 const server = app.listen(port);
 
 const io = require("socket.io")(server);
+
+io.use((socket, next) => {
+    sessionMiddleware(socket.request, socket.request.res, next);
+});
+
+app.use(sessionMiddleware);
+
+io.sockets.on("connection", (socket) => {
+    socket.request.session;
+});
 
 const passportSocketIo = require("passport.socketio");
 
@@ -69,6 +82,11 @@ io.use(passportSocketIo.authorize({
 }));
 */
 // app.io = io;
+
+app.use((req, res, next) => {
+    console.log(req.session);
+    next();
+});
 
 const userRouter = require("./routes/user")(io);
 const horseRouter = require("./routes/horse")(io);
