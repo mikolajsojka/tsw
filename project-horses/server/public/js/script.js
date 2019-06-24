@@ -282,9 +282,6 @@ document.onreadystatechange = () => {
                 checkClass(classes[index], index);
                 classes.sort((a, b) => a.number - b.number);
 
-                // wykminić dlaczego się status klasy nie chce zmienić
-
-
                 classhorses = horses.map((horse) => {
                     if (horse.class === classes[index].number) {
                         return horse;
@@ -341,7 +338,6 @@ document.onreadystatechange = () => {
                     let index = horses.findIndex(item => item._id === data._id);
                     let actualclass = horses[index].class;
                     horses[index] = data;
-
                     if (clickedClass === horses[index].class) {
                         classhorses.push(horses[index]);
                         sorting();
@@ -380,6 +376,9 @@ document.onreadystatechange = () => {
                             }
                         }
                     }
+                    document.getElementById("actual").innerHTML = "";
+                    document.getElementById("end").innerHTML = "";
+                    checkClasses();
                     clickEvents();
                 }
                 catch (e) {}

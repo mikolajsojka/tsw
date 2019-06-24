@@ -230,6 +230,8 @@ module.exports = (io) => {
                         }
                     });
 
+                    horse.result.notes = newnotes;
+
                     Horse.updateOne(
                         { _id: ObjectId(horse._id) },
                         {
