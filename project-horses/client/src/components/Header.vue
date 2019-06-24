@@ -17,10 +17,10 @@
         methods: {
             redirect () {
                 if (this.action === "login") {
-                    router.push("/auth");
+                    this.$store.dispatch("LOGIN");
                 }
                 if (this.action === "logout") {
-                    console.log("Tu będzie akcja wylogowania użytkownika");
+                    this.$store.dispatch("LOGOUT");
                 }
             },
             check () {

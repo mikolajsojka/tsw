@@ -304,6 +304,18 @@ export default new Vuex.Store({
                     alert("Wystąpił problem z zalogowaniem");
                 });
         },
+        LOGOUT ({ commit }) {
+            axios
+                .get(`${hostname}/user/logout`)
+                .then(() => {
+                    commit("USER", false);
+
+                    router.push("/main");
+                })
+                .catch(errors => {
+                    alert("Wystąpił problem z wylogowaniem");
+                });
+        },
         FETCH_HORSES ({ commit }) {
             axios
                 .get(`${hostname}/horse/gethorses`)
