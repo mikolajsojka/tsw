@@ -15,7 +15,6 @@ const MongoStore = require("connect-mongo")(session);
 app.use(bodyParser.json({ limit: "10mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
 
-
 const passport = require("passport");
 
 const mongoose = require("mongoose");
@@ -32,7 +31,7 @@ db.once("open", () => {
 });
 
 const store = new MongoStore({
-    url: "mongodb://localhost/project-horses",
+    url: "mongodb://localhost:27017/project-horses",
     ttl: 60
 });
 
@@ -41,7 +40,9 @@ app.use(cookieParser());
 let sessionMiddleware = session({
     key: "express.sid",
     store,
-    secret: "session_secret"
+    secret: "session_secret",
+    resave: false,
+    saveUninitialized: false
 });
 
 app.use(express.urlencoded({ extended: true }));
@@ -55,7 +56,7 @@ const server = app.listen(port);
 const io = require("socket.io")(server);
 
 app.use(sessionMiddleware);
-const passportSocketIo = require("passport.socketio");
+// const passportSocketIo = require("passport.socketio");
 
 /*
 io.use(passportSocketIo.authorize({
@@ -88,10 +89,6 @@ function onAuthorizeFail(data, message, error, accept) {
     }
 }
 */
-
-app.use((req, res, next) => {
-    next();
-});
 
 const userRouter = require("./routes/user")(io);
 const horseRouter = require("./routes/horse")(io);

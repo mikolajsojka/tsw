@@ -495,100 +495,101 @@ module.exports = (io) => {
                 socket.broadcast.emit("deletehorse", id);
             }
         });
+    });
 
 
-        router.post("/randomhorses", (req, res) => {
-            let { horses } = req.body;
+    router.post("/randomhorses", (req, res) => {
+        let { horses } = req.body;
+        console.log(horses);
 
-            mongoose.connect("mongodb://localhost:27017/project-horses", {
-                useNewUrlParser: true
-            });
+        mongoose.connect("mongodb://localhost:27017/project-horses", {
+            useNewUrlParser: true
+        });
 
-            const db = mongoose.connection;
+        const db = mongoose.connection;
 
-            db.dropCollection("horses", (err, result) => {});
+        db.dropCollection("horses", (err, result) => {});
 
-            let responsehorses = [];
-            let counter = 0;
+        let responsehorses = [];
+        let counter = 0;
 
-            horses.forEach((element) => {
-                Horse.findOne(
-                    {
-                        id: element.id
-                    },
-                    (_err, horse) => {
-                        if (!horse) {
-                            let notes = [];
-                            element.wynik.noty.forEach((elem) => {
-                                notes.push({
-                                    htype: elem.typ,
-                                    head: elem.glowa,
-                                    barrel: elem.kloda,
-                                    legs: elem.nogi,
-                                    move: elem.ruch
-                                });
+        horses.forEach((element) => {
+            Horse.findOne(
+                {
+                    id: element.id
+                },
+                (_err, horse) => {
+                    if (!horse) {
+                        let notes = [];
+                        element.wynik.noty.forEach((elem) => {
+                            notes.push({
+                                htype: elem.typ,
+                                head: elem.glowa,
+                                barrel: elem.kloda,
+                                legs: elem.nogi,
+                                move: elem.ruch
                             });
-                            let newHorse = new Horse({
-                                id: element.id,
-                                number: element.numer,
-                                class: element.klasa,
-                                name: element.nazwa,
-                                country: element.kraj,
-                                yob: element.rocznik,
-                                hair: element.masc,
-                                sex: element.plec,
-                                breeder: {
-                                    name: element.hodowca.nazwa,
-                                    country: element.hodowca.kraj
+                        });
+                        let newHorse = new Horse({
+                            id: element.id,
+                            number: element.numer,
+                            class: element.klasa,
+                            name: element.nazwa,
+                            country: element.kraj,
+                            yob: element.rocznik,
+                            hair: element.masc,
+                            sex: element.plec,
+                            breeder: {
+                                name: element.hodowca.nazwa,
+                                country: element.hodowca.kraj
+                            },
+                            owner: {
+                                name: element.wlasciciel.nazwa,
+                                country: element.wlasciciel.kraj
+                            },
+                            bloodline: {
+                                father: {
+                                    name: element.rodowod.o.nazwa,
+                                    country: element.rodowod.o.kraj
                                 },
-                                owner: {
-                                    name: element.wlasciciel.nazwa,
-                                    country: element.wlasciciel.kraj
+                                mother: {
+                                    name: element.rodowod.m.nazwa,
+                                    country: element.rodowod.m.kraj
                                 },
-                                bloodline: {
-                                    father: {
-                                        name: element.rodowod.o.nazwa,
-                                        country: element.rodowod.o.kraj
-                                    },
-                                    mother: {
-                                        name: element.rodowod.m.nazwa,
-                                        country: element.rodowod.m.kraj
-                                    },
-                                    fathermother: {
-                                        name: element.rodowod.om.nazwa,
-                                        country: element.rodowod.om.kraj
-                                    }
-                                },
-                                result: {
-                                    arbitrator: 0,
-                                    notes
+                                fathermother: {
+                                    name: element.rodowod.om.nazwa,
+                                    country: element.rodowod.om.kraj
                                 }
-                            });
-                            counter += 1;
-                            responsehorses.push({
-                                _id: newHorse._id,
-                                id: newHorse.id,
-                                number: newHorse.number,
-                                class: newHorse.class,
-                                name: newHorse.name,
-                                country: newHorse.country,
-                                yob: newHorse.yob,
-                                hair: newHorse.hair,
-                                sex: newHorse.sex,
-                                breeder: newHorse.breeder,
-                                owner: newHorse.owner,
-                                bloodline: newHorse.bloodline
-                            });
-                            Horse.createHorse(newHorse, (err, _horse) => {
-                                if (err) throw err;
-                            });
-                            if (counter === horses.length) {
-                                res.status(200).json(responsehorses);
+                            },
+                            result: {
+                                arbitrator: 0,
+                                notes
                             }
+                        });
+                        counter += 1;
+                        responsehorses.push({
+                            _id: newHorse._id,
+                            id: newHorse.id,
+                            number: newHorse.number,
+                            class: newHorse.class,
+                            name: newHorse.name,
+                            country: newHorse.country,
+                            yob: newHorse.yob,
+                            hair: newHorse.hair,
+                            sex: newHorse.sex,
+                            breeder: newHorse.breeder,
+                            owner: newHorse.owner,
+                            bloodline: newHorse.bloodline
+                        });
+                        Horse.createHorse(newHorse, (err, _horse) => {
+                            if (err) throw err;
+                        });
+                        if (counter === horses.length) {
+                            res.status(200).json(responsehorses);
                         }
                     }
-                );
-            });
+                }
+            );
         });
     });
     return router;

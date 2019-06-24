@@ -353,7 +353,6 @@ export default new Vuex.Store({
                     alert("Wystąpił problem z losowaniem klas v2");
                 });
         },
-
         RANDOMHORSES ({ commit }) {
             axios
                 .get(`${hostnamerandom}/konie`)
