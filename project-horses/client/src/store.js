@@ -6,6 +6,7 @@ import router from "./router";
 Vue.use(Vuex);
 
 const hostname = `http://${window.location.hostname}:3001`;
+const hostnamerandom = `http://${window.location.hostname}:3000`;
 
 export default new Vuex.Store({
     state: {
@@ -335,7 +336,7 @@ export default new Vuex.Store({
         },
         RANDOMCLASSES ({ commit }) {
             axios
-                .get("http://localhost:3000/klasy")
+                .get(`${hostnamerandom}/klasy`)
                 .then(response => {
                     axios
                         .post(`${hostname}/class/randomclasses`, {
@@ -355,7 +356,7 @@ export default new Vuex.Store({
 
         RANDOMHORSES ({ commit }) {
             axios
-                .get("http://localhost:3000/konie")
+                .get(`${hostnamerandom}/konie`)
                 .then(response => {
                     axios
                         .post(`${hostname}/horse/randomhorses`, {
@@ -374,7 +375,7 @@ export default new Vuex.Store({
         },
         RANDOMJUDGES ({ commit }) {
             axios
-                .get("http://localhost:3000/sedziowie")
+                .get(`${hostnamerandom}/sedziowie`)
                 .then(response => {
                     axios
                         .post(`${hostname}/judge/randomjudges`, {

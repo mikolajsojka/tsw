@@ -67,11 +67,13 @@
             Podium
         },
         created () {
-            if (this.$store.state.actualhorses.length !== 0) {
-                this.fill();
-                this.results();
-                this.checkArbitrator();
-            }
+            if (this.$store.state.user) {
+                if (this.$store.state.actualhorses.length !== 0) {
+                    this.fill();
+                    this.results();
+                    this.checkArbitrator();
+                }
+            } else { router.push("/auth"); }
         },
         async mounted () {
             if (!this.horses.length) {

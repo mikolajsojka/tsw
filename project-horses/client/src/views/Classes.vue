@@ -32,9 +32,11 @@
             };
         },
         created () {
-            this.$store.commit("FILL_COUNTER_CLASSES");
-            this.limit = this.$store.state.counters.classes.limit;
-            this.classes = this.$store.state.counters.classes.classes;
+            if (this.$store.state.user) {
+                this.$store.commit("FILL_COUNTER_CLASSES");
+                this.limit = this.$store.state.counters.classes.limit;
+                this.classes = this.$store.state.counters.classes.classes;
+            } else { router.push("/auth"); }
         },
         methods: {
             addclass () {

@@ -29,9 +29,11 @@
             };
         },
         created () {
-            this.$store.commit("FILL_COUNTER_JUDGES");
-            this.limit = this.$store.state.counters.judges.limit;
-            this.judges = this.$store.state.counters.judges.judges;
+            if (this.$store.state.user) {
+                this.$store.commit("FILL_COUNTER_JUDGES");
+                this.limit = this.$store.state.counters.judges.limit;
+                this.judges = this.$store.state.counters.judges.judges;
+            } else { router.push("/auth"); }
         },
         methods: {
             addjudge () {

@@ -51,7 +51,9 @@
             };
         },
         created () {
-            this.render();
+            if (this.$store.state.user) {
+                this.render();
+            } else { router.push("/auth"); }
         },
         methods: {
             judgeredirect (id) {

@@ -32,7 +32,7 @@
 </template>
 
 <script>
-
+    import router from "../router";
     export default {
         name: "AddClass",
         data () {
@@ -52,7 +52,9 @@
             };
         },
         created () {
-            this.render();
+            if (this.$store.state.user) {
+                this.render();
+            } else { router.push("/auth"); }
         },
         methods: {
             render () {

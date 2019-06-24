@@ -17,7 +17,7 @@
 </template>
 
 <script>
-    // import router from "../router";
+    import router from "../router";
     export default {
         name: "Judge",
         data () {
@@ -28,6 +28,9 @@
                     country: ""
                 }
             };
+        },
+        created () {
+            if (!this.$store.state.user) { router.push("/auth"); }
         },
         methods: {
             savejudge () {

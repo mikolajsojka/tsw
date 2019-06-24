@@ -13,7 +13,9 @@
 
     export default {
         name: "Main",
-        created () {},
+        created () {
+            if (!this.$store.state.user) { router.push("/auth"); }
+        },
         methods: {
             horseredirect () {
                 router.push("/horses");

@@ -33,9 +33,11 @@
             });
         },
         created () {
-            this.$store.commit("FILL_COUNTER_HORSES");
-            this.limit = this.$store.state.counters.horses.limit;
-            this.horses = this.$store.state.counters.horses.horses;
+            if (this.$store.state.user) {
+                this.$store.commit("FILL_COUNTER_HORSES");
+                this.limit = this.$store.state.counters.horses.limit;
+                this.horses = this.$store.state.counters.horses.horses;
+            } else { router.push("/auth"); }
         },
         methods: {
             addhorse () {

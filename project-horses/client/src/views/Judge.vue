@@ -26,10 +26,12 @@
             };
         },
         created () {
-            let index = this.$store.state.judges.findIndex(
-                item => item._id === this.$route.params.id
-            );
-            this.judge = this.$store.state.judges[index];
+            if (this.$store.state.user) {
+                let index = this.$store.state.judges.findIndex(
+                    item => item._id === this.$route.params.id
+                );
+                this.judge = this.$store.state.judges[index];
+            } else { router.push("/auth"); }
         },
         methods: {
             change ({ target }) {

@@ -102,7 +102,7 @@
 </template>
 
     <script>
-    // import router from "../router";
+    import router from "../router";
     export default {
         name: "AddHorse",
         data () {
@@ -147,7 +147,9 @@
             };
         },
         created () {
-            this.classes = this.$store.state.classes;
+            if (this.$store.state.user) {
+                this.classes = this.$store.state.classes;
+            } else { router.push("/auth"); }
         },
         methods: {
             savehorse () {

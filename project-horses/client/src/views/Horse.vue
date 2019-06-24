@@ -116,29 +116,31 @@
             };
         },
         created () {
-            let index = this.$store.state.horses.findIndex(
-                item => item._id === this.$route.params.id
-            );
-            this.horse = this.$store.state.horses[index];
+            if (this.$store.state.user) {
+                let index = this.$store.state.horses.findIndex(
+                    item => item._id === this.$route.params.id
+                );
+                this.horse = this.$store.state.horses[index];
 
-            let index2 = this.$store.state.classes.findIndex(
-                item => item.number === this.horse.class
-            );
+                let index2 = this.$store.state.classes.findIndex(
+                    item => item.number === this.horse.class
+                );
 
-            try {
-                this.actualclass = this.$store.state.classes[index2];
+                try {
+                    this.actualclass = this.$store.state.classes[index2];
 
-                this.$store.state.classes.forEach(element => {
-                    if (element._id !== this.actualclass._id) {
+                    this.$store.state.classes.forEach(element => {
+                        if (element._id !== this.actualclass._id) {
+                            this.classes.push(element);
+                        }
+                    });
+                } catch (err) {
+                    this.$store.state.classes.forEach(element => {
                         this.classes.push(element);
-                    }
-                });
-            } catch (err) {
-                this.$store.state.classes.forEach(element => {
-                    this.classes.push(element);
-                });
-                this.actualclass = { number: -1, category: "brak klasy" };
-            }
+                    });
+                    this.actualclass = { number: -1, category: "brak klasy" };
+                }
+            } else { router.push("/auth"); }
         },
         methods: {
             change ({ target }) {

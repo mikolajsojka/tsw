@@ -26,7 +26,6 @@
         },
         methods: {
             horses () {
-                console.log("click");
                 router.push("/horses");
             },
             judges () {
