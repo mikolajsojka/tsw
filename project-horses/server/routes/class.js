@@ -1,5 +1,6 @@
 const Class = require("../models/Class");
 const Horse = require("../models/Horse");
+const Cookie = require("../models/Cookie");
 const ObjectId = require("mongodb").ObjectID;
 
 const express = require("express");
@@ -27,123 +28,151 @@ module.exports = (io) => {
         });
 
         router.post("/add", (req, res) => {
-            let { item } = req.body;
-            let number = 0;
+            let cookie = req.body.cookie;
 
-            req.checkBody("item.category", "Wymagana jest nazwa klasy!").notEmpty();
+            Cookie.findOne({ id: cookie }, (_err, cookie) => {
+                if (cookie) {
+                    let { item } = req.body;
 
-            let errors = req.validationErrors();
+                    let number = 0;
 
-            if (errors) {
-                res.status(400).json(errors);
-            }
-            else {
-                Class.find({}, (err, items) => {
-                    items.forEach((element) => {
-                        if (parseInt(element.number) > number) {
-                            number = parseInt(element.number);
-                        }
-                    });
-                    number += 1;
-                    let newClass = new Class({
-                        number,
-                        category: item.category,
-                        committee: item.committee
-                    });
+                    req.checkBody("item.category", "Wymagana jest nazwa klasy!").notEmpty();
 
-                    Class.createClass(newClass, (err, _class) => {
-                        if (err) throw err;
+                    let errors = req.validationErrors();
 
-                        res.status(200).json(newClass);
+                    if (errors) {
+                        res.status(400).json(errors);
+                    }
+                    else {
+                        Class.find({}, (err, items) => {
+                            items.forEach((element) => {
+                                if (parseInt(element.number) > number) {
+                                    number = parseInt(element.number);
+                                }
+                            });
+                            number += 1;
+                            let newClass = new Class({
+                                number,
+                                category: item.category,
+                                committee: item.committee
+                            });
 
-                        socket.emit("addclass", {
-                            number, _id: newClass._id, category: newClass.category, committee: newClass.committee, status: false
+                            Class.createClass(newClass, (err, _class) => {
+                                if (err) throw err;
+
+                                res.status(200).json(newClass);
+
+                                socket.emit("addclass", {
+                                    number, _id: newClass._id, category: newClass.category, committee: newClass.committee, status: false
+                                });
+                                socket.broadcast.emit("addclass", {
+                                    number, _id: newClass._id, category: newClass.category, committee: newClass.committee, status: false
+                                });
+                            });
                         });
-                        socket.broadcast.emit("addclass", {
-                            number, _id: newClass._id, category: newClass.category, committee: newClass.committee, status: false
-                        });
-                    });
-                });
-            }
+                    }
+                }
+                else {
+                    res.status(400).send("Nieautoryzowany");
+                }
+            });
         });
 
         router.post("/edit", (req, res) => {
-            let { item } = req.body;
+            let cookie = req.body.cookie;
 
-            req.checkBody("item.category", "Wymagana jest nazwa klasy!").notEmpty();
+            Cookie.findOne({ id: cookie }, (_err, cookie) => {
+                if (cookie) {
+                    let { item } = req.body;
 
-            let errors = req.validationErrors();
+                    req.checkBody("item.category", "Wymagana jest nazwa klasy!").notEmpty();
 
-            if (errors) {
-                res.status(400).json(errors);
-            }
-            else {
-                Class.updateOne(
-                    { _id: ObjectId(item._id) },
-                    {
-                        $set: {
-                            committee: item.committee,
-                            number: item.number,
-                            category: item.category
+                    let errors = req.validationErrors();
 
-                        }
-                    },
-                    (err) => {
+                    if (errors) {
+                        res.status(400).json(errors);
+                    }
+                    else {
+                        Class.updateOne(
+                            { _id: ObjectId(item._id) },
+                            {
+                                $set: {
+                                    committee: item.committee,
+                                    number: item.number,
+                                    category: item.category
+
+                                }
+                            },
+                            (err) => {
+                                if (err) {
+                                    res.status(400).send("Coś poszło nie tak..");
+                                }
+                                else {
+                                    res.status(200).send("OK");
+                                    socket.emit("editclass", {
+                                        _id: item._id,
+                                        committee: item.committee,
+                                        number: item.number,
+                                        category: item.category,
+                                        status: false
+                                    });
+                                    socket.broadcast.emit("editclass", {
+                                        _id: item._id,
+                                        committee: item.committee,
+                                        number: item.number,
+                                        category: item.category,
+                                        status: false
+                                    });
+                                }
+                            }
+                        );
+                    }
+                }
+                else {
+                    res.status(400).send("Nieautoryzowany");
+                }
+            });
+        });
+
+        router.post("/delete/:id", (req, res) => {
+            let cookie = req.body.cookie;
+
+            Cookie.findOne({ id: cookie }, (_err, cookie) => {
+                if (cookie) {
+                    let { id } = req.params;
+
+                    Class.findOne({ _id: ObjectId(id) }, (err, item) => {
+                        Horse.updateMany(
+                            { class: item.number },
+                            {
+                                $set: {
+                                    class: -1,
+                                    result: {
+                                        notes: []
+                                    }
+                                }
+                            },
+                            (err) => {
+                                if (err) {
+                                    res.status(400).send("Coś poszło nie tak..");
+                                }
+                            }
+                        );
+                    });
+
+                    Class.deleteOne({ _id: ObjectId(id) }, (err, item) => {
                         if (err) {
                             res.status(400).send("Coś poszło nie tak..");
                         }
                         else {
                             res.status(200).send("OK");
-                            socket.emit("editclass", {
-                                _id: item._id,
-                                committee: item.committee,
-                                number: item.number,
-                                category: item.category,
-                                status: false
-                            });
-                            socket.broadcast.emit("editclass", {
-                                _id: item._id,
-                                committee: item.committee,
-                                number: item.number,
-                                category: item.category,
-                                status: false
-                            });
+                            socket.emit("deleteClass", id);
+                            socket.broadcast.emit("deleteClass", id);
                         }
-                    }
-                );
-            }
-        });
-
-        router.post("/delete/:id", (req, res) => {
-            let { id } = req.params;
-
-            Class.findOne({ _id: ObjectId(id) }, (err, item) => {
-                Horse.updateMany(
-                    { class: item.number },
-                    {
-                        $set: {
-                            class: -1,
-                            result: {
-                                notes: []
-                            }
-                        }
-                    },
-                    (err) => {
-                        if (err) {
-                            res.status(400).send("Coś poszło nie tak..");
-                        }
-                    }
-                );
-            });
-
-            Class.deleteOne({ _id: ObjectId(id) }, (err, item) => {
-                if (err) {
-                    res.status(400).send("Coś poszło nie tak..");
+                    });
                 }
                 else {
-                    res.status(200).send("OK");
-                    socket.emit("deleteClass", id);
-                    socket.broadcast.emit("deleteClass", id);
+                    res.status(400).send("Nieautoryzowany");
                 }
             });
         });

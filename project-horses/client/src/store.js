@@ -221,7 +221,7 @@ export default new Vuex.Store({
         },
         ADD_CLASS ({ commit }, payload) {
             axios
-                .post(`${hostname}/class/add`, { item: payload })
+                .post(`${hostname}/class/add`, { item: payload, cookie: Cookie.get("logged") })
                 .then(response => {
                     commit("ADD_CLASS", response.data);
                 })
@@ -241,7 +241,7 @@ export default new Vuex.Store({
         },
         EDIT_CLASS ({ commit }, payload) {
             axios
-                .post(`${hostname}/class/edit`, { item: payload })
+                .post(`${hostname}/class/edit`, { item: payload, cookie: Cookie.get("logged") })
                 .then(response => {
                     commit("EDIT_CLASS", response.data);
                 })
@@ -293,7 +293,7 @@ export default new Vuex.Store({
             commit("DELETE_CLASS", payload);
 
             axios
-                .post(`${hostname}/class/delete/${payload}`);
+                .post(`${hostname}/class/delete/${payload}`, { cookie: Cookie.get("logged") });
         },
         LOGIN ({ commit }, payload) {
             axios
