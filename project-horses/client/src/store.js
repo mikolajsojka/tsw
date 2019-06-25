@@ -189,7 +189,7 @@ export default new Vuex.Store({
         EDIT_HORSE_NOTES ({ commit }, payload) {
             commit("EDIT_HORSE_NOTES", payload);
             axios
-                .post(`${hostname}/horse/editnotes`, { horse: payload });
+                .post(`${hostname}/horse/editnotes`, { horse: payload, cookie: Cookie.get("logged") });
         },
         FRESH_NOTES_HORSES ({ commit }, payload) {
             axios
@@ -200,18 +200,19 @@ export default new Vuex.Store({
         ADD_NOTE_JUDGE_FROM_CLASS ({ commit }, payload) {
             axios
                 .post(`${hostname}/horse/addnote`, {
-                    cnumber: payload.classNumber
+                    cnumber: payload.classNumber, cookie: Cookie.get("logged")
                 });
         },
         DELETE_NOTE_JUDGE_FROM_CLASS ({ commit }, payload) {
             axios.post(`${hostname}/horse/deletenote`, {
                 judge: payload.judge,
-                cnumber: payload.classNumber
+                cnumber: payload.classNumber,
+                cookie: Cookie.get("logged")
             });
         },
         ADD_HORSE ({ commit }, payload) {
             axios
-                .post(`${hostname}/horse/add`, { item: payload })
+                .post(`${hostname}/horse/add`, { item: payload, cookie: Cookie.get("logged") })
                 .then(response => {
                     commit("ADD_HORSE", response.data);
                 })
@@ -231,7 +232,7 @@ export default new Vuex.Store({
         },
         ADD_JUDGE ({ commit }, payload) {
             axios
-                .post(`${hostname}/judge/add`, { item: payload })
+                .post(`${hostname}/judge/add`, { item: payload, cookie: Cookie.get("logged") })
                 .then(response => {
                     commit("ADD_JUDGE", response.data);
                 })
@@ -251,7 +252,7 @@ export default new Vuex.Store({
         },
         EDIT_HORSE ({ commit }, payload) {
             axios
-                .post(`${hostname}/horse/edit`, { item: payload })
+                .post(`${hostname}/horse/edit`, { item: payload, cookie: Cookie.get("logged") })
                 .then(response => {
                     commit("EDIT_HORSE", response.data);
                 })
@@ -261,7 +262,7 @@ export default new Vuex.Store({
         },
         EDIT_JUDGE ({ commit }, payload) {
             axios
-                .post(`${hostname}/judge/edit`, { item: payload })
+                .post(`${hostname}/judge/edit`, { item: payload, cookie: Cookie.get("logged") })
                 .then(response => {
                     commit("EDIT_JUDGE", response.data);
                 })
@@ -273,7 +274,7 @@ export default new Vuex.Store({
             commit("DELETE_HORSE", payload);
 
             axios
-                .post(`${hostname}/horse/delete/${payload}`)
+                .post(`${hostname}/horse/delete/${payload}`, { cookie: Cookie.get("logged") })
                 .then(response => {})
                 .catch(errors => {
                     alert("Wystąpił problem z usuwaniem konia");
@@ -283,7 +284,7 @@ export default new Vuex.Store({
             commit("DELETE_JUDGE", payload);
 
             axios
-                .post(`${hostname}/judge/delete/${payload}`)
+                .post(`${hostname}/judge/delete/${payload}`, { cookie: Cookie.get("logged") })
                 .then(response => {})
                 .catch(errors => {
                     alert("Wystąpił problem z usuwaniem sędziego");
