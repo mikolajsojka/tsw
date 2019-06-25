@@ -2,8 +2,11 @@ import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
 import router from "./router";
+import Cookie from "js-cookie";
+import { uuid } from "vue-uuid";
 
 Vue.use(Vuex);
+Vue.use(Cookie);
 
 const hostname = `http://${window.location.hostname}:3001`;
 const hostnamerandom = `http://${window.location.hostname}:3000`;
@@ -297,8 +300,20 @@ export default new Vuex.Store({
                 .post(`${hostname}/user/login`, payload)
                 .then(response => {
                     commit("USER", response.data);
+                    Cookie.set("logged", `${uuid.v1()}`, { expires: 0.01 });
 
                     router.push("/main");
+
+                    axios
+                        .post(`${hostname}/user/cookie`, {
+                            cookie: Cookie.get("logged")
+                        })
+                        .then(response => {
+
+                        })
+                        .catch(errors => {
+                            alert("Wystąpił problem z ciasteczkiem");
+                        });
                 })
                 .catch(errors => {
                     alert("Wystąpił problem z zalogowaniem");
@@ -306,7 +321,9 @@ export default new Vuex.Store({
         },
         LOGOUT ({ commit }) {
             axios
-                .get(`${hostname}/user/logout`)
+                .post(`${hostname}/user/logout`, {
+                    cookie: Cookie.get("logged")
+                })
                 .then(() => {
                     commit("USER", false);
 

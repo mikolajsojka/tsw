@@ -19,8 +19,12 @@
             Header
         },
         sockets: {
-            connection (data) {
-                console.log(data);
+            connect () {
+                this.$socket.emit("checkauth", this.$cookies.get("logged"));
+            },
+            logged () {
+                this.$store.commit("USER", true);
+                router.push("/main");
             }
 
         },

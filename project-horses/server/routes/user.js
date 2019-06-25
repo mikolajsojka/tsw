@@ -1,12 +1,21 @@
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const User = require("../models/User");
+const Cookie = require("../models/Cookie");
 const express = require("express");
 
 const router = express.Router();
 
 module.exports = (io) => {
     io.on("connect", (socket) => {
+        socket.on("checkauth", (data) => {
+            Cookie.findOne({ id: data }, (_err, cookie) => {
+                if (cookie) {
+                    socket.emit("logged");
+                }
+            });
+        });
+
         passport.use(
             new LocalStrategy((username, password, done) => {
                 User.getUserByUsername(username, (err, user) => {
@@ -69,9 +78,23 @@ module.exports = (io) => {
             })(req, res, next);
         });
 
+        router.post("/cookie", (req, res, next) => {
+            let newCookie = new Cookie({
+                id: req.body.cookie
+            });
+            Cookie.createCookie(newCookie, (err, cookie) => {
+                if (err) throw err;
+            });
+        });
 
-        router.get("/logout", (req, res) => {
+
+        router.post("/logout", (req, res) => {
             req.logout();
+
+            Cookie.deleteOne({ id: req.body.cookie }, (err, cookie) => {
+
+            });
+
             res.send(false);
         });
 

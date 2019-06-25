@@ -5,14 +5,19 @@ import store from "./store";
 import VueSocketIO from "vue-socket.io";
 import SOCKETIO from "socket.io-client";
 
+import VueCookies from "vue-cookies";
+
 store.dispatch("FETCH_HORSES");
 store.dispatch("FETCH_JUDGES");
-store.dispatch("FETCH_CLASSES");
+store.dispatch("FETCH_CLASSES"); ;
+VueCookies.config("600s");
+Vue.use(VueCookies);
 
 Vue.use(
     new VueSocketIO({
         debug: true,
-        connection: SOCKETIO("http://localhost:3001/"),
+        connection: SOCKETIO("http://localhost:3001/"
+        ),
         vuex: {
             store,
             actionPrefix: "SOCKET_",

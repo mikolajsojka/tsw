@@ -16,6 +16,8 @@
         },
         methods: {
             redirect () {
+                router.push("/auth");
+
                 if (this.action === "login") {
                     this.$store.dispatch("LOGIN");
                 }
@@ -33,9 +35,13 @@
                 }
             },
             random () {
-                this.$store.dispatch("RANDOMCLASSES");
-                this.$store.dispatch("RANDOMHORSES");
-                this.$store.dispatch("RANDOMJUDGES");
+                if (this.$store.state.user) {
+                    this.$store.dispatch("RANDOMCLASSES");
+                    this.$store.dispatch("RANDOMHORSES");
+                    this.$store.dispatch("RANDOMJUDGES");
+                } else {
+                    alert("Najpierw się zaloguj!");
+                }
                 router.push("/main");
             }
         }

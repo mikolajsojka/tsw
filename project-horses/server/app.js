@@ -53,7 +53,12 @@ app.use(passport.session());
 
 const server = app.listen(port);
 
-const io = require("socket.io")(server);
+const io = require("socket.io").listen(server, {
+    log: false,
+    agent: false,
+    origins: "*:*",
+    transports: ["websocket", "htmlfile", "xhr-polling", "jsonp-polling", "polling"]
+});
 
 app.use(sessionMiddleware);
 // const passportSocketIo = require("passport.socketio");
@@ -89,17 +94,26 @@ function onAuthorizeFail(data, message, error, accept) {
     }
 }
 */
+app.use(
+    cors({
+        credentials: true
+    })
+);
+
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
+    res.header("Access-Control-Allow-Headers", "Content-Type");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, Content-Length, X-Requested-With");
+
+    next();
+});
 
 const userRouter = require("./routes/user")(io);
 const horseRouter = require("./routes/horse")(io);
 const judgeRouter = require("./routes/judge")(io);
 const classRouter = require("./routes/class")(io);
 
-app.use(
-    cors({
-        credentials: true
-    })
-);
 
 app.use("/user", userRouter);
 app.use("/horse", horseRouter);

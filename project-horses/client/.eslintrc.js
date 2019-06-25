@@ -11,7 +11,8 @@ module.exports = {
     "no-unused-expressions":"off",
     indent: ["error", 4],
     semi: ["error", "always"],
-    quotes: ["error", "double"]
+    quotes: ["error", "double"],
+    "no-labels":"off"
   },
   overrides: [
     {
