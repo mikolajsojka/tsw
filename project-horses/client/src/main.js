@@ -9,8 +9,7 @@ import VueCookies from "vue-cookies";
 
 store.dispatch("FETCH_HORSES");
 store.dispatch("FETCH_JUDGES");
-store.dispatch("FETCH_CLASSES"); ;
-VueCookies.config("600s");
+store.dispatch("FETCH_CLASSES");
 Vue.use(VueCookies);
 
 Vue.use(
