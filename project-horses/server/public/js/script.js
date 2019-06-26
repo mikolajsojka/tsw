@@ -467,7 +467,6 @@ document.onreadystatechange = () => {
                 document.getElementById("end").innerHTML = "";
 
                 checkClasses();
-                console.log("Załadowano kolekcję: konie");
             });
 
 
@@ -528,8 +527,6 @@ document.onreadystatechange = () => {
 
             socket.on("getjudges", async (data) => {
                 judges = data;
-
-                console.log("Załadowano kolekcję: sędziowie");
             });
 
             socket.on("getclasses", (data) => {
@@ -538,8 +535,6 @@ document.onreadystatechange = () => {
 
                 socket.emit("gethorsesinit");
                 socket.emit("getjudgesinit");
-
-                console.log("Załadowano kolekcję: klasy");
             });
         });
     }

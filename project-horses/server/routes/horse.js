@@ -555,7 +555,6 @@ module.exports = (io) => {
 
         router.post("/randomhorses", (req, res) => {
             let { horses } = req.body;
-            console.log(horses);
 
             mongoose.connect("mongodb://localhost:27017/project-horses", {
                 useNewUrlParser: true

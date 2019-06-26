@@ -80,7 +80,6 @@
                 await router.push("/classes");
                 alert("Nie przydzielono żadnego konia!");
             }
-            console.log(this.notes);
         },
         methods: {
             checkArbitrator () {

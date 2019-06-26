@@ -102,7 +102,6 @@ export default new Vuex.Store({
             router.push("/classes");
         },
         ADD_HORSE: (state, payload) => {
-            console.log(payload);
             state.horses.push(payload);
             router.push("/horses");
         },
@@ -116,7 +115,6 @@ export default new Vuex.Store({
         },
         EDIT_HORSE: (state, payload) => {
             let index = state.horses.findIndex(item => item._id === payload._id);
-            console.log(payload);
             Vue.set(state.horses, index, payload);
         },
         EDIT_JUDGE: (state, payload) => {
