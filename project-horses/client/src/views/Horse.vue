@@ -138,7 +138,7 @@
                     this.$store.state.classes.forEach(element => {
                         this.classes.push(element);
                     });
-                    this.actualclass = { number: -1, category: "brak klasy" };
+                    this.actualclass = { number: -1, category: "usunięta klasa" };
                 }
             } else { router.push("/auth"); }
         },

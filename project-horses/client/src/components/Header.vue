@@ -1,7 +1,7 @@
 <template>
     <div id="navbar">
         <div class="auth" @click="random">Losuj dane</div>
-
+        <a :href="hostname"><div class="auth">Panel Kibica</div></a>
         <div id="check" v-html="check()" class="auth" @click="redirect"></div>
     </div>
 </template>
@@ -12,7 +12,7 @@
     export default {
         name: "Header",
         data () {
-            return { action: "login" };
+            return { action: "login", hostname: `http://${window.location.hostname}:3001` };
         },
         methods: {
             redirect () {
@@ -34,6 +34,7 @@
                     return "Zaloguj";
                 }
             },
+
             random () {
                 if (this.$store.state.user) {
                     this.$store.dispatch("RANDOMCLASSES");
