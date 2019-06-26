@@ -50,6 +50,18 @@ document.onreadystatechange = () => {
                 if (note.htype !== null) {
                     aresult += parseInt(note.htype);
                 }
+                if (note.head !== null) {
+                    aresult += parseInt(note.head);
+                }
+
+                if (note.barrel !== null) {
+                    aresult += parseInt(note.barrel);
+                }
+
+                if (note.legs !== null) {
+                    aresult += parseInt(note.legs);
+                }
+
                 if (note.move !== null) {
                     aresult += parseInt(note.move);
                 }
@@ -67,15 +79,30 @@ document.onreadystatechange = () => {
                 let amresult = 0;
                 let bhtype = 0;
                 let bmresult = 0;
+                let asum = 0;
+                let bsum = 0;
 
                 a.result.notes.forEach((note) => {
                     if (note.htype !== null) {
                         aresult += parseInt(note.htype);
                         ahtype += parseInt(note.htype);
+                        asum += parseInt(note.htype);
                     }
                     if (note.move !== null) {
                         aresult += parseInt(note.move);
                         amresult += parseInt(note.move);
+                        asum += parseInt(note.move);
+                    }
+                    if (note.barrel !== null) {
+                        asum += parseInt(note.barrel);
+                    }
+
+                    if (note.legs !== null) {
+                        asum += parseInt(note.legs);
+                    }
+
+                    if (note.head !== null) {
+                        asum += parseInt(note.head);
                     }
                 });
 
@@ -83,24 +110,51 @@ document.onreadystatechange = () => {
                     if (note.htype !== null) {
                         bresult += parseInt(note.htype);
                         bhtype += parseInt(note.htype);
+                        bsum += parseInt(note.htype);
                     }
                     if (note.move !== null) {
                         bresult += parseInt(note.move);
                         bmresult += parseInt(note.move);
+                        bsum += parseInt(note.move);
+                    }
+                    if (note.barrel !== null) {
+                        bsum += parseInt(note.barrel);
+                    }
+
+                    if (note.legs !== null) {
+                        bsum += parseInt(note.legs);
+                    }
+
+                    if (note.head !== null) {
+                        bsum += parseInt(note.head);
                     }
                 });
 
-                if (aresult === bresult) {
-                    if (ahtype === bhtype) {
-                        if (amresult === bmresult) {
-                            return a.result.arbitrator - b.result.arbitrator;
-                        }
-                        return bmresult - amresult;
-                    }
-                    return bhtype - ahtype;
+                if (asum > bsum) {
+                    return bsum - asum;
                 }
-                return bresult - aresult;
+
+                if (asum === bsum) {
+                    if (aresult === bresult) {
+                        if (ahtype === bhtype) {
+                            if (amresult === bmresult) {
+                                if (bresult !== 0) {
+                                    this.arbitrator.push(b._id);
+                                }
+                                if (aresult !== 0) {
+                                    this.arbitrator.push(a._id);
+                                }
+                                return a.result.arbitrator - b.result.arbitrator;
+                            }
+                            return bmresult - amresult;
+                        }
+                        return bhtype - ahtype;
+                    }
+                    return bresult - aresult;
+                }
+                return null;
             });
+
 
             let temp = [];
 

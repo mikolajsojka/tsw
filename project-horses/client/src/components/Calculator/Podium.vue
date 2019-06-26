@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="podium" >
-            <div v-for="(horse,index) in sorted" :id="horse._id" :key="horse._id" >Miejsce {{++index}}. {{horse.name}} - {{points(horse)}} pkt</div>
+            <div v-for="(horse,index) in sorted.reverse()" :id="horse._id" :key="horse._id" >Miejsce {{++index}}. {{horse.name}} - {{points(horse)}} pkt</div>
         </div>
     </div>
 </template>
@@ -26,47 +26,81 @@
                 let amresult = 0;
                 let bhtype = 0;
                 let bmresult = 0;
+                let asum = 0;
+                let bsum = 0;
 
                 a.result.notes.forEach(note => {
                     if (note.htype !== null) {
-                        aresult += parseInt(note.htype);
-                        ahtype += parseInt(note.htype);
+                        aresult += parseFloat(note.htype);
+                        ahtype += parseFloat(note.htype);
+                        asum += parseFloat(note.htype);
                     }
                     if (note.move !== null) {
-                        aresult += parseInt(note.move);
-                        amresult += parseInt(note.move);
+                        aresult += parseFloat(note.move);
+                        amresult += parseFloat(note.move);
+                        asum += parseFloat(note.move);
+                    }
+                    if (note.barrel !== null) {
+                        asum += parseFloat(note.barrel);
+                    }
+
+                    if (note.legs !== null) {
+                        asum += parseFloat(note.legs);
+                    }
+
+                    if (note.head !== null) {
+                        asum += parseFloat(note.head);
                     }
                 });
 
                 b.result.notes.forEach(note => {
                     if (note.htype !== null) {
-                        bresult += parseInt(note.htype);
-                        bhtype += parseInt(note.htype);
+                        bresult += parseFloat(note.htype);
+                        bhtype += parseFloat(note.htype);
+                        bsum += parseFloat(note.htype);
                     }
                     if (note.move !== null) {
-                        bresult += parseInt(note.move);
-                        bmresult += parseInt(note.move);
+                        bresult += parseFloat(note.move);
+                        bmresult += parseFloat(note.move);
+                        bsum += parseFloat(note.move);
+                    }
+                    if (note.barrel !== null) {
+                        bsum += parseFloat(note.barrel);
+                    }
+
+                    if (note.legs !== null) {
+                        bsum += parseFloat(note.legs);
+                    }
+
+                    if (note.head !== null) {
+                        bsum += parseFloat(note.head);
                     }
                 });
 
-                if (aresult === bresult) {
-                    if (ahtype === bhtype) {
-                        if (amresult === bmresult) {
-                            if (bresult !== 0) {
-                                this.arbitrator.push(b._id);
+                if (asum > bsum) {
+                    return bsum - asum;
+                }
+
+                if (asum === bsum) {
+                    if (aresult === bresult) {
+                        if (ahtype === bhtype) {
+                            if (amresult === bmresult) {
+                                if (bresult !== 0) {
+                                    this.arbitrator.push(b._id);
+                                }
+                                if (aresult !== 0) {
+                                    this.arbitrator.push(a._id);
+                                }
+                                return a.result.arbitrator - b.result.arbitrator;
+                            } else {
+                                return bmresult - amresult;
                             }
-                            if (aresult !== 0) {
-                                this.arbitrator.push(a._id);
-                            }
-                            return a.result.arbitrator - b.result.arbitrator;
                         } else {
-                            return bmresult - amresult;
+                            return bhtype - ahtype;
                         }
                     } else {
-                        return bhtype - ahtype;
+                        return bresult - aresult;
                     }
-                } else {
-                    return bresult - aresult;
                 }
             });
         },
@@ -83,6 +117,18 @@
                     if (note.htype !== null) {
                         result += parseInt(note.htype);
                     }
+                    if (note.head !== null) {
+                        result += parseInt(note.head);
+                    }
+
+                    if (note.barrel !== null) {
+                        result += parseInt(note.barrel);
+                    }
+
+                    if (note.legs !== null) {
+                        result += parseInt(note.legs);
+                    }
+
                     if (note.move !== null) {
                         result += parseInt(note.move);
                     }

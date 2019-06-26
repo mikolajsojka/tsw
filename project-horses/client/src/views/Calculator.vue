@@ -127,10 +127,22 @@
                 this.result = 0;
                 this.actualhorse.result.notes.forEach(note => {
                     if (note.htype !== null) {
-                        this.result += parseInt(note.htype);
+                        this.result += parseFloat(note.htype);
                     }
+                    if (note.head !== null) {
+                        this.result += parseFloat(note.head);
+                    }
+
+                    if (note.barrel !== null) {
+                        this.result += parseFloat(note.barrel);
+                    }
+
+                    if (note.legs !== null) {
+                        this.result += parseFloat(note.legs);
+                    }
+
                     if (note.move !== null) {
-                        this.result += parseInt(note.move);
+                        this.result += parseFloat(note.move);
                     }
                 });
             },
