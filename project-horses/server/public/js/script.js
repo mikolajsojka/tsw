@@ -208,12 +208,20 @@ document.onreadystatechange = () => {
 
                     classhorses = classhorses.filter(el => el !== 0);
 
-                    document.getElementById("classes").style.display = "none";
-                    document.getElementById("selected").style.display = "flex";
-                    document.getElementById("backbutton").style.display = "flex";
-                    document.getElementById("classname").style.display = "flex";
-                    clickedClass = classes[index].number;
-                    sorting();
+                    if (classhorses.length === 0) {
+                        alert("Aktualnie, brak koni w klasie");
+                    }
+                    else {
+                        startindex = 0;
+                        actualhorse = 0;
+                        document.getElementById("classes").style.display = "none";
+                        document.getElementById("selected").style.display = "flex";
+                        document.getElementById("backbutton").style.display = "flex";
+                        document.getElementById("classname").style.display = "flex";
+                        clickedClass = classes[index].number;
+
+                        sorting();
+                    }
                 });
             });
         };
