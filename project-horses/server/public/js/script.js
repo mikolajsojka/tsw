@@ -328,6 +328,9 @@ document.onreadystatechange = () => {
                     try {
                         classhorses.push(data);
                         sorting();
+                        document.getElementById("actual").innerHTML = "";
+                        document.getElementById("end").innerHTML = "";
+                        checkClasses();
                     }
                     catch (e) {}
                 }
@@ -376,12 +379,19 @@ document.onreadystatechange = () => {
                             }
                         }
                     }
-                    document.getElementById("actual").innerHTML = "";
-                    document.getElementById("end").innerHTML = "";
-                    checkClasses();
+                    else {
+                        let index3 = classhorses.findIndex(horse => horse._id === data._id);
+                        classhorses[index3] = data;
+                        sorting();
+                    }
+
                     clickEvents();
                 }
                 catch (e) {}
+
+                document.getElementById("actual").innerHTML = "";
+                document.getElementById("end").innerHTML = "";
+                checkClasses();
             });
 
             socket.on("deletehorse", (data) => {

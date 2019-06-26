@@ -313,7 +313,7 @@ export default new Vuex.Store({
 
                         })
                         .catch(errors => {
-                            alert("Wystąpił problem z ciasteczkiem");
+
                         });
                 })
                 .catch(errors => {
