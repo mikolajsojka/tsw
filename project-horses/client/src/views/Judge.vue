@@ -40,6 +40,7 @@
                     if (target.value !== "") {
                         this.judge.judge = target.value;
                     } else {
+                        target.value = this.judge.judge;
                         errors.push("Godność sędziego nie może być pusta!");
                     }
                 }
@@ -47,6 +48,7 @@
                     if (target.value !== "") {
                         this.judge.country = target.value;
                     } else {
+                        target.value = this.judge.country;
                         errors.push("Kraj pochodzenia sędziego nie może być pusty!");
                     }
                 }

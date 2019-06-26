@@ -88,6 +88,7 @@
                     if (target.value !== "") {
                         this.item.category = target.value;
                     } else {
+                        target.value = this.item.category;
                         errors.push("Nazwa klasy nie może być pusta!");
                     }
                 }

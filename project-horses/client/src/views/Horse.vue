@@ -150,6 +150,7 @@
                     if (target.value !== "") {
                         this.horse.name = target.value;
                     } else {
+                        target.value = this.horse.name;
                         errors.push("Imię konia nie może być puste!");
                     }
                 }
@@ -159,6 +160,7 @@
                         this.horse.number = target.value;
                     }
                     if (target.value === "") {
+                        target.value = this.horse.number;
                         errors.push("Numer konia nie może być pusty!");
                     }
 
@@ -171,6 +173,7 @@
                     if (target.value !== "") {
                         this.horse.country = target.value;
                     } else {
+                        target.value = this.horse.country;
                         errors.push("Kraj pochodzenia konia nie może być pusty!");
                     }
                 }
@@ -185,6 +188,7 @@
                     }
 
                     if (target.value === "") {
+                        target.value = this.horse.yob;
                         errors.push("Data urodzenia konia nie może być pusta!");
                     }
                 }
@@ -193,6 +197,7 @@
                     if (target.value !== "") {
                         this.horse.hair = target.value;
                     } else {
+                        target.value = this.horse.hair;
                         errors.push("Sierść konia nie może być pusta!");
                     }
                 }
@@ -201,6 +206,7 @@
                     if (target.value !== "") {
                         this.horse.sex = target.value;
                     } else {
+                        target.value = this.horse.sex;
                         errors.push("Płeć konia nie może być pusta!");
                     }
                 }
@@ -209,6 +215,7 @@
                     if (target.value !== "") {
                         this.horse.bloodline.father.name = target.value;
                     } else {
+                        target.value = this.horse.bloodline.father.name;
                         errors.push("Ojciec konia nie może być pusty!");
                     }
                 }
@@ -217,6 +224,7 @@
                     if (target.value !== "") {
                         this.horse.bloodline.father.country = target.value;
                     } else {
+                        target.value = this.horse.bloodline.father.country;
                         errors.push("Kraj ojca konia nie może być pusty!");
                     }
                 }
@@ -225,6 +233,7 @@
                     if (target.value !== "") {
                         this.horse.bloodline.mother.name = target.value;
                     } else {
+                        target.value = this.horse.bloodline.mother.name;
                         errors.push("Matka konia nie może być pusta!");
                     }
                 }
@@ -233,6 +242,7 @@
                     if (target.value !== "") {
                         this.horse.bloodline.mother.country = target.value;
                     } else {
+                        target.value = this.horse.bloodline.mother.country;
                         errors.push("Kraj matki konia nie może być pusty!");
                     }
                 }
@@ -241,6 +251,7 @@
                     if (target.value !== "") {
                         this.horse.bloodline.fathermother.name = target.value;
                     } else {
+                        target.value = this.horse.bloodline.fathermother.name;
                         errors.push("Ojciec matki konia nie może być pusty!");
                     }
                 }
@@ -249,6 +260,7 @@
                     if (target.value !== "") {
                         this.horse.bloodline.fathermother.country = target.value;
                     } else {
+                        target.value = this.horse.bloodline.fathermother.country;
                         errors.push("Kraj ojca matki konia nie może być pusty!");
                     }
                 }
@@ -265,6 +277,7 @@
                     if (target.value !== "") {
                         this.horse.breeder.name = target.value;
                     } else {
+                        target.value = this.horse.breeder.name;
                         errors.push("Godność hodowcy konia nie może być pusta!");
                     }
                 }
@@ -273,6 +286,7 @@
                     if (target.value !== "") {
                         this.horse.breeder.country = target.value;
                     } else {
+                        target.value = this.horse.breeder.country;
                         errors.push("Kraj pochodzenia hodowcy konia nie może być pusty!");
                     }
                 }
@@ -281,6 +295,7 @@
                     if (target.value !== "") {
                         this.horse.owner.name = target.value;
                     } else {
+                        target.value = this.horse.owner.name;
                         errors.push("Godność właściciela konia nie może być pusta!");
                     }
                 }
@@ -289,6 +304,7 @@
                     if (target.value !== "") {
                         this.horse.owner.country = target.value;
                     } else {
+                        target.value = this.horse.owner.country;
                         errors.push("Kraj pochodzenia właściciela konia nie może być pusty!");
                     }
                 }
