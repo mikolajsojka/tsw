@@ -348,6 +348,7 @@ document.onreadystatechange = () => {
                     else {
                         index = classhorses.findIndex(item => item._id === data._id);
                         classhorses.splice(index, 1);
+                        actualhorse = classhorses[0];
                         sorting();
                     }
 
@@ -436,6 +437,7 @@ document.onreadystatechange = () => {
                     renderClassFalse(classes[index]);
                 }
                 clickEvents();
+                sorting();
             });
 
             socket.on("deleteClass", (data) => {
