@@ -72,9 +72,14 @@ module.exports = (io) => {
 
         router.post("/login", (req, res, next) => {
             passport.authenticate("local", (err, user, info) => {
-                req.logIn(user, (err) => {
-                    res.send(user);
-                });
+                if (typeof info === "undefined") {
+                    req.logIn(user, (err) => {
+                        res.send(user);
+                    });
+                }
+                else {
+                    res.send(404);
+                }
             })(req, res, next);
         });
 
